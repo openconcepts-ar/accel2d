@@ -1,0 +1,80 @@
+# This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+# SPDX-License-Identifier: AGPL-3.0-only
+
+BOARD?=digilent_arty
+SDRAM_BUS_BITS?=32
+SERIAL_PORT?=/dev/ttyUSB1
+
+#AMDTOOLCHAIN?=--toolchain=yosys+nextpnr #FIXME: some glitches
+CPU_TYPE?=--cpu-type=vexriscv #only supports vexriscv
+
+include Makefile.common
+include $(BUILD_DIR)/software/include/generated/variables.mak
+include $(LITEX_ROOT)/litex/soc/software/common.mak
+
+#INC=-I$(CFLEXROOT)/include #not needed anymore (files incorporated to the project)
+
+CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
+CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
+CXXFLAGS+=$(CCDEFS) $(INC)
+
+SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE)
+
+#FIXME: try crt0 provided by LiteX
+%.o: %.S
+	$(assemble)
+
+%.o: %.c
+	$(compile)
+
+%.o: %.cpp
+	$(compilexx)
+
+%.bin: %.elf
+	$(OBJCOPY) -O binary $< $@
+	chmod -x $@
+	
+prerequisites: LITEX-CONTRIBUTORS 
+
+./build/digilent_arty/software/include/generated/variables.mak: ./digilent_arty.py
+	$(PYTHON) ./digilent_arty.py $(SOCARGS) --no-compile-gateware
+
+
+./build/digilent_arty/gateware/digilent_arty.bit: ./digilent_arty.py c2v
+	$(PYTHON) ./digilent_arty.py $(SOCARGS) $(AMDTOOLCHAIN)
+
+everything: run $(BOARD)
+
+.PHONY: run
+run: sim_linux
+	./sim_linux
+
+sim_linux: prerequisites sim_linux.c drawing_test.c accel_cores.c sim_fb.c sw_cores.cpp
+	g++ -O3 -m32 -ggdb $(CCDEFS) $(INC) -o sw_cores.o -c sw_cores.cpp
+	gcc -O3 -m32 -ggdb $(CCDEFS) $(INC) `sdl2-config --cflags` sim_linux.c sw_cores.o -o $@ `sdl2-config --libs`
+	rm sw_cores.o
+
+.PHONY: firmware
+firmware: main.bin
+
+main.elf: prerequisites main.o accel_cores.o sw_cores.o crt0.o linker.ld
+	$(CC) crt0.o main.o accel_cores.o sw_cores.o $(LDFLAGS) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
+		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) $(LIBS:lib%=-l%)
+
+
+.PHONY: digilent_arty
+digilent_arty: $(BUILD_DIR)/gateware/digilent_arty.bit
+	openFPGALoader -b arty $(BUILD_DIR)/gateware/digilent_arty.bit
+
+.PHONY: upload
+upload: firmware digilent_arty
+	$(LITEX_ROOT)/litex/tools/litex_term.py $(SERIAL_PORT) --kernel main.bin
+
+.PHONY: clean
+clean:
+	$(RM) -R build restore
+	$(RM) *.o *.d *.elf *.elf.map *.bin ellipse_fill32.v rectangle_fill32.v *.v.* sim_linux backup.tar.gz *.orig
+
+LITEX-CONTRIBUTORS:
+	wget -O $@ https://raw.githubusercontent.com/enjoy-digital/litex/master/CONTRIBUTORS
+

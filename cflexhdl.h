@@ -1,0 +1,39 @@
+// This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+// SPDX-License-Identifier: AGPL-3.0-only
+
+#ifndef __CFLEXHDL_H__
+#define __CFLEXHDL_H__
+
+#include "types.h"
+#define MODULE void
+
+//TODO: add missing widths
+typedef uint1 uint1_t;
+typedef uint4 uint4_t;
+typedef uint6 uint6_t;
+typedef uint7 uint7_t;
+typedef uint8 uint8_t;
+typedef uint9 uint9_t;
+typedef uint10 uint10_t;
+typedef uint15 uint15_t;
+typedef uint16 uint16_t;
+typedef uint25 uint25_t;
+typedef uint32 uint32_t;
+
+typedef int10 int10_t;
+#define uintN_internal(n) uint##n
+#define uintN(n) uintN_internal(n)
+
+
+#define CFLEX_INLINE __attribute__((always_inline))
+
+#ifndef promote_u64
+#define promote_u64(x) (x) //just needed if compiled (like 32-bit multiplication with 64-bit output)
+#endif
+
+#ifndef promote_u128
+#define promote_u128(x) (x) //just needed if compiled (like 32-bit multiplication with 64-bit output)
+#endif
+
+
+#endif //__SILICE_COMPAT_H__

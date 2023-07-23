@@ -1,0 +1,21 @@
+# This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+# SPDX-License-Identifier: AGPL-3.0-only
+
+SHELL := /bin/bash
+CFLEXROOT?=../../CflexHDL
+GENERATOR?=$(CFLEXROOT)/src/silice_generator.py
+BUILD_ROOT=./build
+BUILD_DIR?=$(BUILD_ROOT)/$(BOARD)
+LITEX_ROOT=../../litex
+PYTHON?=python3
+FNPREFIX=accel_
+
+all: everything
+
+%.v: %.cc
+	cpp -DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS) -D$(basename $@)=_$(FNPREFIX)$(basename $@) -I$(CFLEXROOT)/include -E $< > $(BUILD_DIR)/$@.tmp.cpp
+	PYTHONPATH=$(CFLEXROOT)/cflexparser $(GENERATOR) $(BUILD_DIR)/$@.tmp.cpp > $(BUILD_DIR)/$@.tmp.si
+	silice -f verilog-gen-header.txt $(BUILD_DIR)/$@.tmp.si -o $@ --export $(FNPREFIX)$(basename $@)
+	
+c2v: rectangle_fill32.v ellipse_fill32.v
+
