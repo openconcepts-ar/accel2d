@@ -131,9 +131,9 @@ Just run:
 
 Where the target *run* runs the simulator, and the *upload* target makes the bitstream and uploads it to the FPGA board.
 
-# About NlNet Foundation
+# About [NLnet](http://nlnet.nl) Foundation
 
-<a href="https://nlnet.nl"><img src="doc/nlnet_logo.png"></img></a>
+<img src="doc/nlnet_logo.png"></img>
 
 This [project](https://nlnet.nl/project/Hardware-2D) is funded through the NGI0 Entrust Fund, a fund established by NLnet with financial support from the European Commission's Next Generation Internet programme, under the aegis of DG Communications Networks, Content and Technology under grant agreement No 101069594.
 
