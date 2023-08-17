@@ -36,7 +36,7 @@ It's useful for the implementation of the hardware accelerated primitive, as exp
 
 The following image is produced by the simulator by calling 1000 times to the software implementation of the primitives,  using random coordinates:
 
-<img src=./doc/simulator1000.png width=640 height=480></img>
+<img src="doc/simulator1000.png" width=640 height=480></img>
 
   
 ## Hardware implementation
@@ -90,7 +90,7 @@ Each accellerator core gets mapped starting at a fixed address (default 0x800000
 
 The resulting execution in hardware is as follows:
 
-<img src=./doc/hardware1000.jpeg width=640 height=480></img>
+<img src="doc/hardware1000.jpeg" width=640 height=480></img>
 
   
   
@@ -119,7 +119,7 @@ Console output would be in this case:
 
 The acceleration is readily appreciated on the following [video](https://peertube.io/w/8ds2de9pjt3c6C22reAnZc), where the software implementation is run prior to the hardware one. After that, a *clock demo* application is shown, using a combination of drawn rectangles and ellipses.
 
-<img src=./doc/clock.png width=640 height=480></img>
+<img src="doc/clock.png" width=640 height=480></img>
 
 The [code](./drawing_test.c) for that demo application can be compiled with the main [simulator](./sim_linux.c) code on the host machine (e.g. Linux) to see results on the simulator window. This eases testing while in development since the program compiles in few seconds, then it can be run on the hardware platform to check if producing the same results. In the provided video, you can see that the hardware matches the simulator.
   
@@ -133,7 +133,7 @@ Where the target *run* runs the simulator, and the *upload* target makes the bit
 
 # About NlNet Foundation
 
-<a href=https://nlnet.nl><img src=./doc/nlnet_logo.png></img></a>
+<a href="https://nlnet.nl"><img src="doc/nlnet_logo.png"></img></a>
 
 This [project](https://nlnet.nl/project/Hardware-2D) is funded through the NGI0 Entrust Fund, a fund established by NLnet with financial support from the European Commission's Next Generation Internet programme, under the aegis of DG Communications Networks, Content and Technology under grant agreement No 101069594.
 
