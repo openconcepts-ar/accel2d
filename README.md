@@ -133,7 +133,7 @@ Where the target *run* runs the simulator, and the *upload* target makes the bit
 
 # About NlNet Foundation
 
-<a href=https://nlnet.nl><img src=./doc/nlnet-logo.png></img></a>
+<a href=https://nlnet.nl><img src=./doc/nlnet_logo.png></img></a>
 
 This [project](https://nlnet.nl/project/Hardware-2D) is funded through the NGI0 Entrust Fund, a fund established by NLnet with financial support from the European Commission's Next Generation Internet programme, under the aegis of DG Communications Networks, Content and Technology under grant agreement No 101069594.
 
