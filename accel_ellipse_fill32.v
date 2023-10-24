@@ -41,7 +41,7 @@ module accel_ellipse_fill32 (
         output wire          mmap_m_cmd_valid,
         input  wire          mmap_m_cmd_ready,
         output wire          mmap_m_cmd_we,
-        output wire   [27:0] mmap_m_cmd_addr,
+        output wire   [29:0] mmap_m_cmd_addr,
         output wire          mmap_m_wdata_valid,
         input  wire          mmap_m_wdata_ready,
         output wire   [15:0] mmap_m_wdata_we,
@@ -111,32 +111,117 @@ module accel_ellipse_fill32 (
     reg     [1:0] extcore_dma_bus_bte = 2'd0;
     wire          extcore_dma_bus_err;
     wire   [31:0] extcore_adr;
-    wire          flush;
-    reg           cmd_valid = 1'd0;
+    wire          cmd_valid;
     wire          cmd_ready;
-    wire          cmd_last;
     wire          cmd_payload_we;
-    wire   [27:0] cmd_payload_addr;
-    reg           wdata_valid = 1'd0;
+    wire   [29:0] cmd_payload_addr;
+    wire          wdata_valid;
     wire          wdata_ready;
     wire  [127:0] wdata_payload_data;
     wire   [15:0] wdata_payload_we;
     wire          rdata_valid;
-    wire          rdata_ready;
+    reg           rdata_ready = 1'd0;
     wire  [127:0] rdata_payload_data;
-    reg    [29:0] litedram_wb_adr = 30'd0;
-    reg   [127:0] litedram_wb_dat_w = 128'd0;
-    reg   [127:0] litedram_wb_dat_r = 128'd0;
-    reg    [15:0] litedram_wb_sel = 16'd0;
-    wire          litedram_wb_cyc;
-    wire          litedram_wb_stb;
-    reg           litedram_wb_ack = 1'd0;
-    wire          litedram_wb_we;
-    wire    [2:0] litedram_wb_cti;
-    wire    [1:0] litedram_wb_bte;
-    reg           litedram_wb_err = 1'd0;
-    reg           aborted = 1'd0;
-    reg           is_ongoing = 1'd0;
+    wire   [29:0] bus_adr;
+    wire  [127:0] bus_dat_w;
+    wire  [127:0] bus_dat_r;
+    wire   [15:0] bus_sel;
+    wire          bus_cyc;
+    wire          bus_stb;
+    wire          bus_ack;
+    wire          bus_we;
+    wire    [2:0] bus_cti;
+    wire    [1:0] bus_bte;
+    reg           bus_err = 1'd0;
+    reg    [29:0] busx_adr = 30'd0;
+    reg   [127:0] busx_dat_w = 128'd0;
+    wire  [127:0] busx_dat_r;
+    reg    [15:0] busx_sel = 16'd0;
+    wire          busx_cyc;
+    wire          busx_stb;
+    reg           busx_ack = 1'd0;
+    wire          busx_we;
+    wire    [2:0] busx_cti;
+    wire    [1:0] busx_bte;
+    reg           busx_err = 1'd0;
+    wire   [29:0] slave_tmp_adr;
+    wire  [127:0] slave_tmp_dat_w;
+    wire  [127:0] slave_tmp_dat_r;
+    wire   [15:0] slave_tmp_sel;
+    reg           slave_tmp_cyc = 1'd0;
+    reg           slave_tmp_stb = 1'd0;
+    wire          slave_tmp_ack;
+    reg           slave_tmp_we = 1'd0;
+    reg     [2:0] slave_tmp_cti = 3'd0;
+    reg     [1:0] slave_tmp_bte = 2'd0;
+    wire          slave_tmp_err;
+    reg     [2:0] data_port_adr = 3'd0;
+    wire  [127:0] data_port_dat_r;
+    reg    [15:0] data_port_we = 16'd0;
+    reg   [127:0] data_port_dat_w = 128'd0;
+    reg     [2:0] sel_port_adr = 3'd0;
+    wire   [15:0] sel_port_dat_r;
+    reg           sel_port_we = 1'd0;
+    reg    [15:0] sel_port_dat_w = 16'd0;
+    reg           write_from_slave = 1'd0;
+    reg     [2:0] tag_port_adr = 3'd0;
+    wire   [27:0] tag_port_dat_r;
+    reg           tag_port_we = 1'd0;
+    wire   [27:0] tag_port_dat_w;
+    wire   [26:0] tag_do_tag;
+    wire          tag_do_dirty;
+    reg    [26:0] tag_di_tag = 27'd0;
+    reg           tag_di_dirty = 1'd0;
+    reg           word_clr = 1'd0;
+    reg           word_inc = 1'd0;
+    reg     [2:0] autoevict_counter = 3'd0;
+    reg           auto_evict = 1'd0;
+    wire          sink_sink_valid;
+    wire          sink_sink_ready;
+    wire   [29:0] sink_sink_payload_address;
+    wire  [127:0] sink_sink_payload_data;
+    wire   [15:0] sink_sink_payload_sel;
+    wire          fifo_sink_valid;
+    wire          fifo_sink_ready;
+    reg           fifo_sink_first = 1'd0;
+    reg           fifo_sink_last = 1'd0;
+    wire  [127:0] fifo_sink_payload_data;
+    wire   [15:0] fifo_sink_payload_sel;
+    wire          fifo_source_valid;
+    wire          fifo_source_ready;
+    wire          fifo_source_first;
+    wire          fifo_source_last;
+    wire  [127:0] fifo_source_payload_data;
+    wire   [15:0] fifo_source_payload_sel;
+    wire          fifo_re;
+    reg           fifo_readable = 1'd0;
+    wire          fifo_syncfifo_we;
+    wire          fifo_syncfifo_writable;
+    wire          fifo_syncfifo_re;
+    wire          fifo_syncfifo_readable;
+    wire  [145:0] fifo_syncfifo_din;
+    wire  [145:0] fifo_syncfifo_dout;
+    reg     [4:0] fifo_level0 = 5'd0;
+    reg           fifo_replace = 1'd0;
+    reg     [3:0] fifo_produce = 4'd0;
+    reg     [3:0] fifo_consume = 4'd0;
+    reg     [3:0] fifo_wrport_adr = 4'd0;
+    wire  [145:0] fifo_wrport_dat_r;
+    wire          fifo_wrport_we;
+    wire  [145:0] fifo_wrport_dat_w;
+    wire          fifo_do_read;
+    wire    [3:0] fifo_rdport_adr;
+    wire  [145:0] fifo_rdport_dat_r;
+    wire          fifo_rdport_re;
+    wire    [4:0] fifo_level1;
+    wire  [127:0] fifo_fifo_in_payload_data;
+    wire   [15:0] fifo_fifo_in_payload_sel;
+    wire          fifo_fifo_in_first;
+    wire          fifo_fifo_in_last;
+    wire  [127:0] fifo_fifo_out_payload_data;
+    wire   [15:0] fifo_fifo_out_payload_sel;
+    wire          fifo_fifo_out_first;
+    wire          fifo_fifo_out_last;
     reg    [13:0] accelgluesoc_adr = 14'd0;
     reg           accelgluesoc_we = 1'd0;
     reg    [31:0] accelgluesoc_dat_w = 32'd0;
@@ -201,10 +286,10 @@ module accel_ellipse_fill32 (
     wire          csr_interconnect_we;
     wire   [31:0] csr_interconnect_dat_w;
     wire   [31:0] csr_interconnect_dat_r;
-    reg     [1:0] accelgluesoc_litedramwishbone2native_state = 2'd0;
-    reg     [1:0] accelgluesoc_litedramwishbone2native_next_state = 2'd0;
-    reg           aborted_next_value = 1'd0;
-    reg           aborted_next_value_ce = 1'd0;
+    reg     [2:0] accelgluesoc_wpubase_state = 3'd1;
+    reg     [2:0] accelgluesoc_wpubase_next_state = 3'd0;
+    reg     [2:0] autoevict_counter_next_value = 3'd0;
+    reg           autoevict_counter_next_value_ce = 1'd0;
     reg           accelgluesoc_wishbone2csr_state = 1'd0;
     reg           accelgluesoc_wishbone2csr_next_state = 1'd0;
 
@@ -256,109 +341,256 @@ module accel_ellipse_fill32 (
     assign extcore_args_payload_xstride = extcore_csrstorage6_storage;
     assign extcore_args_payload_ystride = extcore_csrstorage7_storage;
     assign extcore_dma_bus_adr = extcore_adr[31:2];
-    assign litedram_wb_cyc = extcore_dma_bus_cyc;
-    assign litedram_wb_stb = extcore_dma_bus_stb;
-    assign extcore_dma_bus_ack = litedram_wb_ack;
-    assign litedram_wb_we = extcore_dma_bus_we;
-    assign litedram_wb_cti = extcore_dma_bus_cti;
-    assign litedram_wb_bte = extcore_dma_bus_bte;
-    assign extcore_dma_bus_err = litedram_wb_err;
+    assign sink_sink_payload_data = bus_dat_w;
+    assign sink_sink_payload_sel = bus_sel;
+    assign sink_sink_valid = ((bus_cyc & bus_stb) & bus_we);
+    assign sink_sink_payload_address = bus_adr;
+    assign bus_ack = (sink_sink_ready & sink_sink_valid);
+    assign bus_dat_r = bus_dat_w;
+    assign busx_cyc = extcore_dma_bus_cyc;
+    assign busx_stb = extcore_dma_bus_stb;
+    assign extcore_dma_bus_ack = busx_ack;
+    assign busx_we = extcore_dma_bus_we;
+    assign busx_cti = extcore_dma_bus_cti;
+    assign busx_bte = extcore_dma_bus_bte;
+    assign extcore_dma_bus_err = busx_err;
+    assign bus_adr = slave_tmp_adr;
+    assign bus_dat_w = slave_tmp_dat_w;
+    assign slave_tmp_dat_r = bus_dat_r;
+    assign bus_sel = slave_tmp_sel;
+    assign bus_cyc = slave_tmp_cyc;
+    assign bus_stb = slave_tmp_stb;
+    assign slave_tmp_ack = bus_ack;
+    assign bus_we = slave_tmp_we;
+    assign bus_cti = slave_tmp_cti;
+    assign bus_bte = slave_tmp_bte;
+    assign slave_tmp_err = bus_err;
+    assign {tag_do_dirty, tag_do_tag} = tag_port_dat_r;
+    assign tag_port_dat_w = {tag_di_dirty, tag_di_tag};
     always @(*) begin
-        litedram_wb_adr <= 30'd0;
-        litedram_wb_dat_w <= 128'd0;
-        extcore_dma_bus_dat_r <= 32'd0;
-        litedram_wb_sel <= 16'd0;
-        case (extcore_dma_bus_adr[1:0])
-            1'd0: begin
-                litedram_wb_adr <= extcore_dma_bus_adr[29:2];
-                litedram_wb_sel[3:0] <= extcore_dma_bus_sel;
-                litedram_wb_dat_w[31:0] <= extcore_dma_bus_dat_w;
-                extcore_dma_bus_dat_r <= litedram_wb_dat_r[31:0];
-            end
-            1'd1: begin
-                litedram_wb_adr <= extcore_dma_bus_adr[29:2];
-                litedram_wb_sel[7:4] <= extcore_dma_bus_sel;
-                litedram_wb_dat_w[63:32] <= extcore_dma_bus_dat_w;
-                extcore_dma_bus_dat_r <= litedram_wb_dat_r[63:32];
-            end
-            2'd2: begin
-                litedram_wb_adr <= extcore_dma_bus_adr[29:2];
-                litedram_wb_sel[11:8] <= extcore_dma_bus_sel;
-                litedram_wb_dat_w[95:64] <= extcore_dma_bus_dat_w;
-                extcore_dma_bus_dat_r <= litedram_wb_dat_r[95:64];
-            end
-            2'd3: begin
-                litedram_wb_adr <= extcore_dma_bus_adr[29:2];
-                litedram_wb_sel[15:12] <= extcore_dma_bus_sel;
-                litedram_wb_dat_w[127:96] <= extcore_dma_bus_dat_w;
-                extcore_dma_bus_dat_r <= litedram_wb_dat_r[127:96];
-            end
-        endcase
-    end
-    assign cmd_payload_addr = (litedram_wb_adr - 1'd0);
-    assign cmd_payload_we = litedram_wb_we;
-    assign cmd_last = (~litedram_wb_we);
-    assign flush = (~litedram_wb_cyc);
-    always @(*) begin
-        wdata_valid <= 1'd0;
-        wdata_valid <= (litedram_wb_stb & litedram_wb_we);
-        if (1'd1) begin
-            if ((~is_ongoing)) begin
-                wdata_valid <= 1'd0;
+        data_port_dat_w <= 128'd0;
+        data_port_we <= 16'd0;
+        if (write_from_slave) begin
+            data_port_dat_w <= slave_tmp_dat_r;
+            data_port_we <= {16{1'd1}};
+        end else begin
+            data_port_dat_w <= {1{busx_dat_w}};
+            if ((((busx_cyc & busx_stb) & busx_we) & busx_ack)) begin
+                data_port_we <= busx_sel;
             end
         end
     end
-    assign wdata_payload_data = litedram_wb_dat_w;
-    assign wdata_payload_we = litedram_wb_sel;
-    assign rdata_ready = 1'd1;
+    assign slave_tmp_dat_w = data_port_dat_r;
+    assign busx_dat_r = data_port_dat_r;
+    assign slave_tmp_adr = {tag_do_tag, busx_adr[2:0]};
+    assign slave_tmp_sel = sel_port_dat_r;
     always @(*) begin
-        aborted_next_value <= 1'd0;
-        is_ongoing <= 1'd0;
-        aborted_next_value_ce <= 1'd0;
-        litedram_wb_ack <= 1'd0;
-        cmd_valid <= 1'd0;
-        accelgluesoc_litedramwishbone2native_next_state <= 2'd0;
-        litedram_wb_dat_r <= 128'd0;
-        accelgluesoc_litedramwishbone2native_next_state <= accelgluesoc_litedramwishbone2native_state;
-        case (accelgluesoc_litedramwishbone2native_state)
+        tag_di_tag <= 27'd0;
+        tag_di_dirty <= 1'd0;
+        extcore_dma_bus_dat_r <= 32'd0;
+        word_clr <= 1'd0;
+        word_inc <= 1'd0;
+        slave_tmp_cyc <= 1'd0;
+        slave_tmp_stb <= 1'd0;
+        slave_tmp_we <= 1'd0;
+        busx_adr <= 30'd0;
+        accelgluesoc_wpubase_next_state <= 3'd0;
+        busx_dat_w <= 128'd0;
+        data_port_adr <= 3'd0;
+        busx_sel <= 16'd0;
+        autoevict_counter_next_value <= 3'd0;
+        autoevict_counter_next_value_ce <= 1'd0;
+        busx_ack <= 1'd0;
+        sel_port_adr <= 3'd0;
+        sel_port_we <= 1'd0;
+        auto_evict <= 1'd0;
+        sel_port_dat_w <= 16'd0;
+        write_from_slave <= 1'd0;
+        tag_port_adr <= 3'd0;
+        tag_port_we <= 1'd0;
+        case (extcore_dma_bus_adr[1:0])
+            1'd0: begin
+                busx_adr <= extcore_dma_bus_adr[29:2];
+                busx_sel[3:0] <= extcore_dma_bus_sel;
+                busx_dat_w[31:0] <= extcore_dma_bus_dat_w;
+                extcore_dma_bus_dat_r <= busx_dat_r[31:0];
+            end
             1'd1: begin
-                is_ongoing <= 1'd1;
-                aborted_next_value <= ((~litedram_wb_cyc) | aborted);
-                aborted_next_value_ce <= 1'd1;
-                if ((wdata_valid & wdata_ready)) begin
-                    litedram_wb_ack <= (litedram_wb_cyc & (~aborted));
-                    accelgluesoc_litedramwishbone2native_next_state <= 1'd0;
+                busx_adr <= extcore_dma_bus_adr[29:2];
+                busx_sel[7:4] <= extcore_dma_bus_sel;
+                busx_dat_w[63:32] <= extcore_dma_bus_dat_w;
+                extcore_dma_bus_dat_r <= busx_dat_r[63:32];
+            end
+            2'd2: begin
+                busx_adr <= extcore_dma_bus_adr[29:2];
+                busx_sel[11:8] <= extcore_dma_bus_sel;
+                busx_dat_w[95:64] <= extcore_dma_bus_dat_w;
+                extcore_dma_bus_dat_r <= busx_dat_r[95:64];
+            end
+            2'd3: begin
+                busx_adr <= extcore_dma_bus_adr[29:2];
+                busx_sel[15:12] <= extcore_dma_bus_sel;
+                busx_dat_w[127:96] <= extcore_dma_bus_dat_w;
+                extcore_dma_bus_dat_r <= busx_dat_r[127:96];
+            end
+        endcase
+        tag_port_adr <= busx_adr[2:0];
+        tag_di_tag <= busx_adr[29:3];
+        data_port_adr <= busx_adr[2:0];
+        sel_port_adr <= busx_adr[2:0];
+        sel_port_we <= 1'd0;
+        accelgluesoc_wpubase_next_state <= accelgluesoc_wpubase_state;
+        case (accelgluesoc_wpubase_state)
+            1'd0: begin
+                if (busx_cyc) begin
+                    accelgluesoc_wpubase_next_state <= 1'd1;
+                end else begin
+                    busx_adr[2:0] <= autoevict_counter;
+                    tag_port_adr <= busx_adr[2:0];
+                    data_port_adr <= busx_adr[2:0];
+                    sel_port_adr <= busx_adr[2:0];
+                    accelgluesoc_wpubase_next_state <= 2'd3;
                 end
             end
             2'd2: begin
-                aborted_next_value <= ((~litedram_wb_cyc) | aborted);
-                aborted_next_value_ce <= 1'd1;
-                if (rdata_valid) begin
-                    litedram_wb_ack <= (litedram_wb_cyc & (~aborted));
-                    litedram_wb_dat_r <= rdata_payload_data;
-                    accelgluesoc_litedramwishbone2native_next_state <= 1'd0;
+                slave_tmp_stb <= 1'd1;
+                slave_tmp_cyc <= 1'd1;
+                slave_tmp_we <= 1'd1;
+                if (slave_tmp_ack) begin
+                    word_inc <= 1'd1;
+                    if (1'd1) begin
+                        tag_port_we <= 1'd1;
+                        sel_port_we <= 1'd1;
+                        sel_port_dat_w <= 1'd0;
+                        word_clr <= 1'd1;
+                        accelgluesoc_wpubase_next_state <= 1'd1;
+                    end
+                end
+            end
+            2'd3: begin
+                busx_adr[2:0] <= autoevict_counter;
+                tag_port_adr <= busx_adr[2:0];
+                data_port_adr <= busx_adr[2:0];
+                sel_port_adr <= busx_adr[2:0];
+                auto_evict <= tag_do_dirty;
+                if (auto_evict) begin
+                    slave_tmp_cyc <= 1'd1;
+                    slave_tmp_stb <= 1'd1;
+                    slave_tmp_we <= 1'd1;
+                    if (slave_tmp_ack) begin
+                        tag_di_tag <= tag_do_tag;
+                        tag_di_dirty <= 1'd0;
+                        tag_port_we <= 1'd1;
+                        sel_port_we <= 1'd1;
+                        sel_port_dat_w <= 1'd0;
+                        autoevict_counter_next_value <= (autoevict_counter + 1'd1);
+                        autoevict_counter_next_value_ce <= 1'd1;
+                        accelgluesoc_wpubase_next_state <= 1'd0;
+                    end
+                end else begin
+                    accelgluesoc_wpubase_next_state <= 1'd0;
+                end
+            end
+            3'd4: begin
+                slave_tmp_stb <= 1'd1;
+                slave_tmp_cyc <= 1'd1;
+                slave_tmp_we <= 1'd0;
+                if (slave_tmp_ack) begin
+                    write_from_slave <= 1'd1;
+                    word_inc <= 1'd1;
+                    if (1'd1) begin
+                        accelgluesoc_wpubase_next_state <= 1'd1;
+                    end else begin
+                        accelgluesoc_wpubase_next_state <= 1'd1;
+                    end
                 end
             end
             default: begin
-                cmd_valid <= (litedram_wb_cyc & litedram_wb_stb);
-                if (((cmd_valid & cmd_ready) & litedram_wb_we)) begin
-                    accelgluesoc_litedramwishbone2native_next_state <= 1'd1;
+                if ((busx_cyc & busx_stb)) begin
+                    word_clr <= 1'd1;
+                    autoevict_counter_next_value <= (busx_adr[29:3] ^ 3'd4);
+                    autoevict_counter_next_value_ce <= 1'd1;
+                    if ((tag_do_tag == busx_adr[29:3])) begin
+                        busx_ack <= 1'd1;
+                        if (busx_we) begin
+                            tag_di_dirty <= 1'd1;
+                            tag_port_we <= 1'd1;
+                            sel_port_we <= 1'd1;
+                            sel_port_dat_w <= (busx_sel | sel_port_dat_r);
+                        end
+                    end else begin
+                        if (tag_do_dirty) begin
+                            accelgluesoc_wpubase_next_state <= 2'd2;
+                        end else begin
+                            tag_port_we <= 1'd1;
+                            sel_port_we <= 1'd1;
+                            if (busx_we) begin
+                                sel_port_dat_w <= busx_sel;
+                            end else begin
+                                sel_port_dat_w <= 1'd0;
+                            end
+                            word_clr <= 1'd1;
+                            accelgluesoc_wpubase_next_state <= 1'd1;
+                        end
+                    end
+                end else begin
+                    if ((~busx_cyc)) begin
+                        accelgluesoc_wpubase_next_state <= 1'd0;
+                    end
                 end
-                if (((cmd_valid & cmd_ready) & (~litedram_wb_we))) begin
-                    accelgluesoc_litedramwishbone2native_next_state <= 2'd2;
-                end
-                aborted_next_value <= 1'd0;
-                aborted_next_value_ce <= 1'd1;
             end
         endcase
     end
+    assign cmd_payload_we = 1'd1;
+    assign cmd_payload_addr = sink_sink_payload_address;
+    assign cmd_valid = (fifo_sink_ready & sink_sink_valid);
+    assign sink_sink_ready = (fifo_sink_ready & cmd_ready);
+    assign fifo_sink_valid = (sink_sink_valid & cmd_ready);
+    assign fifo_sink_payload_data = sink_sink_payload_data;
+    assign fifo_sink_payload_sel = sink_sink_payload_sel;
+    assign wdata_payload_we = fifo_source_payload_sel;
+    assign wdata_valid = fifo_source_valid;
+    assign fifo_source_ready = wdata_ready;
+    assign wdata_payload_data = fifo_source_payload_data;
+    assign fifo_syncfifo_din = {fifo_fifo_in_last, fifo_fifo_in_first, fifo_fifo_in_payload_sel, fifo_fifo_in_payload_data};
+    assign {fifo_fifo_out_last, fifo_fifo_out_first, fifo_fifo_out_payload_sel, fifo_fifo_out_payload_data} = fifo_syncfifo_dout;
+    assign fifo_sink_ready = fifo_syncfifo_writable;
+    assign fifo_syncfifo_we = fifo_sink_valid;
+    assign fifo_fifo_in_first = fifo_sink_first;
+    assign fifo_fifo_in_last = fifo_sink_last;
+    assign fifo_fifo_in_payload_data = fifo_sink_payload_data;
+    assign fifo_fifo_in_payload_sel = fifo_sink_payload_sel;
+    assign fifo_source_valid = fifo_readable;
+    assign fifo_source_first = fifo_fifo_out_first;
+    assign fifo_source_last = fifo_fifo_out_last;
+    assign fifo_source_payload_data = fifo_fifo_out_payload_data;
+    assign fifo_source_payload_sel = fifo_fifo_out_payload_sel;
+    assign fifo_re = fifo_source_ready;
+    assign fifo_syncfifo_re = (fifo_syncfifo_readable & ((~fifo_readable) | fifo_re));
+    assign fifo_level1 = (fifo_level0 + fifo_readable);
     always @(*) begin
+        fifo_wrport_adr <= 4'd0;
+        if (fifo_replace) begin
+            fifo_wrport_adr <= (fifo_produce - 1'd1);
+        end else begin
+            fifo_wrport_adr <= fifo_produce;
+        end
+    end
+    assign fifo_wrport_dat_w = fifo_syncfifo_din;
+    assign fifo_wrport_we = (fifo_syncfifo_we & (fifo_syncfifo_writable | fifo_replace));
+    assign fifo_do_read = (fifo_syncfifo_readable & fifo_syncfifo_re);
+    assign fifo_rdport_adr = fifo_consume;
+    assign fifo_syncfifo_dout = fifo_rdport_dat_r;
+    assign fifo_rdport_re = fifo_do_read;
+    assign fifo_syncfifo_writable = (fifo_level0 != 5'd16);
+    assign fifo_syncfifo_readable = (fifo_level0 != 1'd0);
+    always @(*) begin
+        accelgluesoc_we <= 1'd0;
+        accelgluesoc_wishbone_ack <= 1'd0;
+        accelgluesoc_dat_w <= 32'd0;
+        accelgluesoc_wishbone2csr_next_state <= 1'd0;
         accelgluesoc_wishbone_dat_r <= 32'd0;
         accelgluesoc_adr <= 14'd0;
-        accelgluesoc_wishbone2csr_next_state <= 1'd0;
-        accelgluesoc_we <= 1'd0;
-        accelgluesoc_dat_w <= 32'd0;
-        accelgluesoc_wishbone_ack <= 1'd0;
         accelgluesoc_wishbone2csr_next_state <= accelgluesoc_wishbone2csr_state;
         case (accelgluesoc_wishbone2csr_state)
             1'd1: begin
@@ -397,8 +629,8 @@ module accel_ellipse_fill32 (
     end
     assign x00_r = bank_bus_dat_w[15:0];
     always @(*) begin
-        x00_we <= 1'd0;
         x00_re <= 1'd0;
+        x00_we <= 1'd0;
         if ((sel & (bank_bus_adr[8:0] == 2'd2))) begin
             x00_re <= bank_bus_we;
             x00_we <= (~bank_bus_we);
@@ -433,8 +665,8 @@ module accel_ellipse_fill32 (
     end
     assign rgba0_r = bank_bus_dat_w[31:0];
     always @(*) begin
-        rgba0_re <= 1'd0;
         rgba0_we <= 1'd0;
+        rgba0_re <= 1'd0;
         if ((sel & (bank_bus_adr[8:0] == 3'd6))) begin
             rgba0_re <= bank_bus_we;
             rgba0_we <= (~bank_bus_we);
@@ -494,9 +726,31 @@ module accel_ellipse_fill32 (
     end
 
     always @(posedge sys_clk) begin
-        accelgluesoc_litedramwishbone2native_state <= accelgluesoc_litedramwishbone2native_next_state;
-        if (aborted_next_value_ce) begin
-            aborted <= aborted_next_value;
+        accelgluesoc_wpubase_state <= accelgluesoc_wpubase_next_state;
+        if (autoevict_counter_next_value_ce) begin
+            autoevict_counter <= autoevict_counter_next_value;
+        end
+        if (fifo_syncfifo_re) begin
+            fifo_readable <= 1'd1;
+        end else begin
+            if (fifo_re) begin
+                fifo_readable <= 1'd0;
+            end
+        end
+        if (((fifo_syncfifo_we & fifo_syncfifo_writable) & (~fifo_replace))) begin
+            fifo_produce <= (fifo_produce + 1'd1);
+        end
+        if (fifo_do_read) begin
+            fifo_consume <= (fifo_consume + 1'd1);
+        end
+        if (((fifo_syncfifo_we & fifo_syncfifo_writable) & (~fifo_replace))) begin
+            if ((~fifo_do_read)) begin
+                fifo_level0 <= (fifo_level0 + 1'd1);
+            end
+        end else begin
+            if (fifo_do_read) begin
+                fifo_level0 <= (fifo_level0 - 1'd1);
+            end
         end
         accelgluesoc_wishbone2csr_state <= accelgluesoc_wishbone2csr_next_state;
         bank_bus_dat_r <= 1'd0;
@@ -591,12 +845,92 @@ module accel_ellipse_fill32 (
             extcore_csrstorage6_re <= 1'd0;
             extcore_csrstorage7_storage <= 16'd0;
             extcore_csrstorage7_re <= 1'd0;
-            aborted <= 1'd0;
-            accelgluesoc_litedramwishbone2native_state <= 2'd0;
+            autoevict_counter <= 3'd0;
+            fifo_readable <= 1'd0;
+            fifo_level0 <= 5'd0;
+            fifo_produce <= 4'd0;
+            fifo_consume <= 4'd0;
+            accelgluesoc_wpubase_state <= 3'd1;
             accelgluesoc_wishbone2csr_state <= 1'd0;
         end
     end
 
+
+
+    reg [127:0] data_mem[0:7];
+    reg [2:0] data_mem_adr0;
+    always @(posedge sys_clk) begin
+        if (data_port_we[0])
+            data_mem[data_port_adr][7:0] <= data_port_dat_w[7:0];
+        if (data_port_we[1])
+            data_mem[data_port_adr][15:8] <= data_port_dat_w[15:8];
+        if (data_port_we[2])
+            data_mem[data_port_adr][23:16] <= data_port_dat_w[23:16];
+        if (data_port_we[3])
+            data_mem[data_port_adr][31:24] <= data_port_dat_w[31:24];
+        if (data_port_we[4])
+            data_mem[data_port_adr][39:32] <= data_port_dat_w[39:32];
+        if (data_port_we[5])
+            data_mem[data_port_adr][47:40] <= data_port_dat_w[47:40];
+        if (data_port_we[6])
+            data_mem[data_port_adr][55:48] <= data_port_dat_w[55:48];
+        if (data_port_we[7])
+            data_mem[data_port_adr][63:56] <= data_port_dat_w[63:56];
+        if (data_port_we[8])
+            data_mem[data_port_adr][71:64] <= data_port_dat_w[71:64];
+        if (data_port_we[9])
+            data_mem[data_port_adr][79:72] <= data_port_dat_w[79:72];
+        if (data_port_we[10])
+            data_mem[data_port_adr][87:80] <= data_port_dat_w[87:80];
+        if (data_port_we[11])
+            data_mem[data_port_adr][95:88] <= data_port_dat_w[95:88];
+        if (data_port_we[12])
+            data_mem[data_port_adr][103:96] <= data_port_dat_w[103:96];
+        if (data_port_we[13])
+            data_mem[data_port_adr][111:104] <= data_port_dat_w[111:104];
+        if (data_port_we[14])
+            data_mem[data_port_adr][119:112] <= data_port_dat_w[119:112];
+        if (data_port_we[15])
+            data_mem[data_port_adr][127:120] <= data_port_dat_w[127:120];
+        data_mem_adr0 <= data_port_adr;
+    end
+    assign data_port_dat_r = data_mem[data_mem_adr0];
+
+
+    reg [15:0] sel_mem[0:7];
+    reg [2:0] sel_mem_adr0;
+    always @(posedge sys_clk) begin
+        if (sel_port_we)
+            sel_mem[sel_port_adr] <= sel_port_dat_w;
+        sel_mem_adr0 <= sel_port_adr;
+    end
+    assign sel_port_dat_r = sel_mem[sel_mem_adr0];
+
+
+    reg [27:0] tag_mem[0:7];
+    reg [2:0] tag_mem_adr0;
+    always @(posedge sys_clk) begin
+        if (tag_port_we)
+            tag_mem[tag_port_adr] <= tag_port_dat_w;
+        tag_mem_adr0 <= tag_port_adr;
+    end
+    assign tag_port_dat_r = tag_mem[tag_mem_adr0];
+
+
+    reg [145:0] storage[0:15];
+    reg [145:0] storage_dat0;
+    reg [145:0] storage_dat1;
+    always @(posedge sys_clk) begin
+        if (fifo_wrport_we)
+            storage[fifo_wrport_adr] <= fifo_wrport_dat_w;
+        storage_dat0 <= storage[fifo_wrport_adr];
+    end
+    always @(posedge sys_clk) begin
+        if (fifo_rdport_re)
+            storage_dat1 <= storage[fifo_rdport_adr];
+    end
+    assign fifo_wrport_dat_r = storage_dat0;
+    assign fifo_rdport_dat_r = storage_dat1;
 
 
     M_accel_ellipse_fill32 M_accel_ellipse_fill32(

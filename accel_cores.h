@@ -4,7 +4,7 @@
 #ifndef __ACCEL_CORES_H__
 #define __ACCEL_CORES_H__
 
-//This file could be generated automatically
+//Most of this file could be generated automatically
 #include <stddef.h> //just for NULL
 #ifndef DISABLE_HARDWARE_ACCEL
 #include <generated/csr.h>
@@ -42,5 +42,28 @@ static accel_ellipse_fill32_layout_t * const accel_ellipse_fill32_regs = NULL;
 #endif
 
 unsigned accel_ellipse_fill(accel_ellipse_fill32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
+
+// accel_line32 ------------------------------------------------------------------------------------
+#include "accel_line32.inl"
+
+#if !defined(CSR_ACCEL_LINE32_BASE) && defined(ACCEL_LINE32_REGION)
+#define CSR_ACCEL_LINE32_BASE (size_t)(ACCEL_LINE32_REGION+ACCEL_LINE32_CSR_PAGE_OFFSET)
+#endif
+
+#ifdef CSR_ACCEL_LINE32_BASE
+static accel_line32_layout_t * const accel_line32_regs =
+  (accel_line32_layout_t *) CSR_ACCEL_LINE32_BASE;
+#else
+static accel_line32_layout_t * const accel_line32_regs = NULL;
+#endif
+
+unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
+
+
+//helpers ------------------------------------------------------------------------------------------
+
+unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
+
+
 
 #endif //__ACCEL_CORES_H__

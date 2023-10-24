@@ -1,12 +1,18 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-BOARD?=digilent_arty
+#BOARD?=digilent_arty
+BOARD?=lambdaconcept_ecpix5
+#LATTICETOOLCHAIN=--toolchain diamond
+LATTICETOOLCHAIN=--toolchain trellis --nextpnr-seed 0 --nextpnr-timingstrict 
 SDRAM_BUS_BITS?=32
-SERIAL_PORT?=/dev/ttyUSB1
+#SERIAL_PORT?=/dev/ttyUSB0 #for arty
+SERIAL_PORT?=/dev/ttyUSB2 #for ecpix5
+
 
 #AMDTOOLCHAIN?=--toolchain=yosys+nextpnr #FIXME: some glitches
 CPU_TYPE?=--cpu-type=vexriscv #only supports vexriscv
+SYS_CLK?=--sys-clk-freq 75e6 #ECP5 pass at 96 MHz if just rectangles, but glitches remains
 
 include Makefile.common
 include $(BUILD_DIR)/software/include/generated/variables.mak
@@ -39,9 +45,14 @@ prerequisites: LITEX-CONTRIBUTORS
 ./build/digilent_arty/software/include/generated/variables.mak: ./digilent_arty.py
 	$(PYTHON) ./digilent_arty.py $(SOCARGS) --no-compile-gateware
 
-
 ./build/digilent_arty/gateware/digilent_arty.bit: ./digilent_arty.py c2v
 	$(PYTHON) ./digilent_arty.py $(SOCARGS) $(AMDTOOLCHAIN)
+
+./build/lambdaconcept_ecpix5/software/include/generated/variables.mak: ./lambdaconcept_ecpix5.py
+	$(PYTHON) ./lambdaconcept_ecpix5.py $(SOCARGS) $(SYS_CLK) --no-compile-gateware
+
+./build/lambdaconcept_ecpix5/gateware/lambdaconcept_ecpix5.bit: ./lambdaconcept_ecpix5.py c2v
+	$(PYTHON) ./lambdaconcept_ecpix5.py $(SOCARGS) $(SYS_CLK) $(LATTICETOOLCHAIN)
 
 everything: run $(BOARD)
 
@@ -66,8 +77,15 @@ main.elf: prerequisites main.o accel_cores.o sw_cores.o crt0.o linker.ld
 digilent_arty: $(BUILD_DIR)/gateware/digilent_arty.bit
 	openFPGALoader -b arty $(BUILD_DIR)/gateware/digilent_arty.bit
 
+.PHONY: lambdaconcept_ecpix5
+lambdaconcept_ecpix5: $(BUILD_DIR)/gateware/lambdaconcept_ecpix5.bit
+	openFPGALoader -b ecpix5 --cable ft4232 --freq 30e6 $(BUILD_DIR)/gateware/lambdaconcept_ecpix5.bit
+	#this is only for diamond toolchain:
+	#PYTHONPATH=/media/vsuarez/elocaldata/SCRATCH/prjtrellis/libtrellis $(PYTHON) ecp5_patch_idcode.py
+	#openFPGALoader -b ecpix5 --cable ft4232 --freq 30e6 repack.bit #$(BUILD_DIR)/gateware/lambdaconcept_ecpix5.bit
+
 .PHONY: upload
-upload: firmware digilent_arty
+upload: firmware $(BOARD)
 	$(LITEX_ROOT)/litex/tools/litex_term.py $(SERIAL_PORT) --kernel main.bin
 
 .PHONY: clean

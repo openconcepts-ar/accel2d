@@ -1,8 +1,8 @@
 // This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 // SPDX-License-Identifier: AGPL-3.0-only
 
-#define RAND_SEED 0x89ABCDEF
-static uint32_t lfsr = RAND_SEED; //won't work until seed is set
+#define RAND_SEED 0xABCDEF
+static uint32_t lfsr = RAND_SEED; //won't work until suitable seed is set
 void srand32(uint32_t seed)
 {
   lfsr = seed;
@@ -22,8 +22,9 @@ uint32_t rand32(void)
 
 // drawing tests -----------------------------------------------------------------------------------
 
-accel_rectangle_fill32_layout_t *rectangle_regs = accel_rectangle_fill32_regs;
-accel_ellipse_fill32_layout_t *ellipse_regs = accel_ellipse_fill32_regs;
+static accel_rectangle_fill32_layout_t *rectangle_regs = accel_rectangle_fill32_regs;
+static accel_ellipse_fill32_layout_t *ellipse_regs = accel_ellipse_fill32_regs;
+static accel_line32_layout_t *line_regs = accel_line32_regs;
 
 void draw_char(char ch, int x, int y, int width, int height, uint32_t rgba)
 {
@@ -33,6 +34,10 @@ void draw_char(char ch, int x, int y, int width, int height, uint32_t rgba)
     int y0 = y+2*height;
     accel_ellipse_fill(ellipse_regs, x0, y0, x0+2*width, y0+4*height, rgba);
     y0 += 6*width;
+#if defined(FRAMEBUFFER_CACHE_HANDLING) && !defined(CSR_ACCEL_RECTANGLE_FILL32_BASE) && defined(CSR_ACCEL_ELLIPSE_FILL32_BASE)
+       flush_l2_cache(); //corrects screen pixels
+       flush_cpu_dcache();
+#endif
     accel_ellipse_fill(ellipse_regs, x0, y0, x0+2*width, y0+4*height, rgba);
     return;
   }
@@ -41,13 +46,17 @@ void draw_char(char ch, int x, int y, int width, int height, uint32_t rgba)
   {
     int x0 = x+4*width;
     int y0 = y+12*height;
+#if defined(FRAMEBUFFER_CACHE_HANDLING) && !defined(CSR_ACCEL_RECTANGLE_FILL32_BASE) && defined(CSR_ACCEL_ELLIPSE_FILL32_BASE)
+       flush_l2_cache(); //corrects screen pixels
+       flush_cpu_dcache();
+#endif
     accel_ellipse_fill(ellipse_regs, x0, y0, x0+2*width, y0+2*height, rgba);
     return;
   }
   
   if(ch < '0' || ch > '9')
     return;
-  
+ 
   /*
     012345
      WWWW  0
@@ -82,7 +91,14 @@ void draw_char(char ch, int x, int y, int width, int height, uint32_t rgba)
       int x1 = x0+width*s->w;
       int y1 = y0+height*s->h;
       if(x0 >= 0 && x1 < FRAME_WIDTH && y0 >= 0 && y1 < FRAME_HEIGHT)
+      {
+#if defined(FRAMEBUFFER_CACHE_HANDLING) && !defined(CSR_ACCEL_ELLIPSE_FILL32_BASE) && defined(CSR_ACCEL_RECTANGLE_FILL32_BASE)
+ //FIXME: recheck condition...
+       flush_l2_cache(); //corrects screen pixels
+       flush_cpu_dcache();
+#endif
         accel_rectangle_fill(rectangle_regs, x0, y0, x1, y1, rgba);
+      }
     }
   }
 
@@ -108,9 +124,13 @@ void draw_char(char ch, int x, int y, int width, int height, uint32_t rgba)
       int x1 = x0+width*c->w;
       int y1 = y0+height*c->h;
       if(x0 >= 0 && x1 < FRAME_WIDTH && y0 >= 0 && y1 < FRAME_HEIGHT)
+      {
         accel_ellipse_fill(ellipse_regs, x0, y0, x1, y1, rgba);
+      }
     }
-  }  
+  }
+  
+  //accel_rectangle(line_regs, x-2, y-2, x+width*6+2, y+height*15-5, rgba); //optionally draw some lines around digits
 }
 
 void draw_clock(void)
@@ -165,7 +185,7 @@ void draw_clock(void)
       }
       int x = x0+pos[i]*4*sz;
       int y = y0;
-      if(isnum)
+      if(isnum) //FIXME: to avoid problems with superposition of characters, all previous digits should be drawn prior to current ones
         draw_char('8', x-dx, y-dy, sz, sz, bkcolor); //clear previous digit
       else
         draw_char(timedigits[i], x-dx, y-dy, sz, sz, bkcolor); //clear previous symbol
@@ -177,8 +197,8 @@ void draw_clock(void)
     const int xlimit = FRAME_WIDTH-(pos[DIGITS]*4+7)*sz;
     const int ylimit = FRAME_HEIGHT-sz*(14+1);
 #if DIGITS == 7
-    int x0_new = (uint32_t)ttarget % xlimit; //random like
-    int y0_new = (uint32_t)ttarget % ylimit; //random like
+    int x0_new = ((uint32_t)ttarget*37*41) % xlimit; //random like
+    int y0_new = ((uint32_t)ttarget*43*67) % ylimit; //random like
     dx = x0_new-x0; 
     dy = y0_new-y0;
 #else
@@ -194,6 +214,12 @@ void draw_clock(void)
 #endif
     x0 += dx;
     y0 += dy;
+
+
+#ifdef FRAMEBUFFER_CACHE_HANDLING
+    flush_l2_cache(); //corrects screen pixels
+    flush_cpu_dcache();
+#endif
   }
 }
 
@@ -215,17 +241,38 @@ unsigned draw_shape(void)
   pix.g = (pix.g * pix.a) >> 8;
   pix.b = (pix.b * pix.a) >> 8;
 
+#if defined(CSR_ACCEL_RECTANGLE_FILL32_BASE) && defined(CSR_ACCEL_ELLIPSE_FILL32_BASE)
   if(rand32() & 1)
     count = accel_ellipse_fill(ellipse_regs, x0, y0, x1, y1, pix.rgba);
   else
+  {
+#ifdef CSR_ACCEL_LINE32_BASE
+    count = accel_rectangle(line_regs, x0, y0, x1, y1, pix.rgba^0xFFFFFF);
+    count += accel_line(line_regs, x0, y0, x1, y1, pix.rgba^0xFFFFFF);
+    count += accel_line(line_regs, x1, y0, x0, y1, pix.rgba^0xFFFFFF);
+#else //FIXME: there are pixel errors if using both rectangles and lines (maybe when they overlap)
     count = accel_rectangle_fill(rectangle_regs, x0, y0, x1, y1, pix.rgba);
+#endif
+  }
+#else
+#ifdef CSR_ACCEL_ELLIPSE_FILL32_BASE
+  count = accel_ellipse_fill(ellipse_regs, x0, y0, x1, y1, pix.rgba);
+#endif
+#ifdef CSR_ACCEL_LINE32_BASE
+  count = accel_rectangle(line_regs, x0, y0, x1, y1, pix.rgba^0xFFFFFF);
+  count += accel_line(line_regs, x0, y0, x1, y1, pix.rgba^0xFFFFFF);
+  count += accel_line(line_regs, x1, y0, x0, y1, pix.rgba^0xFFFFFF);
+#else
+  count = accel_rectangle_fill(rectangle_regs, x0, y0, x1, y1, pix.rgba);
+#endif
+#endif
   
   //printf("count %d\n", count);
 
   return count;
 }
 
-void draw_shapes(int shapecount)
+void draw_shapes(int pixcount)
 {
   srand32(RAND_SEED); //reset pseudorandom function generator
   
@@ -242,7 +289,7 @@ void draw_shapes(int shapecount)
 
   uint64_t start = higres_ticks();
   uint64_t c = 0;
-  for(int i = 0; i < shapecount; ++i)
+  while(c < pixcount)
   {
   		uint32_t ops = draw_shape();
 	    c += ops;
@@ -261,13 +308,14 @@ int drawing_test(void)
   pix_t *fb_tmp = (pix_t*) malloc(FRAME_HEIGHT*FRAME_PITCH);
   assert(fb_tmp != NULL);
 
-  int shapecount = higres_ticks_freq()/100000; //FIXME: this is just to compensate slow simulations
-  printf("\nCurrent test: draw %d shapes\n", shapecount);
+  int pixcount = higres_ticks_freq()/10; //FIXME: this is just to compensate slow simulations
+  printf("\nCurrent test: draw %d pixels\n", pixcount);
   // disable acellerators
   rectangle_regs = NULL; 
-  ellipse_regs = NULL; 
+  ellipse_regs = NULL;
+  line_regs = NULL;
   printf("Start software rendering\n");
-  draw_shapes(shapecount);
+  draw_shapes(pixcount);
 
 /*
 #ifdef FRAMEBUFFER_CACHE_HANDLING //seems optional since test passes anyways
@@ -282,7 +330,8 @@ int drawing_test(void)
   printf("Switch to hardware rendering\n");
   rectangle_regs = accel_rectangle_fill32_regs;
   ellipse_regs = accel_ellipse_fill32_regs;
-  draw_shapes(shapecount);
+  line_regs = accel_line32_regs;
+  draw_shapes(pixcount);
 
   printf("Just waiting a bit to evaluate image...\n");
   uint64_t ttarget = higres_ticks()+higres_ticks_freq()*5;

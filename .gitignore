@@ -1,0 +1,10 @@
+__pycache__
+*.o
+*.d
+*.v.*.log
+*.lpp
+*.bin
+*.elf
+*.map
+build
+sim_linux

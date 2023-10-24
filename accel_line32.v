@@ -24,7 +24,7 @@ See LITEX-CONTRIBUTORS file for additional authors that may have written code us
 `timescale 1ns / 1ps
 
 
-module accel_rectangle_fill32 (
+module accel_line32 (
         input  wire          clk,
         input  wire          rst,
         input  wire   [29:0] mmap_s_adr,
@@ -933,28 +933,28 @@ module accel_rectangle_fill32 (
     assign fifo_rdport_dat_r = storage_dat1;
 
 
-    M_accel_rectangle_fill32 M_accel_rectangle_fill32(
-                                 .clock(sys_clk),
-                                 .in_base(extcore_args_payload_base),
-                                 .in_bus_ack(extcore_dma_bus_ack),
-                                 .in_bus_dat_r(extcore_dma_bus_dat_r),
-                                 .in_rgba(extcore_args_payload_rgba),
-                                 .in_run(extcore_args_valid),
-                                 .in_x0(extcore_args_payload_x0),
-                                 .in_x1(extcore_args_payload_x1),
-                                 .in_xstride(extcore_args_payload_xstride),
-                                 .in_y0(extcore_args_payload_y0),
-                                 .in_y1(extcore_args_payload_y1),
-                                 .in_ystride(extcore_args_payload_ystride),
-                                 .reset(sys_rst),
-                                 .out_bus_adr(extcore_adr),
-                                 .out_bus_cyc(extcore_dma_bus_cyc),
-                                 .out_bus_dat_w(extcore_dma_bus_dat_w),
-                                 .out_bus_sel(extcore_dma_bus_sel),
-                                 .out_bus_stb(extcore_dma_bus_stb),
-                                 .out_bus_we(extcore_dma_bus_we),
-                                 .out_done(extcore_args_ready)
-                             );
+    M_accel_line32 M_accel_line32(
+                       .clock(sys_clk),
+                       .in_base(extcore_args_payload_base),
+                       .in_bus_ack(extcore_dma_bus_ack),
+                       .in_bus_dat_r(extcore_dma_bus_dat_r),
+                       .in_rgba(extcore_args_payload_rgba),
+                       .in_run(extcore_args_valid),
+                       .in_x0(extcore_args_payload_x0),
+                       .in_x1(extcore_args_payload_x1),
+                       .in_xstride(extcore_args_payload_xstride),
+                       .in_y0(extcore_args_payload_y0),
+                       .in_y1(extcore_args_payload_y1),
+                       .in_ystride(extcore_args_payload_ystride),
+                       .reset(sys_rst),
+                       .out_bus_adr(extcore_adr),
+                       .out_bus_cyc(extcore_dma_bus_cyc),
+                       .out_bus_dat_w(extcore_dma_bus_dat_w),
+                       .out_bus_sel(extcore_dma_bus_sel),
+                       .out_bus_stb(extcore_dma_bus_stb),
+                       .out_bus_we(extcore_dma_bus_we),
+                       .out_done(extcore_args_ready)
+                   );
 
 endmodule
 

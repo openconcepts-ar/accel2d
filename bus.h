@@ -17,6 +17,7 @@
 #endif
 
 #define busaddr_t intptr_t
+#define busaddr_diff_t intptr_t
 #define busx_setup32(bus) bus = nullptr
 #define busx_acquire(bus) 
 #define busx_release(bus) 
@@ -31,7 +32,7 @@
 #define busx_set_address(bus, a) bus = (busmaster_t)(a)
 #define busx_get_address(bus) (busaddr_t)(bus)
 #define busx_next_address(bus) (++bus)
-#define busx_inc_address(bus, a) (bus += a/sizeof(*bus))
+#define busx_inc_address(bus, a) (bus += (a)/sizeof(*bus))
 #define busx_set_mask(bus, mask) bus_sel = (\
     ((mask)&(1<<0)?(uint128(255)<<8*0):0) \
   | ((mask)&(1<<1)?(uint128(255)<<8*1):0) \
@@ -78,6 +79,7 @@
 #define busx_set_address(bus, a) bus##_adr = (a)
 #define busx_get_address(bus) bus##_adr
 #define busaddr_t uint32
+#define busaddr_diff_t int32
 #define busx_inc_address(bus, a) busx_set_address(bus, busx_get_address(bus) + (a))
 #define busx_next_address(bus) busx_inc_address(bus, bus_bytes())
 #define busx_set_mask(bus, mask) bus##_sel = mask

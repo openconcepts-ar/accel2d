@@ -40,15 +40,8 @@ class WPUBase(Accel):
           self.sync += If(self.args.valid & ~self.args.ready & self.dma_bus.we & self.dma_bus.ack,
               Display("x0 %d, y0 %d, dma_addr 0x%08X (0x%08X) done %d", self.args.x0, self.args.y0, self.dma_bus.adr, adr, self.args.ready))
 
-    # FIXME: move connect code
     def connect_to_soc(self, soc):
         soc.bus.add_master(master=self.dma_bus, name="dma_bus_"+self.name)
-
-    def connect_native_port_to_soc(self, soc):
-        port = soc.sdram.crossbar.get_port()
-        s1, s2 = wb_to_native_adapter(self.dma_bus, port)
-        self.submodules += s1
-        self.submodules += s2
 
 
 # Core adder ---------------------------------------------------------------------------------------

@@ -84,7 +84,14 @@ int main(int argc, char **argv)
   #ifdef CSR_ACCEL_ELLIPSE_FILL32_BASE
   printf("\tCSR_ACCEL_ELLIPSE_FILL32_BASE %p, vram %p\n", (void*)CSR_ACCEL_ELLIPSE_FILL32_BASE, (void*)VRAM_ORIGIN_ACCEL_ELLIPSE_FILL32);
   #endif
+  #ifdef CSR_ACCEL_LINE32_BASE
+  printf("\tCSR_ACCEL_LINE32_BASE %p, vram %p\n", (void*)CSR_ACCEL_LINE32_BASE, (void*)VRAM_ORIGIN_ACCEL_LINE32);
+  #endif
 
+#if !defined(CSR_ACCEL_RECTANGLE_FILL32_BASE) && !defined(CSR_ACCEL_ELLIPSE_FILL32_BASE) && !defined(CSR_ACCEL_LINE32_BASE)
+  printf("\tNo hardware accelerators\n");
+  int passed = 1;
+#else
   int passed = (drawing_test() == 0);
   
   printf("\n==========================================\n");
@@ -93,11 +100,16 @@ int main(int argc, char **argv)
   else
     printf("*** TESTS FAILED ***\n");
   printf("==========================================\n");
-
+#endif
   for(;;) //loop forever, passed or not, so results of test are visible
   {
+#ifdef CSR_ACCEL_LINE32_BASE
+//FIXME:
+#warning: drawing demo is skipped just for demo purposes (recording screen with lines drawn)
+#else
     if(passed) 
       draw_clock(); //demo drawing
+#endif
   }
 
   irq_setie(0);

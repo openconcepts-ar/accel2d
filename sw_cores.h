@@ -10,6 +10,7 @@ extern "C" {
 
 void sw_rectangle_fill(accel_rectangle_fill32_layout_t *regs);
 void sw_ellipse_fill(accel_ellipse_fill32_layout_t *regs);
+void sw_line(accel_line32_layout_t *regs);
 
 #ifdef __cplusplus
 }

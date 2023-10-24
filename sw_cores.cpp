@@ -29,6 +29,7 @@ typedef uint32_t *busmaster_t;
 
 #include "rectangle_fill32.cc"
 #include "ellipse_fill32.cc"
+#include "line32.cc"
 #include "sw_cores.h"
 
 
@@ -58,5 +59,19 @@ void sw_ellipse_fill(accel_ellipse_fill32_layout_t *regs)
   uint32 ystride = regs->ystride;
   
   ellipse_fill32(BUSMASTER_ARG, x0, x1, y0, y1, rgba, base, xstride, ystride);
+}
+
+void sw_line(accel_line32_layout_t *regs)
+{
+  uint16 x0 = regs->x0;
+  uint16 x1 = regs->x1;
+  uint16 y0 = regs->y0;
+  uint16 y1 = regs->y1;
+  uint32 rgba = regs->rgba;
+  uint32 base = regs->base;
+  uint32 xstride = regs->xstride;
+  uint32 ystride = regs->ystride;
+  
+  line32(BUSMASTER_ARG, x0, x1, y0, y1, rgba, base, xstride, ystride);
 }
 

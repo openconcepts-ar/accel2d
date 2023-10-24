@@ -64,7 +64,7 @@ unsigned accel_ellipse_fill(accel_ellipse_fill32_layout_t *regs, int x0, int y0,
     regs = &sw_args;
   else
   {
-    regs->run = 0; //stps
+    regs->run = 0; //stops
     while(regs->done); //wait data latch
   }
 
@@ -95,4 +95,59 @@ unsigned accel_ellipse_fill(accel_ellipse_fill32_layout_t *regs, int x0, int y0,
 
   return (abs(x1-x0)+1)*(abs(y1-y0)+1);
 }
+
+unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba)
+{
+  accel_line32_layout_t sw_args;
+  int sw_render = !regs;
+  uintptr_t fb_base = VIDEO_FRAMEBUFFER_BASE; 
+#ifdef VRAM_ORIGIN_ACCEL_ELLIPSE_FILL32
+  if(!sw_render) fb_base = VRAM_ORIGIN_ACCEL_ELLIPSE_FILL32;
+#endif
+  if(sw_render)
+    regs = &sw_args;
+  else
+  {
+    regs->run = 0; //stops
+    while(regs->done); //wait data latch
+  }
+
+  fb_base += y0*FRAME_PITCH + x0*sizeof(rgba);
+  regs->x0 = x0;
+  regs->x1 = x1;
+  regs->y0 = y0;
+  regs->y1 = y1;
+
+  regs->base = fb_base;
+  regs->xstride = x0 < x1 ? SDRAM_BUS_BITS/8 : -SDRAM_BUS_BITS/8;
+  regs->ystride = y0 < y1 ? FRAME_PITCH : -FRAME_PITCH;
+
+  regs->rgba = rgba;
+  
+  if(sw_render)
+  {
+    //printf("sw_line\n");
+#ifdef INDUCE_RENDERING_ERRORS    
+    ++regs->y1;
+#endif
+    sw_line(regs);
+  }
+  else
+  {
+    regs->run = 1; //start
+    while(!regs->done); //wait until done
+  }
+
+  return abs(x1-x0)+abs(y1-y0);
+}
+
+
+unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba)
+{
+  return accel_line(regs, x0, y0, x1, y0, rgba)
+   + accel_line(regs, x1, y0, x1, y1, rgba)
+   + accel_line(regs, x1, y1, x0, y1, rgba)
+   + accel_line(regs, x0, y1, x0, y0, rgba);
+}
+
 

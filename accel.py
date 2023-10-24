@@ -138,7 +138,7 @@ class AccelSoc(SoCMini):
         builder  = Builder(self, output_dir=build_dir)
         builder.build(build_name=self.accelcore.name, run=False)
 """   
-        
+SDRAM_ACCESS_WIDTH = 128 #FIXME: should match glue code, and ideally matching sdram bus width (128-bit)
         
 class AccelImporterSoC(Module): #TODO: separate in base and derived class
     def __init__(self, corename, csr_base=0, busmaster_type="wishbone", debug=False):
@@ -149,7 +149,7 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
         if busmaster_type == "wishbone":
             self.mmap_m = m = wishbone.Interface()
         if busmaster_type == "native":
-            self.mmap_m = m = LiteDRAMNativePort("both", address_width=30, data_width=128)
+            self.mmap_m = m = LiteDRAMNativePort("both", address_width=30, data_width=SDRAM_ACCESS_WIDTH)
 
         self.busmaster_type = busmaster_type
 
@@ -238,7 +238,7 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
           soc.bus.add_master(master=self.mmap_m)
           
         if self.busmaster_type == "native":
-           soc.comb += self.mmap_m.connect(soc.sdram.crossbar.get_port())
+          soc.comb += self.mmap_m.connect(soc.sdram.crossbar.get_port(data_width=SDRAM_ACCESS_WIDTH))
 
         #slave
         region_name = self.name+"_region" #CSR base
