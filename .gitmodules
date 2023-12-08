@@ -1,0 +1,4 @@
+[submodule "micropython"]
+	path = micropython
+	url = git@github.com:suarezvictor/micropython.git
+	branch = gpu2d

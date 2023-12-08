@@ -58,12 +58,13 @@ class VideoGenericPHY_SDR(Module):
 
 
 class _CRG(Module):
-    def __init__(self, platform, sys_clk_freq, video_clock, with_dram):
+    def __init__(self, platform, sys_clk_freq, video_clock, with_dram, with_rst=True):
         self.rst = Signal()
         self.clock_domains.cd_sys = ClockDomain()
 
         self.submodules.pll = pll = S7PLL(speedgrade=-1)
-        rst    = ~platform.request("cpu_reset")
+
+        rst    = ~platform.request("cpu_reset") if with_rst else 0
         self.comb += pll.reset.eq(rst | self.rst)
         pll.register_clkin(platform.request("clk100"), 100e6)
         pll.create_clkout(self.cd_sys, sys_clk_freq)
@@ -93,7 +94,8 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 
 	sys_clk_freq = int(100e6)
 	soc = SoCCore(platform, sys_clk_freq, **soc_core_argdict(args))
-	soc.submodules.crg = _CRG(platform, sys_clk_freq, timings["pix_clk"], True)
+	#use with_rst=False for mpremote (or when serial connection has to avoid reset)
+	soc.submodules.crg = _CRG(platform, sys_clk_freq, timings["pix_clk"], True, with_rst=False)
 
 	if args.toolchain == "yosys+nextpnr":
 		#this is needed to avoid the unsupported clocked DSP48E1s
@@ -140,7 +142,7 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 		soc.submodules.videophy = VideoGenericPHY_SDR(platform.request("vga"), clock_domain="vga")
 		soc.add_video_framebuffer(phy=soc.videophy, timings=timings_sel, clock_domain="vga", format="rgb888")
 
-		corelist = ["rectangle_fill32", "ellipse_fill32"]
+		corelist = ["rectangle_fill32", "ellipse_fill32", "line32"]
 		gen_accel_cores(soc, corelist, pixel_bus_width)
 
 		soc.add_constant("SDRAM_BUS_BITS", pixel_bus_width)
