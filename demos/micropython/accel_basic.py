@@ -1,3 +1,6 @@
+# Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+# SPDX-License-Identifier: AGPL-3.0-only
+
 import litex
 from framebuf import FrameBuffer, RGB32
 video = litex.Video(0)

@@ -32,7 +32,8 @@ typedef struct {
 	volatile uint32_t	xstride;	//offset  0x20
 	volatile uint32_t	ystride;	//offset  0x24
 } accel_ellipse_fill32_layout_t;
+#ifndef DISABLE_HARDWARE_ACCEL
 #define ACCEL_ELLIPSE_FILL32_CSR_PAGE_SIZE 0x28
 #define ACCEL_ELLIPSE_FILL32_CSR_PAGE_OFFSET 0x0
 ACCEL_STATIC_ASSERT(sizeof(accel_ellipse_fill32_layout_t)==ACCEL_ELLIPSE_FILL32_CSR_PAGE_SIZE, non_matching_struct_size)
-
+#endif

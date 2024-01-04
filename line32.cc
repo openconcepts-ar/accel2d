@@ -17,8 +17,8 @@ MODULE line32(
   const uint16&	y0,
   const uint16&	y1,
   const uint32&	rgba, //color
-  const uint32& base, //pixel offset
-  const int16& xstride, //normally 1, but can run backwards
+  const busaddr_t& base, //pixel offset
+  const int16& xstride, //normally 4, but can run backwards
   const int16& ystride //bytes to skip for next line (usually the framebuffer width * 4 bytes)
   )
 {
