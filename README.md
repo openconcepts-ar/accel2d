@@ -127,7 +127,7 @@ The [code](./drawing_test.c) for that demo application can be compiled with the 
 
 Accelerator cores gets directly connected to the dynamic RAM of the respective boards (acting similarly as a DMA), and using caching to achieve access at high speed. That way, the accelerated cores are about 7X faster than when running in software, as the current tests reports (line drawing core on a ECP5 device):
 
-<img src=doc/linesdemo.png width=640 height=480></img>
+<img src="doc/linesdemo.png" width=640 height=480></img>
 
     Start software rendering
     elapsed 9057225 us, ops/s: 828153 (2 FPS @640x480)
@@ -156,6 +156,55 @@ Just run:
     make BOARD=lambdaconcept_ecpix5 run upload
 
 Where the target *run* runs the simulator, and the *upload* target makes the bitstream and uploads it to the FPGA board.
+
+# Micropython support, with graphics
+The FPGA board is now capable of running a graphics-enabled micropython port, capable of controlling a PC monitor.
+Up to 8 bit per color channel are supported.
+  
+Example: [accel_basic.py](./demos/micropython/accel_basic.py)  
+  
+<img src="doc//MicropythonRGBdemo.png"></img>
+
+## Build & run instructions for micropython:
+Generate and upload the bitstream (use your own serial port location if different):
+
+    make BOARD=digilent_arty digilent_arty SERIAL_PORT=/dev/ttyUSB1
+    cd micropython/ports/litex
+    make
+    litex_term.py --kernel build/firmware.bin /dev/ttyUSB1
+    cd -
+    openFPGALoader -b arty build/digilent_arty/gateware/digilent_arty.bit
+
+Then the .py file can be uploaded using the standard `mpremote` command:
+
+    mpremote connect /dev/ttyUSB1 run demos/micropython/accel_basic.py
+
+This generates the following picture:  
+  
+<img src="doc/FPGA-RGBdemo.png" width=640 height=480></img>
+
+
+To run the clock demo, [accel_clock.py](./demos/micropython/accel_clock.py)  (in same folder)
+
+
+# New CPU-based board
+A brand-new board was designed using a graphics-capable CPU:
+
+<img src="doc/CPUboard.png" width=320 height=240></img>
+
+It's capable of running the [clock demo](./target-cpu/drawing_test.c), using the graphics primitives [ellipse](./ellipse_fill32.cc) and [rectangle fill](./rectangle_fill32.cc)
+
+This produces the following image:  
+<img src="doc/CPUclockdemo.png" width=320 height=240></img>
+
+## Build instructions:  
+   cd target-cpu/f133-bare/
+   make
+
+The `make` command will build the firmware and upload it to the board. To upload new firmware, you have to first push the reset button.
+
+This milestone is **conclusive proof** that this framework is capable running the drawing primitives as software or hardware, since the same code runs on the CPU as software and in the FPGA as a hardware core, producing matching visual results.
+
 
 # About [NLnet](http://nlnet.nl) Foundation
 
