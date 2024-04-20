@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 #include <stdio.h>
+#include <string.h>
 #include "ioregs.h"
 #include "sys.h"
 #include "sw_accel_cores.h"
@@ -38,25 +39,87 @@ static void graphics_test(void)
   for(;;)
     draw_clock(0xFFFF8000);
 }
+
+extern uint8_t jpeg_test_image_640x480_data[];
+extern unsigned jpeg_test_image_640x480_data_len;
+
+//#define TJPGD_DEMO
+
+#ifdef TJPGD_DEMO
+#include "../../tjpgd3/jpeg_demo.c"
+#include "../../tjpgd3/src/tjpgd.c"
+static void jpeg_decompress(void)
+{
+	static uint8_t work[16384];
+	static uint32_t fbdata[480][640];
+	IODEV devid; // Session identifier
+	devid.fp = jpeg_test_image_640x480_data;
+	devid.fbuf = (uint8_t *) fbdata;
+	devid.wfbuf = 640;
+	JRESULT res = jpeg_demo(&devid, work, sizeof(work));
+	if(res == JDR_OK)
+		framebuffer_address = (uintptr_t) fbdata;
+}
+#else
+
+int ultraembedded_jpeg_decompress(const uint8_t *jpegdata, size_t jpegdata_size, uint8_t *dst);
+
+static void jpeg_decompress(void)
+{
+	static uint32_t fbdata[480][640];
+	if(ultraembedded_jpeg_decompress(jpeg_test_image_640x480_data, jpeg_test_image_640x480_data_len, (uint8_t *) fbdata) == 0)
+		framebuffer_address = (uintptr_t) fbdata;
+}
+
 #endif
+#endif
+
 
 int main(void)
 {
-  void fb_probe(void);
-  fb_probe();
-  
+  printf("Decompressing JPEG...\r\n");
+  jpeg_decompress();
+  printf("Done\r\n");
 
+  if(framebuffer_address)
+  {
+    void fb_probe(void);
+    fb_probe();
+  }
+  
+#if 0
+  uint64_t t0 = highres_ticks();
+  size_t nbytes = 0;
   for(int i=0; ; ++i)
   {
-    if(i < 10)
-      printf("Hello from D1s bare %d!!\r\n", i);
-    else
-       graphics_test();
+    //printf("Hello from D1s bare %d!!\r\n", i);
+    for(int y=0; y < 480; ++y)
+    {
+      memset((void*)(framebuffer_address+y*640*4), i, (640-1)*4);
+      nbytes += (640-1)*4;
+    }
 
-    io_write32(GPIO_pd_dat, i & 1 ? led_mask : 0);
+    if((i & 0xFF) == 0)
+    {
+      uint64_t t1 = highres_ticks();
+      printf("bytes %d, dt %d ms\r\n", nbytes, 1000*(t1-t0)/highres_ticks_freq());
+      jpeg_decompress();
+      t0 = highres_ticks();
+      nbytes = 0;
+    }
 
-    delay_us(500*1000);
+    io_write32(GPIO_pd_dat, i & 128 ? led_mask : 0);
   }
+#else
+  for(;;);  
+#endif
   return 0;
+}
+
+
+void __assert_fail(void)
+{
+  printf("ASSERTION FAILED\r\n");
+  for(;;);
 }
 

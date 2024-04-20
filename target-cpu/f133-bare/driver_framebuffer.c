@@ -8,7 +8,7 @@
 
 void dump_reg(uintptr_t addr)
 {
-	printf("REGISTER at 0x%x: 0x%x\r\n", addr, io_read32(addr));
+	//printf("REGISTER at 0x%x: 0x%x\r\n", addr, io_read32(addr));
 }
 
 void fb_probe(void)
@@ -586,16 +586,13 @@ REGISTER at 0x5461040: 0x80000167
 #define DE_M0_BLD_OUT_COLOR	 (DE_M0_BLD + 0x0FC)
 
 
-
-extern unsigned char splash640x480_data[];
-extern unsigned int splash640x480_data_len;
+#warning this should be parameters
 uintptr_t framebuffer_address;
 unsigned framebuffer_pitch;
 
 //see https://linux-sunxi.org/images/7/7b/Allwinner_DE2.0_Spec_V1.0.pdf section 5.10
 void init_de(void)
 {
-    framebuffer_address = (uintptr_t) splash640x480_data;
     framebuffer_pitch = 640*sizeof(uint32_t);
 	
     // Enable ROT_SCLK_GATE, RT_WB_SCLK_GATE, CORE1_SCLK_GATE, CORE0_SCLK_GATE

@@ -24,9 +24,15 @@
  *
  */
 // (C) 2024 Victor Suarez Rovere <suarezvictor@gmail.com>
-// SPDX-License-Identifier: AGPL-3.0-only
+// (C) 2021 bigmagic123 https://github.com/bigmagic123/d1-nezha-baremeta
+// SPDX-License-Identifier: AGPL-3.0-only AND Apache-2.0
 
 #include "ioregs.h"
+
+const intptr_t UART_BASE = 0x02500000;
+const int UART_LSR = 0x0014;
+const uint8_t UART_LSR_DR = 0x01; // Receiver data ready
+const int UART_RBR = 0x0000;
 
 void uart_probe(void)
 {
@@ -58,7 +64,7 @@ void uart_probe(void)
 	io_write32(addr, val);
 
 	/* Config uart0 to 115200-8-1-0 */
-	addr = 0x02500000;
+	addr = UART_BASE;
 	io_write32(addr + 0x04, 0x0);
 	io_write32(addr + 0x08, 0xf7);
 	io_write32(addr + 0x10, 0x0);
@@ -76,11 +82,27 @@ void uart_probe(void)
 	io_write32(addr + 0x0c, val);
 }
 
+int driver_uart_putc_wontblock(void)
+{
+	return (io_read32(UART_BASE + 0x7c) & (0x1 << 1)) != 0;
+}
+
 void driver_uart_putc(char c)
 {
-	uintptr_t addr = 0x02500000;
+	while(!driver_uart_putc_wontblock());
+	io_write32(UART_BASE + 0x00, c);
+}
 
-	while((io_read32(addr + 0x7c) & (0x1 << 1)) == 0);
-	io_write32(addr + 0x00, c);
+int driver_uart_getc_wontblock(void)
+{
+  return (io_read32(UART_BASE + UART_LSR) & UART_LSR_DR) != 0;
+}
+
+int driver_uart_getc(void)
+{
+  if(!driver_uart_getc_wontblock())
+    return -1;
+
+  return io_read32(UART_BASE + UART_RBR);
 }
 

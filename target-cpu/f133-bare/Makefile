@@ -1,10 +1,10 @@
 CROSS_COMPILE	?= riscv64-unknown-linux-gnu-
 
-INCLUDES		:= -I../../ -I../../micropython/ports
+INCLUDES		:= -I../../ -I../../micropython/ports -I../../core_jpeg/c_model
 
-ASFLAGS			:= -g -ggdb -Wall -O2
-CFLAGS			:= -g -ggdb -Wall -O2
-CPPFLAGS		:= -g -ggdb -Wall -O2
+ASFLAGS			:= -g -ggdb -Wall -O3
+CFLAGS			:= -g -ggdb -Wall -O3
+CPPFLAGS		:= -g -ggdb -Wall -O3
 LDFLAGS			:= -T linker.ld -nostdlib
 MCFLAGS			:= -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c906 -mcmodel=medlow -fno-stack-protector -mstrict-align
 MCPPFLAGS		= $(MCFLAGS)
@@ -13,7 +13,7 @@ DEFINES		+=	-D__RISCV64__
 
 ASFLAGS		+=	-ffunction-sections -fdata-sections -ffreestanding -std=gnu99 $(DEFINES)
 CFLAGS		+=	-ffunction-sections -fdata-sections -ffreestanding -std=gnu99 $(DEFINES)
-CPPFLAGS	+=	-ffunction-sections -fdata-sections -ffreestanding $(DEFINES)
+CPPFLAGS	+=	-ffunction-sections -fdata-sections -ffreestanding $(DEFINES) -fno-threadsafe-statics
 LDFLAGS		+=	-Wl,-gc-sections
 
 AS			:=	$(CROSS_COMPILE)gcc -x assembler-with-cpp
@@ -38,7 +38,7 @@ all: output.bin
 	xfel exec 0x40000000
 
 
-output.bin: start.o main.o sys.o driver_uart.o driver_framebuffer.o memcpy.o memset.o printf.o rawdata.o sw_accel_cores.o
+output.bin: start.o main.o sys.o driver_uart.o driver_framebuffer.o memcpy.o memset.o printf.o rawdata.o sw_accel_cores.o c_model_jpeg_test.o
 	@echo [LD] Linking $@
 	@$(CC) $(LDFLAGS) $^ -o $@.elf -Wl,--cref,-Map=$@.map
 	@echo [OC] Objcopying $@
@@ -48,7 +48,7 @@ output.bin: start.o main.o sys.o driver_uart.o driver_framebuffer.o memcpy.o mem
 
 main.o: main.c
 	@echo [CC] $<
-	@$(CC) $(INCLUDES) $(CFLAGS) $(MCFLAGS) -c $< -o$@
+	$(CC) $(INCLUDES) $(CFLAGS) $(MCFLAGS) -c $< -o$@
 
 sys.o: sys.c
 	@echo [CC] $<
@@ -67,7 +67,11 @@ printf.o: printf.c
 	@$(CC) $(INCLUDES) $(CFLAGS) $(MCFLAGS) -c $< -o$@
 
 sw_accel_cores.o: sw_accel_cores.cpp
-	@echo [CC] $<
+	@echo [CXX] $<
+	@$(CXX) $(INCLUDES) $(CPPFLAGS) $(MCPPFLAGS) -c $< -o$@
+
+c_model_jpeg_test.o: c_model_jpeg_test.cpp
+	@echo [CXX] $<
 	@$(CXX) $(INCLUDES) $(CPPFLAGS) $(MCPPFLAGS) -c $< -o$@
 
 start.o: start.S
@@ -82,7 +86,7 @@ memset.o: memset.S
 	@echo [AS] $<
 	@$(AS) $(ASFLAGS) -I. -c $< -o $@
 
-rawdata.o: rawdata.S splash640x480.data
+rawdata.o: rawdata.S splash640x480.data splash640x480.jpeg
 	@echo [AS] $<
 	@$(AS) $(ASFLAGS) -I. -c $< -o $@
 
