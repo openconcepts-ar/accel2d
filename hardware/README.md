@@ -18,10 +18,10 @@ The board is 4 layer, based on the [Yuzuki design](https://bbs.aw-ol.com/topic/9
   
 PDF schematics are [here](./CPU_board/CPU_board_schematics.pdf).  
 
-<img src="../doc/CPU_board3D.png" width=640/>  
-<img src="../doc/CPU_boardFRONT.png" width=640/>  
-<img src="../doc/CPU_boardBACK.png" width=640/>  
-<img src="../doc/CPU_board_layers.png" width=640/>  
+<img src="../doc/CPU_board3D.png" width=640>  
+<img src="../doc/CPU_boardFRONT.png" width=640>  
+<img src="../doc/CPU_boardBACK.png" width=640>  
+<img src="../doc/CPU_board_layers.png" width=640>  
 
 ## FPGA board design
 
@@ -45,9 +45,9 @@ The board is 6 layer, based on the [OrgangeCrab board r0.1](https://orangecrab-f
   
 PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).  
 
-<img src="../doc/FPGA_board3D.png" width=640/>  
-<img src="../doc/FPGA_boardFRONT.png" width=640/>  
-<img src="../doc/FPGA_boardBACK.png" width=640/>  
-<img src="../doc/FPGA_board_layers.png" width=640/>  
+<img src="../doc/FPGA_board3D.png" width=640>  
+<img src="../doc/FPGA_boardFRONT.png" width=640>  
+<img src="../doc/FPGA_boardBACK.png" width=640>  
+<img src="../doc/FPGA_board_layers.png" width=640>  
 
 *NOTE: FPGA chip is not shown on the 3D rendering for lack of a 3D model for the part*
