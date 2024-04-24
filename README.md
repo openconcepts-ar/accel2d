@@ -186,6 +186,41 @@ This generates the following picture:
 
 To run the clock demo, [accel_clock.py](./demos/micropython/accel_clock.py)  (in same folder)
 
+## Micropython support on the CPU board
+  
+The same repository used for the port of micropython to the FPGA platform was used to target the project's CPU board (F133A SoC by Allwinner Tech)
+
+Supported features are:  
+  * REPL (Python prompt) over UART  
+  * Minimal umachine support  
+  * Time functions (except RTC)  
+  * Video Framebuffer
+  * Dynamic memory allocation (using the internal DDR2 RAM)
+
+The repository of the extended micropython is linked as a git submodule on the main repo (see [micropython@51dfc37b30](https://notabug.org/suarezvictor/gpu2d) at the project's main repo). The sub repository directs to the micropython [repo](https://github.com/suarezvictor/micropython/tree/gpu2d).
+
+The source for the f133 port are under the following [folder](https://github.com/suarezvictor/micropython/tree/gpu2d/ports/f133)
+  
+A basic example to test micropython on the CPU is to use the REPL mode:
+  
+<img src="doc/cpu_mpy_basic_REPL.png"></img>
+
+Under the f133 folder, there's a micropython script that shows how to access the video framebuffer: [test/test_video.py](https://github.com/suarezvictor/micropython/blob/gpu2d/ports/f133/test/test_video.py)
+  
+<img src="doc/cpu_mpy_video_example.png"></img>
+
+Execution of this produced the following result:
+  
+<img src="doc/cpu_mpy_video_example_screen.png" width=640></img>
+
+Note the compatibility of the micropython code with the one for the [FPGA platform](https://github.com/suarezvictor/micropython/blob/gpu2d/ports/litex/test/test_video.py).
+
+## Build instructions:  
+```
+cd ports/f133
+make
+```
+The `make` command will build the firmware and upload it to the board. To upload new firmware, you have to first push the reset button.
 
 # New CPU-based board
 A brand-new board was designed using a graphics-capable CPU:
@@ -198,13 +233,16 @@ This produces the following image:
 <img src="doc/CPUclockdemo.png" width=320 height=240></img>
 
 ## Build instructions:  
+```
    cd target-cpu/f133-bare/
    make
+```
 
 The `make` command will build the firmware and upload it to the board. To upload new firmware, you have to first push the reset button.
 
 This milestone is **conclusive proof** that this framework is capable running the drawing primitives as software or hardware, since the same code runs on the CPU as software and in the FPGA as a hardware core, producing matching visual results.
 
+The same port of micropython to the FPGA platform was used to target the project's CPU board (F133A SoC by Allwinner Tech)
 
 # Software JPEG image decompression
 
