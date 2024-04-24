@@ -206,6 +206,22 @@ The `make` command will build the firmware and upload it to the board. To upload
 This milestone is **conclusive proof** that this framework is capable running the drawing primitives as software or hardware, since the same code runs on the CPU as software and in the FPGA as a hardware core, producing matching visual results.
 
 
+# Software JPEG image decompression
+
+A new function to decompress JPEG file was implemented, it's based on the C model of a [Verilog decompressor](https://github.com/ultraembedded/core_jpeg), so in that form it's useful to test things in sofware before moving it to hardware. The original code was changed to avoid dynamic memory allocations thus easier to run in the bare metal environment, see [target-cpu/f133-bare](target-cpu/f133-bare) for sources.
+
+
+A JPEG file is embedded in the firmware image by means of a direct include of the raw file data (.incbin directive in the [rawdata.S](target-cpu/f133-bare/rawdata.S) assembler source)
+
+The example image size is 33.8KB when compressed and 921.6 KB when decompressed (27:1 ratio). Software decompresion takes 195ms (5FPS) expected to reach 30FPS with the planned video decoder accelerator (Verilog).
+
+Working example on the bare metal enviroment:
+  
+<img src="doc/JPEG_software_decompression.jpeg" width=640>
+
+The decompression algorithm is in the [c_model_jpeg_test.cpp](target-cpu/f133-bare/c_model_jpeg_test.cpp) source.
+
+
 # About [NLnet](http://nlnet.nl) Foundation
 
 <img src="doc/nlnet_logo.png"></img>
