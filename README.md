@@ -259,6 +259,15 @@ See below an example interaction with micropython using the second port (UART1),
 
 This is achieved in software by calling a initialization function `uart_probe(UART_COMM)` to enable the second port. See [main.c](target-cpu/f133-bare/main.c) for a example usage and [driver_uart.c](target-cpu/f133-bare/driver_uart.c) for the implementation.
 
+## I2C
+An I2C driver was added to the micropython port for the CPU board. It can access display information provided by PC monitors and determine available resolutions.
+
+It works by configuring I/O pins for open-drain behaviour, thus electrically compatible with the I2C standard.
+See [mphalport.h](https://github.com/suarezvictor/micropython/blob/1be3d4751f3e6832b87b66c13be2fca8f1f1078a/ports/f133/mphalport.h#L64) for implementation details.
+
+The micropython script to run is: [i2c_vga_ddc.py](demos/micropython/i2c_vga_ddc.py), which obtains the following information:
+  
+<img src="doc/mpy_i2c_scan_result.png">
 
 # Software JPEG image decompression
 
