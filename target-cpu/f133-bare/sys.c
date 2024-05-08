@@ -26,6 +26,8 @@
 // (C) 2024 Victor Suarez Rovere <suarezvictor@gmail.com>
 // SPDX-License-Identifier: AGPL-3.0-only
 
+#include "driver_uart.h"
+
 void sys_dram_init(void)
 {
 /*
@@ -60,8 +62,8 @@ void riscv64_handle_exception(struct pt_regs_t * regs)
 {
 }
 
-void sys_uart_init()
+//NOTE: this is called from start.S, so IT IS NOT called if program is loaded by FEL
+void sys_uart_init(void)
 {
-  void uart_probe();
-  uart_probe();
+  uart_probe(UART_BOOT);
 }

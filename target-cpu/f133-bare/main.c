@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "ioregs.h"
+#include <stdint.h>
 #include "sys.h"
+#include "driver_uart.h"
 #include "sw_accel_cores.h"
 
 #define LED_BUILTIN 22
@@ -77,6 +78,8 @@ static void jpeg_decompress(void)
 
 int main(void)
 {
+  uart_probe(UART_COMM);
+
   printf("Decompressing JPEG...\r\n");
   jpeg_decompress();
   printf("Done\r\n");

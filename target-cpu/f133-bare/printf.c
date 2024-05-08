@@ -29,7 +29,8 @@
 #include <stdarg.h>
 #include <stdint.h>
 
-void driver_uart_putc(char c);
+#include "driver_uart.h"
+#define printf_putc(c) driver_uart_putc(UART_COMM, c)
 
 static int vpf_str_to_num(const char * fmt, int * num)
 {
@@ -83,7 +84,7 @@ static void vpf_num_to_str(uint32_t a, int ish, int pl, int pc)
 	buf[idx] = '\0';
 
 	for(i = idx - 1; i >= 0; i--)
-		driver_uart_putc(buf[i]);
+		printf_putc(buf[i]);
 }
 
 static int vpf(const char * fmt, va_list va)
@@ -115,9 +116,9 @@ static int vpf(const char * fmt, va_list va)
 		else
 		{
 			for(i = 0; i < (p - q); i++)
-				driver_uart_putc(q[i]);
+				printf_putc(q[i]);
 			t = (unsigned char)(f != 0 ? f : c);
-			driver_uart_putc(t);
+			printf_putc(t);
 		}
 	}
 	return 0;

@@ -244,6 +244,22 @@ This milestone is **conclusive proof** that this framework is capable running th
 
 The same port of micropython to the FPGA platform was used to target the project's CPU board (F133A SoC by Allwinner Tech)
 
+
+# Serial communications
+
+The CPU board is capable of communication using serial ports, they're typically used to control the board externally and to get debug messages.
+
+See an example of boot mesages outputted from the default debug port (UART0):
+  
+<img src="doc/mpy_boot_console.png"></img>
+
+See below an example interaction with micropython using the second port (UART1), accesible in the board at the 6-pin header (bottom left).
+  
+<img src="doc/mpy_basic_prompt.png"></img>
+
+This is achieved in software by calling a initialization function `uart_probe(UART_COMM)` to enable the second port. See [main.c](target-cpu/f133-bare/main.c) for a example usage and [driver_uart.c](target-cpu/f133-bare/driver_uart.c) for the implementation.
+
+
 # Software JPEG image decompression
 
 A new function to decompress JPEG file was implemented, it's based on the C model of a [Verilog decompressor](https://github.com/ultraembedded/core_jpeg), so in that form it's useful to test things in sofware before moving it to hardware. The original code was changed to avoid dynamic memory allocations thus easier to run in the bare metal environment, see [target-cpu/f133-bare](target-cpu/f133-bare) for sources.

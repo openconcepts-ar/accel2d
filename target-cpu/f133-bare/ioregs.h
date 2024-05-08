@@ -6,8 +6,10 @@
 
 #include <stdint.h>
 
+typedef int gpio_pin_t;
+
 //Register defintions generated from d1_ioregs.svd using custom tool, based on:
-//see http://github.com/postspectacular/cmsis-svd-srcgen
+//see http://github.com/postspectacular/cmsis-svd-srcgen (or custom fork)
 #include "d1_ioregs.h"
 
 static inline __attribute__((__always_inline__)) uint32_t io_read32(uintptr_t addr)
