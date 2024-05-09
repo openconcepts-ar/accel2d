@@ -2,3 +2,6 @@
 	path = micropython
 	url = git@github.com:suarezvictor/micropython.git
 	branch = gpu2d
+[submodule "fat_io_lib"]
+	path = fat_io_lib
+	url = https://github.com/ultraembedded/fat_io_lib.git

@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+# Copyright (c) 2023-2024 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
 DEBUG = 0 #enable this to run in a unix platform
@@ -9,13 +9,14 @@ from framebuf import FrameBuffer, RGB32
 if DEBUG:
   fbuf = FrameBuffer(bytearray(FRAME_WIDTH*FRAME_HEIGHT*4), FRAME_WIDTH, FRAME_HEIGHT, RGB32, FRAME_WIDTH)
 else:
-  import litex
-  video = litex.Video(0)
+  import f133 as board #use litex as board for the FPGA board
+  video = board.Video(0)
   fbuf = FrameBuffer(video, video.width(), video.height(), RGB32, video.stride())
   video.flush() #makes sure screen gets completely clear
 
 bgcolor = 0xFF0000
 fbuf.fill(bgcolor)
+fbuf.rect(0, 0, FRAME_WIDTH, FRAME_HEIGHT, 0) #black border
 
 def accel_ellipse_fill(x0, y0, x1, y1, rgba):
   global fbuf

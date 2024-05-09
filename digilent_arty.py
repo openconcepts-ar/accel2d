@@ -63,7 +63,6 @@ class _CRG(Module):
         self.clock_domains.cd_sys = ClockDomain()
 
         self.submodules.pll = pll = S7PLL(speedgrade=-1)
-
         rst    = ~platform.request("cpu_reset") if with_rst else 0
         self.comb += pll.reset.eq(rst | self.rst)
         pll.register_clkin(platform.request("clk100"), 100e6)
@@ -147,8 +146,23 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 
 		soc.add_constant("SDRAM_BUS_BITS", pixel_bus_width)
 
-	return soc
+	# SD card -------------------------------------------------------------------------------------
+	with_sdcard = True
+	if with_sdcard:
+		ext = digilent_arty.sdcard_pmod_io("pmoda")
+		soc.platform.add_extension(ext)
+		soc.add_sdcard()
+	
+	#Hardware JPEG decoder
+	with_jpeg_decoder = True
+	if with_jpeg_decoder:
+		from videocodecs import JPEGDecoder
+		rdport = soc.sdram.crossbar.get_port(mode="read", data_width=32)
+		wrport = soc.sdram.crossbar.get_port(mode="write", data_width=32)
+		soc.submodules.jpeg_decoder = JPEGDecoder(rdport=rdport, wrport=wrport) #add JPEG decoder
+		soc.platform.add_source_dir("core_jpeg/src_v") #for jpeg_core.v and dependencies
 
+	return soc
 
 def set_args(parser):
     #builder_args(parser)
