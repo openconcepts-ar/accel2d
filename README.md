@@ -269,6 +269,10 @@ The micropython script to run is: [i2c_vga_ddc.py](demos/micropython/i2c_vga_ddc
   
 <img src="doc/mpy_i2c_scan_result.png">
 
+The script can be run from the Linux console with the `mpremote` command:
+```
+mpremote connect /dev/ttyUSB0 run demos/micropython/i2c_vga_ddc.py
+```
 # Software JPEG image decompression
 
 A new function to decompress JPEG file was implemented, it's based on the C model of a [Verilog decompressor](https://github.com/ultraembedded/core_jpeg), so in that form it's useful to test things in sofware before moving it to hardware. The original code was changed to avoid dynamic memory allocations thus easier to run in the bare metal environment, see [target-cpu/f133-bare](target-cpu/f133-bare) for sources.
