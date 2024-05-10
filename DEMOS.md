@@ -5,7 +5,7 @@ The working principle to play movies is akin to the MJPEG format (Motion JPEG): 
 
 See it in action:
   
-<a href="https://peertube.io/w/stGvx1Cg7f5jy5QT8sTUd8"><img src="doc/demo_video.gif"></a>
+<a href="https://peertube.io/w/stGvx1Cg7f5jy5QT8sTUd8"><img src="doc/demo_video.png"></a>
 
 
 The video file format is a very simple to manage one: just a TAR file of single JPEG-encoded frames, [accessed](untar.c) from a [SD](fs.c) card by using a provided [FAT filesystem layer](https://github.com/ultraembedded/fat_io_lib) (git submodule fat_io_lib). Each encoded frame is read from the filesystem, while at the same time a previous frame is decoded in hardware. This provides gains in reproduction speed from the simultaneity of software and hardware components.
