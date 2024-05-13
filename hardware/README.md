@@ -1,4 +1,17 @@
 # BOARDS
+
+Here are design files for the various board of this project:  
+  
+
+Processing boards:  
+* [CPU board](#cpu-board-design)  
+* [FPGA board](#fpga-board-design)  
+
+Adapter boards:  
+* [VGA adapter](#vga-adapter-board-design) & connector  
+* [LVDS adapter](#lvds-adapter-board-design)  
+
+
 ## CPU board design
 A second, smaller version of the CPU board was designed, based again on the Alwinner F133A CPU  
   
@@ -54,16 +67,37 @@ PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).
 
 ## VGA adapter board design
 
-This adapter is capable of coverting digital RGB parallel signals to VGA-compatible analog values, using a simple R-2R DAC. The adapter board outputs the VGA signals to a 15-pin flat cable, to be connected 1:1 to a connector board that has the D-sub (15-pin) starndard VGA connector.
+This adapter is capable of converting digital RGB parallel signals to VGA-compatible analog values, using a simple R-2R DAC. The adapter board outputs the VGA signals to a 15-pin flat cable, to be connected 1:1 to a connector board that has the D-sub (15-pin) starndard VGA connector.
 
 The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./VGA_adapter) (adapter) and [here](./VGA_connector_board) (connector)  
-
 PDF schematics for the adapter are [here](./VGA_adapter/VGA_adapter_schematics.pdf).  
+  
+This design is relased under a **CERN open-source hardware** license.
 
 <img src="../doc/VGA_adapter3D.png" height=360>
 <img src="../doc/VGA_connector_board3D.png" height=360>  
 <img src="../doc/VGA_adapterFRONT.png" height=360>
 <img src="../doc/VGA_adapterBACK.png" height=360>
 <img src="../doc/VGA_adapter_layers.png" height=360>  
+
+
+## LVDS adapter board design
+
+This board connects 4 pairs of differential signals to a LCD using LVDS signalling (of the kind commonly used for laptops), to directly drive the display (1-channel). It also connect signals that can identify the display model and resolution.
+
+Features:  
+  * 40-pin FPC cable connector  
+  * Protection diodes  
+  * I2C connection for display EDID reading  
+  * External header for powering the backlight  
+
+The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./LVDS_adapter), licensed under a **CERN open-source hardware** license.  
+  
+PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf).  
+
+<img src="../doc/LVDS_adapter3D.png" width=480>  
+<img src="../doc/LVDS_adapterFRONT.png" width=240>
+<img src="../doc/LVDS_adapterBACK.png" width=240>  
+<img src="../doc/LVDS_adapter_layers.png" width=240>  
 
 
