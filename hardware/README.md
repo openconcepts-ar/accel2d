@@ -51,3 +51,16 @@ PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).
 <img src="../doc/FPGA_board_layers.png" width=640>  
 
 *NOTE: FPGA chip is not shown on the 3D rendering for lack of a 3D model for the part*
+
+## VGA adapter board design
+
+This adapter is capable of coverting digital RGB parallel signals to VGA-compatible analog values, using a simple R-2R DAC.
+
+PDF schematics are [here](./VGA_adapter/VGA_adapter_schematics.pdf).  
+
+<img src="../doc/VGA_adapter3D.png" height=360>  
+<img src="../doc/VGA_adapterFRONT.png" height=360>
+<img src="../doc/VGA_adapterBACK.png" height=360>
+<img src="../doc/VGA_adapter_layers.png" height=360>  
+
+
