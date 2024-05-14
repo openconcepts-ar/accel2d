@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "TE Connectivity 1-1734248-5")(type "KiCad")(uri "footprints.pretty")(options "")(descr ""))
+)
