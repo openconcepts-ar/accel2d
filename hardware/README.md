@@ -27,7 +27,7 @@ It features:
   * Reset and boot buttons
   * JTAG debugging using "pogo-pins"  
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./CPU_board)  
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./CPU_board)  
 The board is 4 layer, based on the [Yuzuki design](https://bbs.aw-ol.com/topic/922/%E5%BC%80%E6%BA%90-yuzukinezha-d1s-%E6%A0%B8%E5%BF%83%E6%9D%BF-mini-pice-%E6%A0%B8%E5%BF%83%E6%9D%BF/3), with **CERN open-source hardware** license.
   
 PDF schematics are [here](./CPU_board/CPU_board_schematics.pdf).  
@@ -70,7 +70,7 @@ PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).
 
 This adapter is capable of converting digital RGB parallel signals to VGA-compatible analog values, using a simple R-2R DAC. The adapter board outputs the VGA signals to a 15-pin flat cable, to be connected 1:1 to a connector board that has the D-sub (15-pin) starndard VGA connector.
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./VGA_adapter) (adapter) and [here](./VGA_connector_board) (connector)  
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./VGA_adapter) (adapter) and [here](./VGA_connector_board) (connector)  
 PDF schematics for the adapter are [here](./VGA_adapter/VGA_adapter_schematics.pdf).  
   
 This design is relased under a **CERN open-source hardware** license.
@@ -92,7 +92,7 @@ Features:
   * I2C connection for display [EDID](https://en.wikipedia.org/wiki/Extended_Display_Identification_Data) reading  
   * External header for powering the backlight  
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./LVDS_adapter), licensed under a **CERN open-source hardware** license.  
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./LVDS_adapter), licensed under a **CERN open-source hardware** license.  
   
 PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf).  
 
@@ -112,7 +112,7 @@ Features:
   * I2C connection for display [EDID](https://en.wikipedia.org/wiki/Extended_Display_Identification_Data) reading  
   * Solder jumpers for the main IC configuration  
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./DVI_adapter) (adapter) and [here](./DVI_connector_board) (connector), licensed under a **CERN open-source hardware** license.  
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./DVI_adapter) (adapter) and [here](./DVI_connector_board) (connector), licensed under a **CERN open-source hardware** license.  
   
 PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.pdf).  
 
