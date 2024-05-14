@@ -54,7 +54,7 @@ Features are:
   * JTAG debugging using "pogo-pins"  
 
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./FPGA_board)  
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./FPGA_board)  
 The board is 6 layer, based on the [OrgangeCrab board r0.1](https://orangecrab-fpga.github.io/orangecrab-hardware/docs/r0.1/), with **CERN open-source hardware** license.
   
 PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).  
@@ -112,7 +112,7 @@ Features:
   * I2C connection for display [EDID](https://en.wikipedia.org/wiki/Extended_Display_Identification_Data) reading  
   * Solder jumpers for the main IC configuration  
 
-The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./DVI_adapter), licensed under a **CERN open-source hardware** license.  
+The design is done with the open-source EDA tool [Kicad](kicad.org), the source files are [here](./DVI_adapter) (adapter) and [here](./DVI_connector_board) (connector), licensed under a **CERN open-source hardware** license.  
   
 PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.pdf).  
 
