@@ -26,9 +26,7 @@ It is expected a tar file with the movie (just a collection of JPEG frames encod
 This is an example aplication for a real-world product: a queue management system.  
 It's capable of showing not only the current token and counter in a big display, but also additional media for purposes of advertising and/or entertaining, in form of short videos that are played from time to time.
   
-See it in action:
-https://notabug.org/suarezvictor/gpu2d/src/master/README.md
-
+See it in action:  
 [<img src="../../raw/master/doc/queue_demo.png">](doc/queue.webm "Queue Management System")
 
 
