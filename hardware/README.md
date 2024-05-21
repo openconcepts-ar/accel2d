@@ -11,7 +11,7 @@ Adapter boards:
   * [VGA adapter](#vga-adapter-board-design) & connector  
   * [LVDS adapter](#lvds-adapter-board-design)  
   * [DVI adapter](#dvi-adapter-board-design)  
-  * [I/O board](#i-o-board-design)  
+  * [I/O board](#io-board-design)  
 
   
 ## CPU board design
