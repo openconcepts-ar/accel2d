@@ -11,6 +11,7 @@ Adapter boards:
   * [VGA adapter](#vga-adapter-board-design) & connector  
   * [LVDS adapter](#lvds-adapter-board-design)  
   * [DVI adapter](#dvi-adapter-board-design)  
+  * [I/O board](#i-o-board-design)  
 
   
 ## CPU board design
@@ -123,4 +124,14 @@ PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.p
 <img src="../doc/DVI_adapter_layers.png" height=160>  
 
 
+  
+## I/O board design
 
+The I/O board adapter allows to externally access the video signals (present on the 2x15 connectors) for other purposes like general purpose I/O pins and debug.
+
+It uses a 40-pin FPC connector and cable that allows to break out the signals, in a more manageable way like using common wires as the ones usually for bread boards.
+
+Also, it includes two 31-pin FPC connectors at 0.3mm pitch for replacing the Hirose connectors with FPC or FFCs.
+All the wiring are directo connections to the video connectors. A header to acces the touchscreen signal is also provided.
+  
+<img src="../doc/IO_boardTOP.png" width=320>
