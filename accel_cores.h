@@ -65,5 +65,12 @@ unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1,
 unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
 
 
+//decoders ------------------------------------------------------------------------------------------
+void accel_jpeg_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done);
+void accel_jpeg_decode_waitdone(unsigned *decoded_width, unsigned *decoded_height);
+
+void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done);
 
 #endif //__ACCEL_CORES_H__

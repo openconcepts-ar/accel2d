@@ -19,7 +19,7 @@ from litex.build.generic_platform import *
 
 from litex_boards.platforms import digilent_arty
 
-
+DVI = True
 
 class VideoGenericPHY_SDR(Module):
     def __init__(self, pads, clock_domain="sys"):
@@ -68,8 +68,15 @@ class _CRG(Module):
         pll.register_clkin(platform.request("clk100"), 100e6)
         pll.create_clkout(self.cd_sys, sys_clk_freq)
 
-        self.clock_domains.cd_vga= ClockDomain(reset_less=False) #TODO: check why True brings errors
-        pll.create_clkout(self.cd_vga, video_clock)
+        if DVI:
+          self.clock_domains.cd_dvi   = ClockDomain()
+          pll.create_clkout(self.cd_dvi,     video_clock)
+          self.clock_domains.cd_dvi5x = ClockDomain()
+          pll.create_clkout(self.cd_dvi5x, 5*video_clock)
+        else:
+          self.clock_domains.cd_vga= ClockDomain(reset_less=False) #TODO: check why True brings errors
+          pll.create_clkout(self.cd_vga, video_clock)
+
         platform.add_false_path_constraints(self.cd_sys.clk, pll.clkin) # Ignore sys_clk to pll.clkin path created by SoC's rst.
 
         if with_dram:
@@ -86,7 +93,7 @@ class _CRG(Module):
 def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile_gateware=False):
 	timings_sel = "640x480@60Hz"
 	timings = video_timings[timings_sel]
-	timings["pix_clk"] = 25e6 #fix default of 25.18MHz
+	timings["pix_clk"] = 24e6 #adjust from 25MHz to allow a possible PLL configuration
 	
 	#supported toolchains: "yosys+nextpnr" or "vivado"
 	platform = digilent_arty.Platform(variant="a7-35", toolchain=args.toolchain)
@@ -129,7 +136,24 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 		)
 
 	# Video -------------------------------------------------------------------------------------
-	if with_video_framebuffer:
+	if with_video_framebuffer and DVI:
+	    dvi_pins  = "01234567" #"62514073" # "62514073" for machdyne dadapter (for TMDS_33, odd-even should be next to each other, like "01234567")
+	    pmod_dvi  = "pmodc" #must be port C for TDMS_33, ports A-D on Arty has 200 ohm series protection resistors
+	    dvi_iostd = "TMDS_33"
+	    platform.add_extension([("dvi_out", 0, #DVI pmod breakout on pmod C (seems not working in others than C)
+                Subsignal("data0_p", Pins(f"{pmod_dvi}:{dvi_pins[0]}"), IOStandard(dvi_iostd)), #B0+
+                Subsignal("data0_n", Pins(f"{pmod_dvi}:{dvi_pins[1]}"), IOStandard(dvi_iostd)), #B0-
+                Subsignal("data1_p", Pins(f"{pmod_dvi}:{dvi_pins[2]}"), IOStandard(dvi_iostd)), #G1+
+                Subsignal("data1_n", Pins(f"{pmod_dvi}:{dvi_pins[3]}"), IOStandard(dvi_iostd)), #G1-
+                Subsignal("data2_p", Pins(f"{pmod_dvi}:{dvi_pins[4]}"), IOStandard(dvi_iostd)), #R2+
+                Subsignal("data2_n", Pins(f"{pmod_dvi}:{dvi_pins[5]}"), IOStandard(dvi_iostd)), #R2-
+                Subsignal("clk_p",   Pins(f"{pmod_dvi}:{dvi_pins[6]}"), IOStandard(dvi_iostd)),
+                Subsignal("clk_n",   Pins(f"{pmod_dvi}:{dvi_pins[7]}"), IOStandard(dvi_iostd)))
+                ])
+	    video_clock_domain = "dvi"
+	    from litex.soc.cores.video import VideoS7HDMIPHY
+	    soc.submodules.videophy = VideoS7HDMIPHY(platform.request("dvi_out"), clock_domain=video_clock_domain)
+	elif with_video_framebuffer:
 		platform.add_extension([("vga", 0, #PMOD VGA on pmod B & C
 			Subsignal("hsync", Pins("U14")), #pmodc.4
 			Subsignal("vsync", Pins("V14")), #pmodc.5
@@ -138,8 +162,11 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 			Subsignal("b", Pins("J17 J18 K15 J15")), #pmodb.4-7
 			IOStandard("LVCMOS33"))])
 			
-		soc.submodules.videophy = VideoGenericPHY_SDR(platform.request("vga"), clock_domain="vga")
-		soc.add_video_framebuffer(phy=soc.videophy, timings=timings_sel, clock_domain="vga", format="rgb888")
+		video_clock_domain = "vga"
+		soc.submodules.videophy = VideoGenericPHY_SDR(platform.request("vga"), clock_domain=video_clock_domain)
+	
+	if with_video_framebuffer:
+		soc.add_video_framebuffer(phy=soc.videophy, timings=timings_sel, clock_domain=video_clock_domain, format="rgb888")
 
 		corelist = ["rectangle_fill32", "ellipse_fill32", "line32"]
 		gen_accel_cores(soc, corelist, pixel_bus_width)
@@ -161,6 +188,9 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 		wrport = soc.sdram.crossbar.get_port(mode="write", data_width=32)
 		soc.submodules.jpeg_decoder = JPEGDecoder(rdport=rdport, wrport=wrport) #add JPEG decoder
 		soc.platform.add_source_dir("core_jpeg/src_v") #for jpeg_core.v and dependencies
+
+	if True:
+		soc.add_constant("UART_POLLING") #FIXME: this is currently needed to be able to read from UART
 
 	return soc
 

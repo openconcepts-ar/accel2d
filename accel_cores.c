@@ -150,4 +150,98 @@ unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, in
    + accel_line(regs, x0, y1, x0, y0, rgba);
 }
 
+#include "bmp.h"
+//example command for PNG to BMP (32-bit)
+//$ convert input.png -alpha on output.bmp
+void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done)
+{
+  BMPHeader *bmp = (BMPHeader *) coded_buf;
+  assert(bmp->type == 0x4D42);
 
+  assert(bmp->bits_per_pixel == 32 && bmp->compression == 3); //check RGBA32 format
+  unsigned w = bmp->width_px, h = bmp->height_px;
+  uint32_t *data = ((uint8_t*)bmp) + bmp->offset;
+  
+  uint8_t *fb = (uint8_t *) dst;
+  fb += h * writer_stride;
+  while(h--)
+  {
+    fb -= writer_stride;
+    memcpy(fb, data, w*sizeof(uint32_t));
+    data += w;
+  }
+  
+  if(decoded_width) *decoded_width = w;
+  if(decoded_height) *decoded_height = h;
+}
+
+
+#ifdef CSR_JPEG_DECODER_BASE
+/*
+Example converting a video file
+
+wget http://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi
+ffmpeg -i big_buck_bunny_480p_surround-fix.avi -vf "scale=640:480" frame%05d.png
+(for file in frame*.png; do convert "$file" ppm:- | cjpeg -quality 90 -sample 2x2 -baseline -outfile "${file%.png}.jpeg"; echo "${file%.png}.jpeg"; done;) | tar -T - -cvf big_buck_bunny_480p_surround-fix.jpeg.tar
+rm frame*.png frame*.jpeg
+
+At same resolution, resulting size is about 4X the original file (no audio)
+*/
+
+void accel_jpeg_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done)
+{
+  accel_jpeg_decode_waitdone(NULL, NULL);
+
+  coded_len = (coded_len + 3) & ~3;
+  jpeg_decoder_reader_base_write((intptr_t) coded_buf);
+  jpeg_decoder_reader_length_write(coded_len);
+  jpeg_decoder_writer_base_write((intptr_t) dst);
+  jpeg_decoder_writer_stride_write(writer_stride);
+
+  jpeg_decoder_reader_enable_write(1); //start decoding
+
+  if(wait_done)
+    accel_jpeg_decode_waitdone(decoded_width, decoded_height);
+}
+
+void accel_jpeg_decode_waitdone(unsigned *decoded_width, unsigned *decoded_height)
+{
+  int count = 0;
+  while(!jpeg_decoder_idle_status_read())
+  {
+    if(count++>100)
+    {
+      jpeg_decoder_reader_enable_write(0);
+      printf("DECODING ERROR\n");
+      return;
+    }
+    printf("idle %ld, byte read offset %ld (of %d), write offset %ld (%d,%d)\n", jpeg_decoder_idle_status_read(),
+    jpeg_decoder_reader_offset_read()*4, jpeg_decoder_reader_length_read(),
+    jpeg_decoder_outport_pixel_offset_read(), jpeg_decoder_outport_x_read(), jpeg_decoder_outport_y_read());
+  }
+/*
+  if(decoded_width && decoded_height)
+  {
+    printf("FINAL idle %ld, byte read offset %ld, write offset %ld (%d,%d)\n", jpeg_decoder_idle_status_read(),
+    jpeg_decoder_reader_offset_read()*4, jpeg_decoder_outport_pixel_offset_read()*4,
+    jpeg_decoder_outport_x_read(), jpeg_decoder_outport_y_read());
+  }
+*/
+
+  if(decoded_width)
+    *decoded_width = jpeg_decoder_outport_width_read();
+  if(decoded_height)
+    *decoded_height = jpeg_decoder_outport_height_read();
+
+
+  jpeg_decoder_reader_enable_write(0);
+  //jpeg_decoder_reader_enable_write(0);
+  //printf("RESET size (%d,%d)\n", jpeg_decoder_outport_width_read(), jpeg_decoder_outport_height_read());
+
+}
+
+#else
+#warning implement software JPEG decoder
+#endif
