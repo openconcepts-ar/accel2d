@@ -27,7 +27,7 @@ It's capable of showing not only the current token and counter in a big display,
   
 See it in action:  
 
-[<img src="doc/queue_demo.png">](doc/queue.webm "Queue Management System")
+[<img src="https://notabug.org/suarezvictor/gpu2d/src/a400b7989aaf578264d81eef1578c29b9ac9f28f/doc/queue_demo.png">](doc/queue.webm "Queue Management System")
 
 
 The graphics board works as a graphic server, running firmware that receive and process commands from various remote clients (desks) indicating which one isn't busy anymore. It also automatically displays short movies retrieved from an SD card after configured delays to entertain the clients while they're waiting.
