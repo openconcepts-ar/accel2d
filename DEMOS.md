@@ -3,7 +3,8 @@
 This one of the most useful features and challenging tasks of this project: A hardware-accelerated video decoder.
 The working principle to play movies is akin to the MJPEG format (Motion JPEG): it decodes individual JPEG files in sequence.
 
-[Click here](doc/demo_video.webm) to see it in action.
+See it in action:  
+[<img src="../../raw/master/doc/demo_video.png">](doc/demo_video.webm "Video demo")
 
 
 The video file format is a very simple to manage one: just a TAR file of single JPEG-encoded frames, [accessed](untar.c) from a [SD](fs.c) card by using a provided [FAT filesystem layer](https://github.com/ultraembedded/fat_io_lib) (git submodule fat_io_lib). Each encoded frame is read from the filesystem, while at the same time a previous frame is decoded in hardware. This provides gains in reproduction speed from the simultaneity of software and hardware components.
@@ -25,9 +26,10 @@ It is expected a tar file with the movie (just a collection of JPEG frames encod
 This is an example aplication for a real-world product: a queue management system.  
 It's capable of showing not only the current token and counter in a big display, but also additional media for purposes of advertising and/or entertaining, in form of short videos that are played from time to time.
   
-See it in action:  
+See it in action:
+https://notabug.org/suarezvictor/gpu2d/src/master/README.md
 
-[<img src="https://notabug.org/suarezvictor/gpu2d/src/a400b7989aaf578264d81eef1578c29b9ac9f28f/doc/queue_demo.png">](doc/queue.webm "Queue Management System")
+[<img src="../../raw/master/doc/queue_demo.png">](doc/queue.webm "Queue Management System")
 
 
 The graphics board works as a graphic server, running firmware that receive and process commands from various remote clients (desks) indicating which one isn't busy anymore. It also automatically displays short movies retrieved from an SD card after configured delays to entertain the clients while they're waiting.
