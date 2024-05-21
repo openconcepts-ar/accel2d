@@ -27,7 +27,12 @@ It's capable of showing not only the current token and counter in a big display,
   
 See it in action:  
   
-<a href="doc/queue.webm">![queue](doc/queue_demo.png)</a>
+<a href="doc/queue.webm">
+<img src="doc/queue_demo.png" width="800" height="480"></img>
+</a>
+<img src="doc/queue_demo.png" width="800" height="480"></img>
+
+
 
 The graphics board works as a graphic server, running firmware that receive and process commands from various remote clients (desks) indicating which one isn't busy anymore. It also automatically displays short movies retrieved from an SD card after configured delays to entertain the clients while they're waiting.
 
