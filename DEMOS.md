@@ -25,7 +25,9 @@ It is expected a tar file with the movie (just a collection of JPEG frames encod
 This is an example aplication for a real-world product: a queue management system.  
 It's capable of showing not only the current token and counter in a big display, but also additional media for purposes of advertising and/or entertaining, in form of short videos that are played from time to time.
   
-[Click here](doc/queue.webm) to see it in action.
+See it in action:  
+  
+<a href="doc/queue.webm">![queue](doc/queue_demo.png)</a>
 
 The graphics board works as a graphic server, running firmware that receive and process commands from various remote clients (desks) indicating which one isn't busy anymore. It also automatically displays short movies retrieved from an SD card after configured delays to entertain the clients while they're waiting.
 
