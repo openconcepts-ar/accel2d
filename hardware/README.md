@@ -1,7 +1,6 @@
 # BOARDS
 
 Here are design files for the various board of this project:  
-  
 
 Processing boards:  
   * [CPU board](#cpu-board-design)  
@@ -133,5 +132,9 @@ It uses a 40-pin FPC connector and cable that allows to break out the signals, i
 
 Also, it includes two 31-pin FPC connectors at 0.3mm pitch for replacing the Hirose connectors with FPC or FFCs.
 All the wiring are directo connections to the video connectors. A header to acces the touchscreen signal is also provided.
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./IO_board), licensed under a **CERN open-source hardware** license.  
+
   
 <img src="../doc/IO_boardTOP.png" width=320>
+
