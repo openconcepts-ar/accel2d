@@ -52,25 +52,24 @@ verify_checksum(const char *p)
 }
 
 // Extract a tar archive
-static void untar(FL_FILE *a, const char *path)
+typedef int (*process_archived_file_t)(FL_FILE *a, const char *fname, size_t flen);
+static int untar(FL_FILE *a, process_archived_file_t process_fn)
 {
 	size_t bytes_read;
 	unsigned long filesize;
 	char buff[BLOCKSIZE];
-
-	for (;;) {
+	{
 		bytes_read = fl_fread(buff, BLOCKSIZE, 1, a);
 		if (bytes_read < BLOCKSIZE) {
-			printf("UNTAR: short read on %s: expected %d, got %d\n", path, BLOCKSIZE, (int)bytes_read);
-			return;
+			printf("UNTAR: short read: expected %d, got %d\n", BLOCKSIZE, (int)bytes_read);
+			return -1;
 		}
 		if (is_end_of_archive(buff)) {
-			printf("UNTAR: end of file %s\n", path);
-			return;
+			return 0;
 		}
 		if (!verify_checksum(buff)) {
 			printf("UNTAR: checksum failure\n");
-			return;
+			return -2;
 		}
 		filesize = parseoct(buff + 124, 12);
 		switch (buff[156]) {
@@ -82,7 +81,7 @@ static void untar(FL_FILE *a, const char *path)
 			break;
 		case '3':
 			printf("UNTAR: ignoring character device %s\n", buff);
-				break;
+			break;
 		case '4':
 			printf("UNTAR: ignoring block device %s\n", buff);
 			break;
@@ -95,13 +94,13 @@ static void untar(FL_FILE *a, const char *path)
 			printf("UNTAR: ignoring FIFO %s\n", buff);
 			break;
 		default:
-			//printf(" Extracting file %s\n", buff);
-			//f = create_file(buff, (int)parseoct(buff + 100, 8));
+			process_fn(a, buff, filesize);
+			filesize = 512-(filesize & 0x1FF); //skip unused bytes
 			break;
 		}
-		process_archived_file(a, buff, filesize);
 		if(filesize & 0x1FF)
-			fl_fseek(a, 512-(filesize & 0x1FF), SEEK_CUR); //skip unused bytes
+			fl_fseek(a, filesize, SEEK_CUR);
 	}
+	return 1;
 }
 
