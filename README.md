@@ -267,7 +267,7 @@ See [mphalport.h](https://github.com/suarezvictor/micropython/blob/1be3d4751f3e6
 
 The micropython script to run is: [i2c_vga_ddc.py](demos/micropython/i2c_vga_ddc.py), which obtains the following information:
   
-<img src="doc/mpy_i2c_scan_result.png">
+<img src="doc/mpy_i2c_scan_result.png"></img>
 
 The script can be run from the Linux console with the `mpremote` command:
 ```
@@ -275,7 +275,7 @@ mpremote connect /dev/ttyUSB0 run demos/micropython/i2c_vga_ddc.py
 ```
 
 The wiring can be done using the [I/O board](hardware/IO_board) using a 40-pin FPC cable and direct wiring to the VGA connector as shown:   
-<img src="doc/GPIO_example.jpeg" width=400>
+<img src="doc/GPIO_example.jpeg" width="400" height="225"></img>
 
   
 # Software JPEG image decompression
@@ -289,7 +289,7 @@ The example image size is 33.8KB when compressed and 921.6 KB when decompressed 
 
 Working example on the bare metal enviroment:
   
-<img src="doc/JPEG_software_decompression.jpeg" width=640>
+<img src="doc/JPEG_software_decompression.jpeg" width="640"></img>
 
 The decompression algorithm is in the [c_model_jpeg_test.cpp](target-cpu/f133-bare/c_model_jpeg_test.cpp) source.
 
