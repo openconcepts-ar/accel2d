@@ -43,12 +43,19 @@ All the videos should be put in the `videos` folder on the SD card, with the sam
 
 The background image is a custom JPEG file also stored on the SD card, with name `background.jpeg`. It allows to internationalize the system, and show custom logos of the store where it's used. The digits should be like a bitmapped font atlas: each character needs to be named with the ASCII character number (i.e. 48.bmp for the '0' digit) and all of them should be put in a TAR file called `font_atlas120x240.bmp.tar` (note that the resolution is fixed for each font atlas). BMP format was used to avoid any loss of quality, unlike the movies that would otherwise use too much space.
 
-All the logic for the complete queue management systems is on a single file: [main.c](main.c). See in particular the `turn_machine()` function, that's called periodically to make the system change its state.
+All the logic for the complete queue management systems is on a single file: [main.c](main.c). See in particular the `turn_machine()` function, that's called periodically to make the system change its state.  
+The firmware for the MCU client is [here](demos/queue-client/main.c).
 
 ## Build instructions
-Execute:
+For the server, execute:
 ```
 make digilent_arty upload
 ```
 The hardware sould be setup as explaiend on the above section.
 The SD card should hold files according to the referenced media files (images and videos).
+  
+For the client:
+```
+cd demos/queue-client
+make flash
+```
