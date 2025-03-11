@@ -1,8 +1,10 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-#BOARD?=digilent_arty
-BOARD?=lambdaconcept_ecpix5
+APP_SRC?=test_app
+
+BOARD?=digilent_arty
+#BOARD?=lambdaconcept_ecpix5
 #LATTICETOOLCHAIN=--toolchain diamond
 LATTICETOOLCHAIN=--toolchain trellis --nextpnr-seed 0 --nextpnr-timingstrict 
 SDRAM_BUS_BITS?=32
@@ -22,7 +24,7 @@ include $(LITEX_ROOT)/litex/soc/software/common.mak
 
 CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
 CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
-CXXFLAGS+=$(CCDEFS) $(INC)
+CXXFLAGS+=$(CCDEFS) $(INC) -fno-threadsafe-statics
 
 SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE)
 
@@ -68,8 +70,8 @@ sim_linux: prerequisites sim_linux.c drawing_test.c accel_cores.c sim_fb.c sw_co
 .PHONY: firmware
 firmware: main.bin
 
-main.elf: prerequisites main.o accel_cores.o sw_cores.o crt0.o linker.ld
-	$(CC) crt0.o main.o accel_cores.o sw_cores.o $(LDFLAGS) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
+main.elf: prerequisites main.o $(APP_SRC).o accel_cores.o sw_cores.o crt0.o linker.ld
+	$(CX) crt0.o main.o $(APP_SRC).o accel_cores.o sw_cores.o -march=rv32im -mabi=ilp32 -nostartfiles -L$(BUILDINC_DIRECTORY) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
 		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) $(LIBS:lib%=-l%)
 
 

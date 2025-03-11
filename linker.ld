@@ -37,6 +37,17 @@ SECTIONS
 		_erodata = .;
 	} > main_ram
 
+    .init_array ALIGN(8) : /*newer versions of GCC adds constructors and initializers here */
+    {
+        KEEP (*.init_array)
+        KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*)))
+    } > main_ram
+
+    .fini_array ALIGN(8) : /*this is for destructors and deinitializers */
+    {
+        KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*)))
+        KEEP(*.fini_array)
+    } > main_ram
 
 	.data :
 	{
@@ -95,4 +106,8 @@ PROVIDE(_edata_rom = LOADADDR(.data) + SIZEOF(.data));
 PROVIDE(_emain_ram = ORIGIN(main_ram) + LENGTH(main_ram));
 PROVIDE(__heap_start = ORIGIN(main_ram) + 0x01000000); /*skips video framebuffer, if any*/
 PROVIDE(__heap_end = ORIGIN(main_ram) + LENGTH(main_ram));
+PROVIDE_HIDDEN (__init_array_start = LOADADDR(.init_array));
+PROVIDE_HIDDEN (__init_array_end = LOADADDR(.init_array) + SIZEOF(.init_array));
+PROVIDE_HIDDEN (__fini_array_start = LOADADDR(.fini_array));
+PROVIDE_HIDDEN (__fini_array_end = LOADADDR(.fini_array) + SIZEOF(.fini_array));
 
