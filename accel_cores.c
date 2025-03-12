@@ -3,11 +3,14 @@
 
 #include <stdio.h>
 #include <stdlib.h> //abs
+#include <string.h> //memcpy
 
 #include "misc.h" //just for ACCEL_STATIC_ASSERT
 #include "accel_cores.h"
 #include "graphics.h"
 #include "sw_cores.h"
+
+#include "bmp.h"
 
 //#define INDUCE_RENDERING_ERRORS //enable to induce errors in softwre renderer
 
@@ -141,7 +144,6 @@ unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1,
   return abs(x1-x0)+abs(y1-y0);
 }
 
-
 unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba)
 {
   return accel_line(regs, x0, y0, x1, y0, rgba)
@@ -150,7 +152,6 @@ unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, in
    + accel_line(regs, x0, y1, x0, y0, rgba);
 }
 
-#include "bmp.h"
 //example command for PNG to BMP (32-bit)
 //$ convert input.png -alpha on output.bmp
 void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,

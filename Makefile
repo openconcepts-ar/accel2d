@@ -1,7 +1,7 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-APP_SRC?=test_app
+APP_SRC?=canvas_app
 
 BOARD?=digilent_arty
 #BOARD?=lambdaconcept_ecpix5
@@ -20,7 +20,8 @@ include Makefile.common
 include $(BUILD_DIR)/software/include/generated/variables.mak
 include $(LITEX_ROOT)/litex/soc/software/common.mak
 
-#INC=-I$(CFLEXROOT)/include #not needed anymore (files incorporated to the project)
+AGG_BASE_DIR=agg-2.4
+INC=-I$(AGG_BASE_DIR)/include -I./freetype
 
 CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
 CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
@@ -70,8 +71,9 @@ sim_linux: prerequisites sim_linux.c drawing_test.c accel_cores.c sim_fb.c sw_co
 .PHONY: firmware
 firmware: main.bin
 
-main.elf: prerequisites main.o $(APP_SRC).o accel_cores.o sw_cores.o crt0.o linker.ld
-	$(CX) crt0.o main.o $(APP_SRC).o accel_cores.o sw_cores.o -march=rv32im -mabi=ilp32 -nostartfiles -L$(BUILDINC_DIRECTORY) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
+
+main.elf: prerequisites main.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o crt0.o linker.ld
+	$(CX) crt0.o main.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o -march=rv32im -mabi=ilp32 -nostartfiles -L$(BUILDINC_DIRECTORY) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
 		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) $(LIBS:lib%=-l%)
 
 

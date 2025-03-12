@@ -67,3 +67,4 @@ void assert(int c)
   for(;;);
 }
 
+int __errno; //FIXME: this is just to avoid linker errors
