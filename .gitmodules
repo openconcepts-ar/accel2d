@@ -5,3 +5,7 @@
 [submodule "fat_io_lib"]
 	path = fat_io_lib
 	url = https://github.com/ultraembedded/fat_io_lib.git
+
+[submodule "agg-2.4"]
+	path = agg-2.4
+	url = https://github.com/suarezvictor/agg-2.4.git

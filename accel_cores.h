@@ -10,6 +10,13 @@
 #include <generated/csr.h>
 #endif
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void accel_framebuffer_base_set(uintptr_t base);
+
 // accel_rectangle_fill32 --------------------------------------------------------------------------
 #include "accel_rectangle_fill32.inl"
 
@@ -72,5 +79,9 @@ void accel_jpeg_decode_waitdone(unsigned *decoded_width, unsigned *decoded_heigh
 
 void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
  unsigned *decoded_width, unsigned *decoded_height, int wait_done);
+
+#ifdef __cplusplus
+} //extern "C"
+#endif
 
 #endif //__ACCEL_CORES_H__
