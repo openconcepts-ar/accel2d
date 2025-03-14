@@ -15,7 +15,7 @@ typedef __INTPTR_TYPE__ intptr_t;
 typedef unsigned long long uint64_t;
 #endif
 
-
+#define CFLEXHDL_SKIP_TYPES
 #include "cflexhdl.h"
 #include "bus.h"
 #include "misc.h" //ACCEL_STATIC_ASSERT
