@@ -99,7 +99,9 @@ public:
 	//
 	void rect(coord_t x, coord_t y, coord_t w, coord_t h, coord_t r = 0)
 	{
-		agg::rounded_rect rect1 (x, y, w, h, r);
+		m_lastpath.remove_all();
+		agg::rounded_rect rect1(x, y, w, h, r);
+		m_lastpath.concat_path(rect1);
 		render_fill(rect1, m_fillColor);
 	}
 
@@ -126,6 +128,8 @@ public:
 #endif
 		render_stroke(m_lastpath, m_strokeColor, m_strokeWidth);
 	}
+
+	void point(coord_t x, coord_t y) { line(x, y, x, y); }
 
 	template <class T>
 	void draw(T& path, coord_t dx, coord_t dy)
@@ -171,6 +175,9 @@ static inline PGraphics::angle_radians_t radians(PGraphics::angle_degrees_t degr
 {
 	return degrees*M_PI/PGraphics::angle_degrees_t(180.0);
 }
+
+static inline float random(float bottom, float top) { return bottom + (top-bottom)*rand()/RAND_MAX; }
+static inline float random(float top) { return random(0, top); }
 
 } //namespace processing
 
