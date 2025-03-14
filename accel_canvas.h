@@ -151,7 +151,7 @@ struct display_pixel_format : pixfmt_rgba32
 		uint32_t color = rgba2raw(c.r, c.g, c.b, c.a);
 		int x0 = x, x1 = x + dx, y0 = y, y1 = y+dy;
 		if(cohenSutherlandClip(0, 0, FRAME_WIDTH, FRAME_HEIGHT, x0, y0, x1, y1))
-			accel_line(accel_line32_regs, x0, y0, x1+1, y1+1, color);
+			accel_line(accel_line32_regs, x0, y0, x1, y1, color);
 	}
 	
     //this is used by the renderer_base's clear function

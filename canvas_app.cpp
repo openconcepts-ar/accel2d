@@ -50,7 +50,7 @@ void draw()
     //point based stars
     canvas.stroke(WHITE);
     for(int i = 0; i < 30; ++i)
-      canvas.point(random(200, canvas.width-200),  random(100, canvas.height/2));
+      canvas.point(random(210, canvas.width-210),  random(110, canvas.height/2));
 
     //cirles based moon
     canvas.fill(WHITE);
