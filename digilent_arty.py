@@ -90,10 +90,22 @@ class _CRG(Module):
 
 
 
+timings1366x768 = ("1366x768@50Hz", {
+        "pix_clk"       : 57.14e6,
+        "h_active"      : 1366,
+        "h_blanking"    : 32+(32+5)+34, #front, sync, back
+        "h_sync_offset" : 32,
+        "h_sync_width"  : 32+5,
+        "v_active"      : 768,
+        "v_blanking"    : 2+(2+2)+4, #front, sync, back
+        "v_sync_offset" : 2,
+        "v_sync_width"  : 2+2,
+})
+
 def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile_gateware=False):
-	timings_sel = "640x480@60Hz"
-	timings = video_timings[timings_sel]
-	timings["pix_clk"] = 24e6 #adjust from 25MHz to allow a possible PLL configuration
+	timings_sel = timings1366x768
+	timings = timings_sel[1]
+	timings["pix_clk"] = 60e6 #adjust to allow a possible PLL configuration
 	
 	#supported toolchains: "yosys+nextpnr" or "vivado"
 	platform = digilent_arty.Platform(variant="a7-35", toolchain=args.toolchain)
@@ -137,7 +149,7 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 
 	# Video -------------------------------------------------------------------------------------
 	if with_video_framebuffer and DVI:
-	    dvi_pins  = "01234567" #"62514073" # "62514073" for machdyne dadapter (for TMDS_33, odd-even should be next to each other, like "01234567")
+	    dvi_pins  = "01234567" # "62514073" for machdyne dadapter (for TMDS_33, odd-even should be next to each other: "01234567")
 	    pmod_dvi  = "pmodc" #must be port C for TDMS_33, ports A-D on Arty has 200 ohm series protection resistors
 	    dvi_iostd = "TMDS_33"
 	    platform.add_extension([("dvi_out", 0, #DVI pmod breakout on pmod C (seems not working in others than C)
@@ -174,7 +186,7 @@ def build_arty(args, pixel_bus_width=32, with_video_framebuffer=True, no_compile
 		soc.add_constant("SDRAM_BUS_BITS", pixel_bus_width)
 
 	# SD card -------------------------------------------------------------------------------------
-	with_sdcard = True
+	with_sdcard = False
 	if with_sdcard:
 		ext = digilent_arty.sdcard_pmod_io("pmoda")
 		soc.platform.add_extension(ext)

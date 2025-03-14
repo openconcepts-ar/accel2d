@@ -6,15 +6,11 @@
 
 #ifdef VIDEO_FRAMEBUFFER_HRES
 #define FRAME_WIDTH VIDEO_FRAMEBUFFER_HRES
-#else
-#define FRAME_WIDTH 640
 #endif
 #ifdef VIDEO_FRAMEBUFFER_VRES
 #define FRAME_HEIGHT VIDEO_FRAMEBUFFER_VRES
-#else
-#define FRAME_HEIGHT 480
-#endif
 #define FRAME_PITCH (FRAME_WIDTH<<2)
+#endif
 
 #ifndef VIDEO_FRAMEBUFFER_BASE
 #define VIDEO_FRAMEBUFFER_BASE 0x40C00000 //default LiteX framebuffer memory address

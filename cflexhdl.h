@@ -7,6 +7,7 @@
 #include "types.h"
 #define MODULE void
 
+#ifndef CFLEXHDL_SKIP_TYPES
 //TODO: add missing widths
 typedef uint1 uint1_t;
 typedef uint4 uint4_t;
@@ -21,6 +22,8 @@ typedef uint25 uint25_t;
 typedef uint32 uint32_t;
 
 typedef int10 int10_t;
+#endif
+
 #define uintN_internal(n) uint##n
 #define uintN(n) uintN_internal(n)
 

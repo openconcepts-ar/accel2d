@@ -10,7 +10,7 @@ LATTICETOOLCHAIN=--toolchain trellis --nextpnr-seed 0 --nextpnr-timingstrict
 SDRAM_BUS_BITS?=32
 #SERIAL_PORT?=/dev/ttyUSB0 #for arty
 SERIAL_PORT?=/dev/ttyUSB2 #for ecpix5
-
+SERIAL_BAURDATE?=960000
 
 #AMDTOOLCHAIN?=--toolchain=yosys+nextpnr #FIXME: some glitches
 CPU_TYPE?=--cpu-type=vexriscv #only supports vexriscv
@@ -27,7 +27,7 @@ CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
 CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
 CXXFLAGS+=$(CCDEFS) $(INC) -fno-threadsafe-statics
 
-SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE)
+SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE) --uart-baudrate $(SERIAL_BAURDATE)
 
 #FIXME: try crt0 provided by LiteX
 %.o: %.S
@@ -89,8 +89,8 @@ lambdaconcept_ecpix5: $(BUILD_DIR)/gateware/lambdaconcept_ecpix5.bit
 	#openFPGALoader -b ecpix5 --cable ft4232 --freq 30e6 repack.bit #$(BUILD_DIR)/gateware/lambdaconcept_ecpix5.bit
 
 .PHONY: upload
-upload: firmware $(BOARD)
-	$(LITEX_ROOT)/litex/tools/litex_term.py $(SERIAL_PORT) --kernel main.bin
+upload: firmware #$(BOARD)
+	$(LITEX_ROOT)/litex/tools/litex_term.py $(SERIAL_PORT) --kernel main.bin --speed $(SERIAL_BAURDATE)
 
 .PHONY: clean
 clean:
