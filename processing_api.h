@@ -129,7 +129,7 @@ public:
 		render_stroke(m_lastpath, m_strokeColor, m_strokeWidth);
 	}
 
-	void point(coord_t x, coord_t y) { line(x, y, x, y); }
+	void point(coord_t x, coord_t y) { m_pixf.copy_hline(x, y, 1, m_strokeColor); }
 
 	template <class T>
 	void draw(T& path, coord_t dx, coord_t dy)
