@@ -6,7 +6,7 @@
 import sys
 import argparse
 
-from wpu import gen_accel_cores
+from accel_glue import gen_accel_cores
 
 from migen import *
 from litex.soc.cores.clock import *
