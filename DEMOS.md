@@ -3,7 +3,7 @@ Scalable font rendering support:
 Demo source: [freetype_app.cpp](freetype_app.cpp)  
 It's based on a hardware accelerator for fast drawing of solid-color horizontal lines.
 
-[<img src="doc/freetype.png" width=384 height=384>](doc/freetype.png "Freetype Demo")  
+[<img src="../../raw/master/doc/freetype.png" width=384 height=384>](doc/freetype.png "Freetype Demo")  
 
 The demo shows how to change scale without reloading the glyph at a different size: just applying a matrix transform to scale the outline coordinates, that thus allows for skew and rotation.
 
