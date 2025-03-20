@@ -3,7 +3,7 @@
 
 An artistic-looking demo that shows how to make graphics in a few lines of code is provided:  
   
-[<img src="../../raw/master/doc/moonlight.png" height=480>](doc/moonlight.png "Moonlight: canvas demo")  
+[<img src="../../raw/master/doc/moonlight.png" height=480>](doc/moonlight.png "Moonlight canvas demo")  
 
 The demo uses the basic drawing primitives: **circles** for the moon, **points** as stars, **lines** as the tree branches and leaves, **text** for the title, and a **rounded rect** as background.  
 Code is in [canvas_app.cpp](canvas_app.cpp)
