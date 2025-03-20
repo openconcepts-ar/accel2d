@@ -1,3 +1,23 @@
+# Canvas demo
+## API emulation of the [Processing API](https://processing.org/reference)
+
+An artistic-looking demo that shows how to make graphics in a few lines of code is provided:  
+  
+[<img src="../../raw/master/doc/moonlight.png" height=480>](doc/moonlight.png "Moonlight (canvas demo)")  
+
+The demo uses the basic drawing primitives: **circles** for the moon, **points** as stars, **lines** as the tree branches and leaves, **text** for the title, and a **rounded rect** as background.  
+Code is in [canvas_app.cpp](canvas_app.cpp)
+
+## Setup function:  
+[<img src="../../raw/master/doc/canvas_app_setup.png">](doc/canvas_app_setup.png "setup function")  
+
+## Drawing function:  
+[<img src="../../raw/master/doc/canvas_app_draw.png">](doc/canvas_app_draw.png "drawing function")  
+
+## Line-based fractal drawing:  
+[<img src="../../raw/master/doc/canvas_app_tree.png">](doc/canvas_app_tree.png "fractal tree drawing function")  
+
+
 # Font renderer
 Scalable font rendering support:
 Demo source: [freetype_app.cpp](freetype_app.cpp)  
