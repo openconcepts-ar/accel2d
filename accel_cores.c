@@ -152,29 +152,62 @@ unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, in
    + accel_line(regs, x0, y1, x0, y0, rgba);
 }
 
+static void bmp32_invert_red_blue_channels(uint8_t *dst, uint8_t *src, int width)
+{
+    //memcpy(dst, src, width*sizeof(uint32_t));
+    //return;
+
+    while(width--)
+    {
+        //this type of access is ok with misaligmnents
+        dst[0] = src[2];
+        dst[1] = src[1];
+        dst[2] = src[0];
+        dst[3] = src[3];
+        
+        dst += 4;
+        src += 4;
+    }
+}
+
 //example command for PNG to BMP (32-bit)
 //$ convert input.png -alpha on output.bmp
 void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
- unsigned *decoded_width, unsigned *decoded_height, int wait_done)
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done, int invert_rb)
 {
   BMPHeader *bmp = (BMPHeader *) coded_buf;
   assert(bmp->type == 0x4D42);
 
   assert(bmp->bits_per_pixel == 32 && bmp->compression == 3); //check RGBA32 format
   unsigned w = bmp->width_px, h = bmp->height_px;
-  uint32_t *data = ((uint8_t*)bmp) + bmp->offset;
+
+  if((decoded_width != NULL && w > *decoded_width) || (decoded_height != NULL && h > *decoded_height))
+  {
+     //not enough space
+    printf("BMP not decoded: w %d, decoded_width %d, h %d, decoded_height %d\n", h, *decoded_width, w, *decoded_height);
+    *decoded_width = 0;
+    *decoded_height = 0;
+    return;
+  }
+    
+  const uint32_t *data = (uint32_t *)(((uint8_t*)bmp) + bmp->offset);
   
   uint8_t *fb = (uint8_t *) dst;
-  fb += h * writer_stride;
+  data += h* w;
   while(h--)
   {
-    fb -= writer_stride;
-    memcpy(fb, data, w*sizeof(uint32_t));
-    data += w;
+    data -= w;
+    //printf("BMP lines remaining to decode %u, width %u - fb %p, data %p\n", h, w, fb, data);
+    if(!invert_rb)
+	    memcpy(fb, data, w*sizeof(uint32_t));
+	else
+	   bmp32_invert_red_blue_channels(fb, (uint8_t *) data, w);
+
+    fb += writer_stride;
   }
   
-  if(decoded_width) *decoded_width = w;
-  if(decoded_height) *decoded_height = h;
+  if(decoded_width) *decoded_width = bmp->width_px;
+  if(decoded_height) *decoded_height = bmp->height_px;
 }
 
 

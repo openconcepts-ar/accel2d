@@ -56,3 +56,14 @@ void fb_deinit(fb_handle_t *handle)
     SDL_DestroyWindow(handle->win);
     handle->win = NULL;
 }
+
+uint64_t highres_ticks(void)
+{
+	return SDL_GetPerformanceCounter();
+}
+
+uint64_t highres_ticks_freq(void)
+{
+	return SDL_GetPerformanceFrequency();
+}
+
