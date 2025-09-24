@@ -3,7 +3,16 @@
 #ifndef __MISC_H__
 #define __MISC_H__
 
-#ifndef DISABLE_HARDWARE_ACCEL
+#ifdef __cplusplus
+#define EXTERN_C extern "C" 
+#else
+#define EXTERN_C
+#endif
+
+#ifdef DISABLE_HARDWARE_ACCEL
+EXTERN_C uint64_t highres_ticks(void);
+EXTERN_C uint64_t highres_ticks_freq(void);
+#else
 #include <generated/csr.h>
 
 #ifdef CSR_TIMER0_UPTIME_CYCLES_ADDR

@@ -3,6 +3,8 @@
 #include "accel_cores.h"
 #include "graphics.h"
 
+extern "C" void wait_vsync(void);
+
 void draw()
 {
 	static uint8_t color = 0;
@@ -12,6 +14,9 @@ void draw()
 		accel_line(accel_line32_regs, 0, y, FRAME_WIDTH, y, color << 8);
 	}
 	++color;
+#ifdef DISABLE_HARDWARE_ACCEL
+	wait_vsync();
+#endif
 }
 
 extern "C" void graphics_app(void)

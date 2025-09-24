@@ -78,7 +78,7 @@ void accel_jpeg_decode(const void *coded_buf, size_t coded_len, void *dst, unsig
 void accel_jpeg_decode_waitdone(unsigned *decoded_width, unsigned *decoded_height);
 
 void accel_bmp_decode(const void *coded_buf, size_t coded_len, void *dst, unsigned writer_stride,
- unsigned *decoded_width, unsigned *decoded_height, int wait_done);
+ unsigned *decoded_width, unsigned *decoded_height, int wait_done, int invert_rb);
 
 #ifdef __cplusplus
 } //extern "C"
