@@ -83,11 +83,11 @@ As always with this project, the graphic core can be run in software mode (using
 
 * [accel.py](./accel.py): AccelImporterSoC class, it instances a 2nd port for simultaneous read-write access to main RAM
 * [line32a.cc](./line32a.cc): actual accelerator core (as always in this project, capable of running as software or transpiled to verilog)
-* [accel_line32a.inl](./line32a.cc): line32a memory-mapped registers layout
-* [wpy.py](./line32a.cc): updated accelerator interface
-* [gsd_orangecrab](./line32a.cc): direct instancing of the accelerator
-* [accel_cores.c](./line32a.cc): accel_linea function, it calls the hardware acellerated version of line draw which simultaneously access two DRAM ports
-* [sw_cores.cpp](./line32a.cc): software implementation (based on same line32a.cc code)
-* [bus.h](./line32a.cc): add macros to allow access to simultaneous ports in accelerators implementations
-* [blit_app.cpp](./line32a.cc): main testing app
+* [accel_line32a.inl](./accel_line32a.inl): line32a memory-mapped registers layout
+* [wpy.py](./wpy.py): updated accelerator interface
+* [gsd_orangecrab.py](./gsd_orangecrab.py): Bitstream genration for custom board, direct instancing of the accelerator
+* [accel_cores.c](./accel_cores.c): accel_linea function, it calls the hardware acellerated version of line draw which simultaneously access two DRAM ports
+* [sw_cores.cpp](./sw_cores.cpp): software implementation (based on same line32a.cc code)
+* [bus.h](./bus.h): add macros to allow access to simultaneous ports in accelerators implementations
+* [blit_app.cpp](./blit_app.cpp): main testing application
 
