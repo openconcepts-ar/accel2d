@@ -16,23 +16,16 @@ enum blit_mode
   BLIT_MODE_COUNT = BLIT_TINT+1
 };
 
+static accel_line32a_layout_t *regs;
 static void blit(uint32_t *dstbase, size_t dstpitch, const uint32_t *srcbase, size_t srcpitch, unsigned w, unsigned h, uint32_t srcmult, uint32_t dstadd)
 {
 	while(h--)
 	{
-#ifdef CSR_ACCEL_LINE32A_BASE
-		accel_linea(accel_line32a_regs, w, 0, dstadd, srcmult,
+		accel_linea(regs, w, 0, dstadd, srcmult,
 		  (uintptr_t)dstbase, dstpitch,
 		  (uintptr_t)srcbase, srcpitch,
 		  1, 1
 		);
-#else
-#warning LINE32A accelerator should be present
-     if(srcmult == 0xFFFFFFFF)
-        memcpy(dstbase, srcbase, w*4);
-     else
-        memset(dstbase, dstadd, w*4);
-#endif
 
 		dstbase += dstpitch;
 		srcbase += srcpitch;
@@ -73,10 +66,11 @@ static unsigned draw(blit_mode mode, unsigned bitmap_w, unsigned bitmap_h)
 		  case BLIT_COPY:
 			fg = 0;
 			tint = 0xFFFFFFFF;
-#ifdef DMA_WORD_SIZE
-			x0 &= ~3;
-			y0 &= ~1;
-#endif
+			if(!regs) //make sure 128-bit aligned (for testing/optimization, not required)
+			{
+				x0 &= ~3;
+				y0 &= ~1;
+			}
 			break;
 		  case BLIT_SOLID:
 			tint = 0;
@@ -122,13 +116,17 @@ extern "C" void graphics_app(void)
 	{
 		uint64_t t0 = highres_ticks();
 		int seconds = int(t0/highres_ticks_freq());
-		blit_mode mode = (blit_mode) ((seconds / 5) % BLIT_MODE_COUNT);
+		int t = seconds / 5;
+		blit_mode mode = (blit_mode) ((t>>1) % BLIT_MODE_COUNT);
+		bool soft = t & 1;
+		regs = soft ? NULL : accel_line32a_regs;
 		size_t pixel_count = draw(mode, bitmap_w, bitmap_h);
 		int64_t dt = highres_ticks() - t0;
 		
-		printf("frame %d, t %d, FPS %d (resolution %dx%d) ticks %ld\n",
+		printf("frame %d, t %d, FPS %d (resolution %dx%d) ticks %ld%s\n",
 			++frame, seconds, pixel_count*int(highres_ticks_freq()/dt)/(FRAME_WIDTH*FRAME_HEIGHT),
-			FRAME_WIDTH, FRAME_HEIGHT, long(dt));
+			FRAME_WIDTH, FRAME_HEIGHT, long(dt),
+			soft ? " (FORCE SOFTWARE)" : "");
 
 #ifdef DISABLE_HARDWARE_ACCEL 
 	void wait_vsync(void);

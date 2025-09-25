@@ -1,0 +1,141 @@
+//(C) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
+// SPDX-License-Identifier: AGPL-3.0-only
+
+#include "cflexhdl.h"
+#include "bus.h"
+
+#ifndef iabs
+#warning iabs should be defined
+#define iabs(x) ((x) < 0 ? -(x) : (x))
+#endif
+
+#define alpha_mul(x, a) (((a)*(x))>>8) //factor is ideally 1 to 256 both inclusive
+
+MODULE line32a(
+  bus_master(bus),
+  const int16&	dx,
+  const int16&	dy,
+  const uint32&	rgba, //color to add
+  const uint32&	tint, //source color multiply factor
+  const busaddr_t& dst_base,
+  const int16& dst_xstride, //normally 1, but can run backwards
+  const int16& dst_ystride, //pixels to skip for next line (usually the framebuffer width)
+  const busaddr_t& src_base,
+  const int16& src_xstride,
+  const int16& src_ystride
+  )
+{
+
+  bus_setup32();
+
+  int16 dxa =  iabs (dx);
+  int16 dya = -iabs (dy);
+  int2 sx = dx < 0 ? -1 : 1;
+  int2 sy = dy < 0 ? -1 : 1;
+  int16 err = dxa + dya; /* error value e_xy */
+  int16 x = 0;
+  int16 y = 0;
+  int16 e2;
+
+  uint8 r, g, b, a;
+  uint9 inv_a;
+
+  uint8 tr, tg, tb, ta;
+
+  union {
+    uint32 pix;
+    struct { uint32 r:8; uint32 g:8; uint32 b:8; uint32 a:8; } p_rgba;
+  };
+
+  union {
+    uint32 color; //union allows to access data as bitfields
+    struct { uint32 r:8; uint32 g:8; uint32 b:8; uint32 a:8; } s_rgba;
+  };
+
+  r = rgba;
+  g = rgba>>8;
+  b = rgba>>16;
+  a = rgba>>24;
+
+  tr = tint;
+  tg = tint>>8;
+  tb = tint>>16;
+  ta = tint>>24;
+ 
+  bus_set_write_address(dst_base);
+  bus_set_read_address(src_base);
+  while(x != dx || y != dy)
+  {
+    if(tint == 0) //transparent sources skip reads
+    {
+      bus_write_start(rgba);
+    }
+    else
+    {
+	    if(!bus_reading() && !bus_writing())
+    	{
+    	  bus_read_start();
+	    }
+
+		if(bus_read_done())
+		{
+		  pix = bus_read_data(); //read pixel, assumes premultiplied alpha
+		  
+		  if(tint == 4294967295 && rgba == 0)
+		  {
+		    color = pix; //copy
+		  }
+		  else
+		  {
+			  uint9 pix_a = alpha_mul(p_rgba.a, ta+1);
+			  inv_a = 256-pix_a;
+			  s_rgba.r = alpha_mul(r, inv_a) + alpha_mul(p_rgba.r, tr+1);
+			  s_rgba.g = alpha_mul(g, inv_a) + alpha_mul(p_rgba.g, tg+1);
+			  s_rgba.b = alpha_mul(b, inv_a) + alpha_mul(p_rgba.b, tb+1);
+			  s_rgba.a = alpha_mul(a, inv_a) + pix_a;
+		  }
+		  bus_write_start(color);
+		}
+	}
+
+    if(bus_write_done())
+    {
+      bus_stop();
+      
+      //these variables needs to be signed
+      busaddr_diff_t dst_xincaddr = 0; 
+      busaddr_diff_t dst_yincaddr = 0;
+      busaddr_diff_t src_xincaddr = 0; 
+      busaddr_diff_t src_yincaddr = 0;
+      
+      e2 = err << 1;
+
+      int16 dxe = 0;
+      if (e2 <= dxa) // e_xy+e_y < 0
+      {
+        dxe = dxa;
+        y = y + sy;
+        dst_yincaddr = dst_ystride;
+        src_yincaddr = src_ystride;
+        //TODO: check if not releasing the bus when jumping in y coordinate
+        //(so jumping in memory addres by a long step)
+        //is the cause of the screen going blank when drawing stroked rects
+      } 
+
+      int16 dye = 0;
+      if (e2 >= dya) // e_xy+e_x > 0
+      {
+        dye = dya;
+        x = x + sx;
+        dst_xincaddr = dst_xstride;
+        src_xincaddr = src_xstride;
+      }
+      bus_inc_write_address(dst_xincaddr + dst_yincaddr);
+      bus_inc_read_address(src_xincaddr + src_yincaddr);
+      err = err + dxe + dye;
+    }
+  }
+
+  while(bus_write_pending()); //wait last transaction
+  bus_release();
+}

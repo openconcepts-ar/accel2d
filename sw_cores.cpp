@@ -20,6 +20,7 @@ typedef unsigned long long uint64_t;
 #include "bus.h"
 #include "misc.h" //ACCEL_STATIC_ASSERT
 #include "accel_regs.h"
+#include "sw_cores.h"
 
 #if SDRAM_BUS_BITS==32
 typedef uint32_t *busmaster_t;
@@ -27,6 +28,10 @@ typedef uint32_t *busmaster_t;
 #error bus width not supported
 #endif
 
+#include "line32a.cc"
+
+#if 0
+#include "line32.cc"
 #include "rectangle_fill32.cc"
 #include "ellipse_fill32.cc"
 #include "line32.cc"
@@ -73,5 +78,26 @@ void sw_line(accel_line32_layout_t *regs)
   uint32 ystride = regs->ystride;
   
   line32(BUSMASTER_ARG, x0, x1, y0, y1, rgba, base, xstride, ystride);
+}
+
+#endif
+
+void sw_linea(accel_line32a_layout_t *regs)
+{
+  int16 dx = regs->dx;
+  int16 dy = regs->dy;
+  uint32 rgba = regs->rgba;
+  uint32 tint = regs->tint;
+  uintptr_t dst_base = regs->dst_base;
+  int16 dst_xstride = regs->dst_xstride;
+  int16 dst_ystride = regs->dst_ystride;
+  uintptr_t src_base = regs->src_base;
+  int16 src_xstride = regs->src_xstride;
+  int16 src_ystride = regs->src_ystride;
+  
+  line32a(BUSMASTER_ARG, dx, dy, rgba, tint,
+    dst_base, dst_xstride, dst_ystride,
+    src_base, src_xstride, src_ystride
+  );
 }
 

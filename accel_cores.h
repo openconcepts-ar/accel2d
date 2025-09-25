@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 void accel_framebuffer_base_set(uintptr_t base);
-
+#if 0
 // accel_rectangle_fill32 --------------------------------------------------------------------------
 #include "accel_rectangle_fill32.inl"
 
@@ -65,11 +65,29 @@ static accel_line32_layout_t * const accel_line32_regs = NULL;
 #endif
 
 unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
+#endif
 
+// accel_line32a ------------------------------------------------------------------------------------
+
+#include "accel_line32a.inl"
+
+#ifdef CSR_ACCEL_LINE32A_BASE
+static accel_line32a_layout_t * const accel_line32a_regs =
+  (accel_line32a_layout_t *) CSR_ACCEL_LINE32A_BASE;
+#else
+static accel_line32a_layout_t * const accel_line32a_regs = NULL;
+#endif
+
+unsigned accel_linea(accel_line32a_layout_t *regs, int dx, int dy,
+  uint32_t rgba, uint32_t tint,
+  uintptr_t dst_base, int dst_ystride,
+  uintptr_t src_base, int src_ystride,
+  int xscale, int yscale
+  );
 
 //helpers ------------------------------------------------------------------------------------------
 
-unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
+//unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba);
 
 
 //decoders ------------------------------------------------------------------------------------------

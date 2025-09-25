@@ -107,7 +107,7 @@ upload: firmware #$(BOARD)
 .PHONY: clean
 clean:
 	$(RM) -R build restore
-	$(RM) *.o *.d *.elf *.elf.map *.bin ellipse_fill32.v rectangle_fill32.v *.v.* sim_linux backup.tar.gz *.orig
+	$(RM) *.o *.d *.elf *.elf.map *.bin line32.v line32a.v ellipse_fill32.v rectangle_fill32.v *.v.* sim_linux backup.tar.gz *.orig
 
 LITEX-CONTRIBUTORS:
 	wget -O $@ https://raw.githubusercontent.com/enjoy-digital/litex/master/CONTRIBUTORS

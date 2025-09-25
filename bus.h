@@ -8,31 +8,33 @@
 #define bus_bits() (8*sizeof(BUSMASTER_CPU(0)[0]))
 
 #ifdef __SIZEOF_INT128__
-#define busx_master(bus) BUSMASTER_CPU bus, uint128 bus_sel
+#define busx_master(bus) BUSMASTER_CPU bus_w, BUSMASTER_CPU bus_r, uint128 bus_sel
 #else
 #if SDRAM_BUS_BITS > 64
 #error Bus width not supported
 #endif
-#define busx_master(bus) BUSMASTER_CPU bus, uint64 bus_sel
+#define busx_master(bus) BUSMASTER_CPU bus_w, BUSMASTER_CPU bus_r, uint64 bus_sel
 #endif
 
 #define busaddr_t intptr_t
 #define busaddr_diff_t intptr_t
-#define busx_setup32(bus) bus = nullptr
+#define busx_setup32(bus) bus##_r = bus##_w = nullptr
 #define busx_acquire(bus) 
 #define busx_release(bus) 
 #define busx_reading(bus) false
 #define busx_writing(bus) false
 #define busx_write_done(bus) true
 #define busx_read_done(bus) true
-#define busx_write_start(bus, data) *bus = (*bus & ~bus##_sel) | (data & bus##_sel)
+#define busx_write_start(bus, data) *bus##_w = (*bus##_w & ~bus##_sel) | (data & bus##_sel)
 #define busx_read_start(bus) 
-#define busx_read_data(bus) *bus
+#define busx_read_data(bus) *bus##_r
 #define busx_stop(bus)
-#define busx_set_address(bus, a) bus = (busmaster_t)(a)
-#define busx_get_address(bus) (busaddr_t)(bus)
-#define busx_next_address(bus) (++bus)
-#define busx_inc_address(bus, a) (bus += (a)/sizeof(*bus))
+#define busx_set_read_address(bus, a) bus##_r = (busmaster_t)(a)
+#define busx_set_write_address(bus, a) bus##_w = (busmaster_t)(a)
+#define busx_inc_read_address(bus, a) (bus##_r += (a))
+#define busx_inc_write_address(bus, a) (bus##_w += (a))
+#define busx_next_read_address(bus) busx_inc_read_address(bus, 1)
+#define busx_next_write_address(bus) busx_inc_write_address(bus, 1)
 #define busx_set_mask(bus, mask) bus_sel = (\
     ((mask)&(1<<0)?(uint128(255)<<8*0):0) \
   | ((mask)&(1<<1)?(uint128(255)<<8*1):0) \
@@ -52,7 +54,7 @@
   | ((mask)&(1<<15)?(uint128(255)<<8*15):0))
 
 
-#define BUSMASTER_ARG busmaster_t(), -1
+#define BUSMASTER_ARG busmaster_t(), busmaster_t(), -1
 
 
 #else
@@ -70,18 +72,22 @@
 #define busx_release(bus) { bus##_cyc = 0; bus##_stb = 0; }
 #define busx_reading(bus) (bus##_stb && !bus##_we)
 #define busx_writing(bus) (bus##_stb && bus##_we)
-#define busx_write_done(bus) (bus##_stb && bus##_ack && bus##_we)
-#define busx_read_done(bus) (bus##_stb && bus##_ack && !bus##_we)
+#define busx_write_done(bus) (bus##_stb && bus##_w_ack)
+#define busx_read_done(bus) (bus##_stb && bus##_r_ack)
 #define busx_write_start(bus, data)  { bus##_dat_w = data; bus##_we = 1; bus##_stb = 1; bus##_cyc = 1; }
 #define busx_read_start(bus) { bus##_we = 0; bus##_stb = 1; bus##_cyc = 1; }
 #define busx_read_data(bus) bus##_dat_r
 #define busx_stop(bus) bus##_stb = 0
-#define busx_set_address(bus, a) bus##_adr = (a)
-#define busx_get_address(bus) bus##_adr
+#define busx_set_write_address(bus, a) bus##_adr_w = (a)
+#define busx_set_read_address(bus, a) bus##_adr_r = (a)
+#define busx_get_write_address(bus) bus##_adr_w
+#define busx_get_read_address(bus) bus##_adr_r
 #define busaddr_t uint32
 #define busaddr_diff_t int32
-#define busx_inc_address(bus, a) busx_set_address(bus, busx_get_address(bus) + (a))
-#define busx_next_address(bus) busx_inc_address(bus, bus_bytes())
+#define busx_inc_write_address(bus, a) busx_set_write_address(bus, busx_get_write_address(bus) + (a)*bus_bytes())
+#define busx_inc_read_address(bus, a) busx_set_read_address(bus, busx_get_read_address(bus) + (a)*bus_bytes())
+#define busx_next_read_address(bus) busx_inc_read_address(bus, 1)
+#define busx_next_write_address(bus) busx_inc_write_address(bus, 1)
 #define busx_set_mask(bus, mask) bus##_sel = mask
 
 typedef uintN(SDRAM_BUS_BITS) bus_data_t; //FIXME: should be parametrizable
@@ -89,12 +95,14 @@ typedef uintN(SDRAM_BUS_BITS) bus_data_t; //FIXME: should be parametrizable
 #define wb_busmater(bus) \
   uint1& 		bus##_cyc, \
   uint1& 		bus##_stb, \
-  uint32& 		bus##_adr, \
+  uint32& 		bus##_adr_w, \
+  uint32& 		bus##_adr_r, \
   uint1& 		bus##_we, \
   uintN(SDRAM_BUS_BITS)&	bus##_dat_w, \
   uint16& 		bus##_sel, \
-  const uint1&	bus##_ack, \
-  const uint32&	bus##_dat_r
+  const uint1&	bus##_r_ack, \
+  const uint1&	bus##_w_ack, \
+  const uintN(SDRAM_BUS_BITS)&	bus##_dat_r
 #define busx_master(bus) wb_busmater(bus)
 #endif //bus_master
 
@@ -110,12 +118,16 @@ typedef uintN(SDRAM_BUS_BITS) bus_data_t; //FIXME: should be parametrizable
 #define bus_read_start() busx_read_start(bus)
 #define bus_read_data() busx_read_data(bus)
 #define bus_stop() busx_stop(bus)
-#define bus_set_address(a) busx_set_address(bus, a)
-#define bus_get_address() busx_get_address(bus)
+#define bus_set_write_address(a) busx_set_write_address(bus, a)
+#define bus_set_read_address(a) busx_set_read_address(bus, a)
+#define bus_get_read_address() busx_get_read_address(bus)
+#define bus_get_write_address() busx_get_write_address(bus)
 #define bus_set_mask(mask) busx_set_mask(bus, mask)
 #define bus_master(bus) busx_master(bus)
-#define bus_next_address() busx_next_address(bus)
-#define bus_inc_address(a) busx_inc_address(bus, a)
+#define bus_next_write_address() busx_next_write_address(bus)
+#define bus_next_read_address() busx_next_read_address(bus)
+#define bus_inc_read_address(a) busx_inc_read_address(bus, a)
+#define bus_inc_write_address(a) busx_inc_write_address(bus, a)
 
 //helpers
 #define bus_bytes() (bus_bits()>>3)

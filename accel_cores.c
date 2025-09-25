@@ -13,7 +13,7 @@
 #include "bmp.h"
 
 //#define INDUCE_RENDERING_ERRORS //enable to induce errors in softwre renderer
-
+#if 0
 unsigned accel_rectangle_fill(accel_rectangle_fill32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba)
 {
   accel_rectangle_fill32_layout_t sw_args;
@@ -143,7 +143,61 @@ unsigned accel_line(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1,
 
   return abs(x1-x0)+abs(y1-y0);
 }
+#endif
 
+unsigned accel_linea(accel_line32a_layout_t *regs, int dx, int dy,
+ uint32_t rgba, uint32_t tint,
+ uintptr_t dst_base, int dst_ystride,
+ uintptr_t src_base, int src_ystride,
+ int xscale, int yscale
+ )
+{
+  /*struct*/ accel_line32a_layout_t sw_args;
+  int sw_render = !regs;
+  
+  //#warning FIXME  
+  //sw_render = true;
+
+  if(sw_render)
+    regs = &sw_args;
+  else
+  {
+    regs->run = 0; //stops
+    while(regs->done); //wait data latch
+  }
+
+  regs->dx = dx;
+  regs->dy = dy;
+
+  regs->rgba = rgba;
+  regs->tint = tint;
+  
+  regs->dst_base = dst_base;
+  regs->dst_xstride = dx < 0 ? -1 : 1;
+  regs->dst_ystride = dy < 0 ? -dst_ystride : dst_ystride;
+  regs->src_base = src_base;
+  regs->src_xstride = dx < 0 ? -xscale : xscale;
+  regs->src_ystride = dy < 0 ? -(src_ystride*yscale) : src_ystride*yscale;
+
+  
+  if(sw_render)
+  {
+    //printf("sw_linea\n");
+#ifdef INDUCE_RENDERING_ERRORS    
+    ++regs->y1;
+#endif
+    sw_linea(regs);
+  }
+  else
+  {
+    regs->run = 1; //start
+    while(!regs->done); //wait until done
+  }
+
+  return abs(dx)+abs(dy);
+}
+
+#if 0
 unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, int y1, uint32_t rgba)
 {
   return accel_line(regs, x0, y0, x1, y0, rgba)
@@ -151,6 +205,7 @@ unsigned accel_rectangle(accel_line32_layout_t *regs, int x0, int y0, int x1, in
    + accel_line(regs, x1, y1, x0, y1, rgba)
    + accel_line(regs, x0, y1, x0, y0, rgba);
 }
+#endif
 
 static void bmp32_invert_red_blue_channels(uint8_t *dst, uint8_t *src, int width)
 {

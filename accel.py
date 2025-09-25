@@ -36,8 +36,11 @@ class Accel(Module, AutoCSR):
           self.add_csrs()
           
         
-    def add_bus_arg(self, bus):
-        adr = Signal(32);
+    def add_bus_arg(self, bus_ext):
+        bus = bus_ext
+
+        adr_w = Signal(32);
+        adr_r = Signal(32);
 
         # Core instance.
         # -----------------
@@ -46,24 +49,26 @@ class Accel(Module, AutoCSR):
             # Bus.
             o_out_bus_cyc   = bus.cyc,
             o_out_bus_stb   = bus.stb,
-            o_out_bus_adr   = adr,
+            o_out_bus_adr_w = adr_w,
+            o_out_bus_adr_r = adr_r,
             o_out_bus_we    = bus.we,
             o_out_bus_dat_w = bus.dat_w,
             o_out_bus_sel   = bus.sel,
             
-            i_in_bus_ack    = bus.ack,
+            i_in_bus_r_ack  = bus.ack & ~bus.we,
+            i_in_bus_w_ack  = bus.ack & bus.we,
             i_in_bus_dat_r  = bus.dat_r,
         ))
 
         #FIXME: use dict
         if bus.data_width == 256:
-          self.comb += bus.adr.eq(adr[5:])
+          self.comb += If(bus.we, bus.adr.eq(adr_w[5:])).Else(bus.adr.eq(adr_r[5:]))
         if bus.data_width == 128:
-          self.comb += bus.adr.eq(adr[4:])
+          self.comb += If(bus.we, bus.adr.eq(adr_w[4:])).Else(bus.adr.eq(adr_r[4:]))
         if bus.data_width == 64:
-          self.comb += bus.adr.eq(adr[3:])
+          self.comb += If(bus.we, bus.adr.eq(adr_w[3:])).Else(bus.adr.eq(adr_r[3:]))
         if bus.data_width == 32:
-          self.comb += bus.adr.eq(adr[2:])
+          self.comb += If(bus.we, bus.adr.eq(adr_w[2:])).Else(bus.adr.eq(adr_r[2:]))
 
 
     def add_csrs(self):
@@ -150,6 +155,8 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
             self.mmap_m = m = wishbone.Interface()
         if busmaster_type == "native":
             self.mmap_m = m = LiteDRAMNativePort("both", address_width=30, data_width=SDRAM_ACCESS_WIDTH)
+            self.mmap_mr = mr = LiteDRAMNativePort("read", address_width=30, data_width=SDRAM_ACCESS_WIDTH)
+        else: assert False
 
         self.busmaster_type = busmaster_type
 
@@ -171,6 +178,7 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
 
     def instance_core(self, region):
         mmap_m = self.mmap_m
+        mmap_mr = self.mmap_mr
         mmap_s = self.mmap_s
 
         assert(mmap_s.data_width == 32)
@@ -228,6 +236,19 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
                 o_mmap_m_rdata_ready = mmap_m.rdata.ready,
                 i_mmap_m_rdata_data  = mmap_m.rdata.data,
             ))
+            params.update(dict(
+                o_mmap_mr_cmd_valid   = mmap_mr.cmd.valid,
+                i_mmap_mr_cmd_ready   = mmap_mr.cmd.ready,
+                o_mmap_mr_cmd_we      = mmap_mr.cmd.we,
+                o_mmap_mr_cmd_addr    = mmap_mr.cmd.addr,
+                o_mmap_mr_wdata_valid = mmap_mr.wdata.valid,
+                i_mmap_mr_wdata_ready = mmap_mr.wdata.ready,
+                o_mmap_mr_wdata_we    = mmap_mr.wdata.we,
+                o_mmap_mr_wdata_data  = mmap_mr.wdata.data,
+                i_mmap_mr_rdata_valid = mmap_mr.rdata.valid,
+                o_mmap_mr_rdata_ready = mmap_mr.rdata.ready,
+                i_mmap_mr_rdata_data  = mmap_mr.rdata.data,
+            ))
 
         self.specials += Instance(self.name, **params)
         
@@ -238,7 +259,8 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
           soc.bus.add_master(master=self.mmap_m)
           
         if self.busmaster_type == "native":
-          soc.comb += self.mmap_m.connect(soc.sdram.crossbar.get_port(data_width=SDRAM_ACCESS_WIDTH))
+          soc.comb += self.mmap_m.connect(soc.sdram.crossbar.get_port(mode="write", data_width=SDRAM_ACCESS_WIDTH))
+          soc.comb += self.mmap_mr.connect(soc.sdram.crossbar.get_port(mode="read", data_width=SDRAM_ACCESS_WIDTH))
 
         #slave
         region_name = self.name+"_region" #CSR base
