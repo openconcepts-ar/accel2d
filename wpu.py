@@ -19,34 +19,41 @@ class WPUBase(Accel):
     def __init__(self, name, pixel_bus_width=32, debug=False):
         coord_width = 16
         arg_desc_layout = [
-            ("x0",      coord_width),
-            ("y0",      coord_width),
-            ("x1",      coord_width),
-            ("y1",      coord_width),
+            ("dx",      coord_width),
+            ("dy",      coord_width),
             ("rgba",    32),
-            ("base",    32),
-            ("xstride", coord_width),
-            ("ystride", coord_width),
+            ("tint",    32),
+            ("dst_base",    32),
+            ("dst_xstride", coord_width),
+            ("dst_ystride", coord_width),
+            ("src_base",    32),
+            ("src_xstride", coord_width),
+            ("src_ystride", coord_width),
         ]
 
         super().__init__(name, arg_desc_layout)
+        self.adr_r = Signal(30)
         self.dma_bus = wishbone.Interface(pixel_bus_width)
         self.add_bus_arg(self.dma_bus)
         
           
         if debug:
-          adr = Signal(32)
-          self.comb += adr[2:].eq(self.dma_bus.adr)
-          self.sync += If(self.args.valid & ~self.args.ready & self.dma_bus.we & self.dma_bus.ack,
-              Display("x0 %d, y0 %d, dma_addr 0x%08X (0x%08X) done %d", self.args.x0, self.args.y0, self.dma_bus.adr, adr, self.args.ready))
+          adr_w = Signal(32)
+          adr_r = Signal(32)
+          self.comb += adr_w[2:].eq(self.dma_bus[0].adr)
+          self.comb += adr_r[2:].eq(self.dma_bus[1])
+          self.sync += If(self.args.valid & ~self.args.ready & self.dma_bus[0].we & self.dma_bus[0].ack,
+              Display("x0 %d, y0 %d, dma_addr 0x%08X (0x%08X) done %d", self.args.x0, self.args.y0, self.dma_bus[0].adr, adr_w, adr_r, self.args.ready))
 
     def connect_to_soc(self, soc):
+        assert False #not used
         soc.bus.add_master(master=self.dma_bus, name="dma_bus_"+self.name)
 
 
 # Core adder ---------------------------------------------------------------------------------------
 
 def gen_accel_cores(soc, active_cores, pixel_bus_width=32):
+    assert False #not well tested
     for core in active_cores:
         corename = "accel_" + core
         fb_offset = 0xC00000

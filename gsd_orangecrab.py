@@ -14,7 +14,7 @@ from migen import *
 from migen.genlib.misc import WaitTimer
 from migen.genlib.resetsync import AsyncResetSynchronizer
 
-from wpu import gen_accel_cores
+from accel_glue import gen_accel_cores
 from litex.gen import LiteXModule
 
 from litex_boards.platforms import gsd_orangecrab
@@ -257,7 +257,8 @@ class LiteXSoCArgumentParser(LiteXArgumentParser): pass # FIXME: Add compat and 
 # Build --------------------------------------------------------------------------------------------
 
 def add_accel_cores(soc, pixel_bus_width = 32):
-    corelist = ["rectangle_fill32"]
+    corelist = ["line32a"]
+    #corelist = ["rectangle_fill32"]
     #corelist = ["rectangle_fill32", "ellipse_fill32", "line32"]
     #corelist = ["rectangle_fill32", "line32"]
     gen_accel_cores(soc, corelist, pixel_bus_width)

@@ -21,8 +21,8 @@
 #else
 //DISABLE_HARDWARE_ACCEL  defined
 #ifndef FRAME_WIDTH
-#define FRAME_WIDTH 1366
-#define FRAME_HEIGHT 768
+#define FRAME_WIDTH 800
+#define FRAME_HEIGHT 600
 #endif
 extern unsigned long VIDEO_FRAMEBUFFER_BASE;
 #endif

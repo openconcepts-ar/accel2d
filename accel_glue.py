@@ -268,6 +268,10 @@ def connect_accel_to_native_wbcache(wpu, port):
 	s1 = wb_to_native_adapter(bus, port)
 	wpu.submodules += s1
 
+def connect_accel_to_native(wpu, port):
+	bus = wpu.dma_bus
+	s1 = wb_to_native_adapter(bus, port)
+	wpu.submodules += s1
 
 def connect_accel_wbcache(wpu):
 	dma_bus= wpu.dma_bus
@@ -295,18 +299,6 @@ def gen_accel_cores(soc, active_cores, pixel_bus_width=32):
         region = soc.bus.alloc_region(region_name, 0x1000, cached=False)
         soc.add_constant(region_name, region.origin)
         
-        #benchmark results are for 1366x768 resolution (Arty platform)
-        if True:
-        	#with write_back cache and 128-bit native: FPS 15 ticks 6563003, clocks per pixel 6
-        	#with standard cache and 128-bit native: FPS 8 ticks 11898854, clocks per pixel 11
-        	connect_accel_to_native_wbcache(wpu, soc.sdram.crossbar.get_port(mode="both", data_width=128))
+       	connect_accel_to_native(wpu, soc.sdram.crossbar.get_port(mode="both", data_width=128))
 
-        if False:
-        	#direct to 32-bit wishbone: FPS 8 ticks 12306127, clocks per pixel 11
-        	wpu.connect_to_soc(soc)
-	        
-        if False:
-        	#write-back cache for 32-bit wishbone: FPS 8 ticks 12306510, clocks per pixel 11
-        	bus = connect_accel_wbcache(wpu)
-        	soc.bus.add_master(master=wpu.dma_bus, name="dma_bus_"+wpu.name)
 
