@@ -110,7 +110,7 @@ static void
 nk_rawfb_ctx_setpixel(const struct rawfb_context *rawfb,
     const short x0, const short y0, const rawfb_color col)
 {
-    unsigned char *pixels = rawfb->fb.pixels;
+    unsigned char *pixels = (unsigned char *) rawfb->fb.pixels;
 
     pixels += y0 * rawfb->fb.pitch;
 
@@ -136,7 +136,7 @@ nk_rawfb_line_horizontal(const struct rawfb_context *rawfb,
      * The caller has to make sure it does no exceed bounds. */
     unsigned int i, n;
     unsigned char c[16 * 4];
-    unsigned char *pixels = rawfb->fb.pixels;
+    unsigned char *pixels = (unsigned char *) rawfb->fb.pixels;
     unsigned int bpp = rawfb->fb.pl.bytesPerPixel;
 
     pixels += (y * rawfb->fb.pitch) + (x0 * bpp);
@@ -585,7 +585,7 @@ nk_rawfb_draw_rect_multi_color(const struct rawfb_context *rawfb,
     struct nk_color *edge_r;
     struct nk_color pixel;
 
-    edge_buf = malloc(((2*w) + (2*h)) * sizeof(struct nk_color));
+    edge_buf = (nk_color*) malloc(((2*w) + (2*h)) * sizeof(struct nk_color));
     if (edge_buf == NULL)
         return;
 
@@ -817,7 +817,7 @@ nk_rawfb_init(void *fb, void *tex_mem, const unsigned int w, const unsigned int 
     const void *tex;
     struct rawfb_context *rawfb;
 
-    rawfb = malloc(sizeof(struct rawfb_context));
+    rawfb = (rawfb_context*) malloc(sizeof(struct rawfb_context));
     if (!rawfb)
         return NULL;
 
