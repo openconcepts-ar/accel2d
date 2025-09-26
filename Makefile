@@ -1,7 +1,7 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-APP_SRC?=blit_app#test_app#canvas_app
+APP_SRC?=nuklear_app#blit_app#test_app#canvas_app
 
 #BOARD?=digilent_arty
 #BOARD?=lambdaconcept_ecpix5
@@ -22,7 +22,8 @@ include $(BUILD_DIR)/software/include/generated/variables.mak
 include $(LITEX_ROOT)/litex/soc/software/common.mak
 
 AGG_BASE_DIR=agg-2.4
-INC=-I$(AGG_BASE_DIR)/include -I./freetype
+NUKLEAR_DIR=./Nuklear
+INC=-I$(AGG_BASE_DIR)/include -I./freetype -I$(NUKLEAR_DIR)
 
 CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
 CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
@@ -74,7 +75,7 @@ sim_linux: prerequisites sim_linux.c $(APP_SRC).cpp accel_cores.c sim_fb.c sw_co
 	g++ -O3 -m32 -ggdb -DDISABLE_HARDWARE_ACCEL $(CCDEFS) $(INC) -o sw_cores.o -c sw_cores.cpp
 	g++ -O3 -m32 -ggdb -include stdint.h -DDISABLE_HARDWARE_ACCEL $(CCDEFS) $(INC) -o $(APP_SRC).o -c $(APP_SRC).cpp
 	as --32 bmpimage.S -o bmpimage.o
-	gcc -O3 -m32 -ggdb -DDISABLE_HARDWARE_ACCEL $(CCDEFS) $(INC) `sdl2-config --cflags` sim_linux.c $(APP_SRC).o sw_cores.o bmpimage.o -o $@ `sdl2-config --libs`
+	gcc -O3 -m32 -ggdb -DDISABLE_HARDWARE_ACCEL $(CCDEFS) $(INC) `sdl2-config --cflags` sim_linux.c $(APP_SRC).o sw_cores.o bmpimage.o -o $@ -lm `sdl2-config --libs`
 	rm sw_cores.o
 
 .PHONY: firmware
