@@ -1,3 +1,42 @@
+# Widget-based UI integration
+## Port of Nuklear Immediate mode UI project to use hardware accelerators
+After evaluation of various UI frameworks, the Nuklear Immediate Mode UI was selected for since its good balance of simplicity and features. As widgets it support labels, combo boxes, buttons, etc. The Nuklear framework supports various implementations for rendering its mid-level drawing primitives including rectangles (filled and outline), bitmap images, text, shapes like lines/circles/trianges/polygons (filled and outlines). etc. All such high-level UI widgets are drawn based on the mid-level drawing primitives   
+  
+The implementation of a renderer for Nuklear is achieved by reading a list of such mid-level commands and draw them accordingly.  
+  
+As a base of the accelerated implementation, a framebuffer-based software rederer was taken: see [nuklear_rawfb.h](./Nuklear/demo/rawfb/nuklear_rawfb.h), particularly the _nk_rawfb_render_ function.  
+  
+The basic "NodeEdit" demo was selected as an example, since its use of most of the available drawing commands. The demo is implemented in [nuklear_app.cpp](./nuklear_app.cpp) and produces the following result:
+
+![nuklear_node_editor.png](./doc/nuklear_node_editor.png)
+
+For a quick test, the following command can be issued:
+```
+APP_SRC=nuklear_app make run
+```
+Or see [Blitting core](#blitting-core) on how to run demos in hardware.
+
+## Implementation
+
+The approach to implement the accelerated renderer consists two basic steps:
+
+1. Reduce the amount of low-level drawing primitives required by the high-level command list
+2. Implement a hardware accelerated version of such set, avoiding access to single-pixels to get significant performance gains.
+
+Evaluation of the possible commands resulted in this minimal set of low-level drawing primitives:
+
+1. Line draws (mostly horizontal, but vertical and oblique supported)
+2. Image blitting
+
+The way to reduce al the Nuklear mid-level drawing primitives to the above set is by determine how to get a same result using more basic basic primitives, for example: a rectangle outline is based on four lines, a filled rectangle is based on multiple horizontal lines, a polygon is based on multiple oblique lines, and if it's filled then it can be drawn similar to a solid rectangle with multiple horizontal lines possibly of different length. Same happens with respect to a filled circle, etc.
+
+Since the line draw is hardware accelerated, it gives important performance gains (on the order of 5X, depending on UI contents).
+
+Text rendering is handled by blitting of rectangles, by copying portions of a pre-generated font atlas to the corresponding location on the framebuffer. See [Blitting core](#blitting-core) for details on the hardware-accelerated blitting core.
+
+The implementation of the truly basic set of drawing primitives is in [nuklear_app.cpp](./nuklear_app.cpp), particularly _nk_accel_line_ and _nk_accel_image_ functions. Regarding the reduction of the various mid-level drawing primitives to the basic set of two, the relevant code can be seen in [nuklear_rawfb.h](./Nuklear/demo/rawfb/nuklear_rawfb.h), for example the _nk_rawfb_stretch_image_ function, where instead of accesing to the framebuffer a pixel at a time, a hardware accelerated version is invoked.   
+
+
 # BLITTING CORE
 ## Simultaneous access to multiple buses from a same accelerator core
 
