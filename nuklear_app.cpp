@@ -6,6 +6,7 @@
 #include "graphics.h"
 
 #define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_STANDARD_VARARGS
 #define NK_IMPLEMENTATION
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
@@ -25,7 +26,10 @@ static void nk_accel_image(const struct rawfb_image *dst,
 #include "demo/rawfb/nuklear_rawfb.h"
 static rawfb_context *rawfb = NULL;
 
-#include "demo/common/calculator.c" //selected demo
+//select demo
+//#include "demo/common/calculator.c"
+//#include "demo/common/overview.c"
+#include "demo/common/node_editor.c"
 
 static void draw()
 {
@@ -33,14 +37,19 @@ static void draw()
     //TODO: handle events
     nk_input_end(&rawfb->ctx);
 
-    calculator(&rawfb->ctx);
+    //calculator(&rawfb->ctx);
+    //overview(&rawfb->ctx);
+    node_editor(&rawfb->ctx);
+    
     nk_rawfb_render(rawfb, nk_rgb(100,30,30), true);
     
     //show default font atlas
+    /*
     nk_accel_image(&rawfb->fb, &rawfb->font_tex,
     	(struct nk_rect){0, rawfb->fb.h/2, rawfb->font_tex.w, rawfb->font_tex.h},
     	(struct nk_rect){0, 0, rawfb->font_tex.w, rawfb->font_tex.h},
     	rawfb->scissors, 0xFF00FFFF, 0x000000FF);
+    */
 }
 
 extern "C" void wait_vsync(void);
@@ -69,8 +78,8 @@ extern "C" void graphics_app(void)
 	{
 		draw();
 		int64_t dt = highres_ticks() - t0;
-		//printf("frame %d, t %d, FPS %d ticks %ld\n",
-		//	frame, int(t0/highres_ticks_freq()), int(highres_ticks_freq()/dt), long(dt));
+		printf("frame %d, t %d, FPS %d ticks %ld\n",
+			frame, int(t0/highres_ticks_freq()), int(highres_ticks_freq()/dt), long(dt));
 		t0 += dt;
 
 #ifdef DISABLE_HARDWARE_ACCEL
