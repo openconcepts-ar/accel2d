@@ -106,6 +106,7 @@ nk_rawfb_int2color(const rawfb_color i, const struct rawfb_pl *pl)
     return col;
 }
 
+#ifndef NK_RAWFB_ACCEL
 static void
 nk_rawfb_ctx_setpixel(const struct rawfb_context *rawfb,
     const short x0, const short y0, const rawfb_color col)
@@ -126,11 +127,13 @@ nk_rawfb_ctx_setpixel(const struct rawfb_context *rawfb,
         }
     }
 }
+#endif
 
 static void
 nk_rawfb_line_horizontal(const struct rawfb_context *rawfb,
     const short x0, const short y, const short x1, const rawfb_color col)
 {
+#ifndef NK_RAWFB_ACCEL
     /* This function is called the most. Try to optimize it a bit...
      * It does not check for scissors or image borders.
      * The caller has to make sure it does no exceed bounds. */
@@ -158,8 +161,12 @@ nk_rawfb_line_horizontal(const struct rawfb_context *rawfb,
         n -= sizeof(c); pixels += sizeof(c);
     } for (i = 0; i < n; i++)
         pixels[i] = c[i];
+#else
+	nk_accel_line(&rawfb->fb, x0, y, x1, y, col);
+#endif
 }
 
+#ifndef NK_RAWFB_ACCEL
 static void
 nk_rawfb_img_setpixel(const struct rawfb_image *img,
     const int x0, const int y0, const struct nk_color col)
@@ -218,6 +225,7 @@ nk_rawfb_img_blendpixel(const struct rawfb_image *img,
     col.b = (col.b * col.a + col2.b * inv_a) >> 8;
     nk_rawfb_img_setpixel(img, x0, y0, col);
 }
+#endif
 
 static void
 nk_rawfb_scissor(struct rawfb_context *rawfb,
@@ -263,6 +271,7 @@ nk_rawfb_stroke_line(const struct rawfb_context *rawfb,
         nk_rawfb_line_horizontal(rawfb, x0, y0, x1, col);
         return;
     }
+#ifndef NK_RAWFB_ACCEL    
     if (dy < 0) {
         dy = -dy;
         stepy = -1;
@@ -300,6 +309,10 @@ nk_rawfb_stroke_line(const struct rawfb_context *rawfb,
             nk_rawfb_ctx_setpixel(rawfb, x0, y0, col);
         }
     }
+#else
+	//TODO: consider thickness and crop (i.e. use Liang-Barsky algorihm)
+	nk_accel_line(&rawfb->fb, x0, y0, x1, y1, col);
+#endif
 }
 
 static void
@@ -357,8 +370,12 @@ nk_rawfb_fill_polygon(const struct rawfb_context *rawfb,
             if (nodeX[i+1] > left) {
                 if (nodeX[i+0] < left) nodeX[i+0] = left ;
                 if (nodeX[i+1] > right) nodeX[i+1] = right;
+#if 0
                 for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++)
                     nk_rawfb_ctx_setpixel(rawfb, pixelX, pixelY, col);
+#else
+				nk_rawfb_line_horizontal(rawfb, nodeX[i], pixelY, nodeX[i + 1], col);
+#endif
             }
         }
     }
@@ -370,6 +387,7 @@ nk_rawfb_stroke_arc(const struct rawfb_context *rawfb,
     short x0, short y0, short w, short h, const short s,
     const short line_thickness, const rawfb_color col)
 {
+#ifndef NK_RAWFB_ACCEL
     /* Bresenham's ellipses - modified to draw one quarter */
     const int a2 = (w * w) / 4;
     const int b2 = (h * h) / 4;
@@ -417,6 +435,7 @@ nk_rawfb_stroke_arc(const struct rawfb_context *rawfb,
             x--;
         } sigma += a2 * ((4 * y) + 6);
     }
+#endif
 }
 
 static void
@@ -488,6 +507,13 @@ nk_rawfb_stroke_rect(const struct rawfb_context *rawfb,
     const short x, const short y, const short w, const short h,
     const short r, const short line_thickness, const rawfb_color col)
 {
+#ifdef NK_RAWFB_ACCEL
+#warning implement hardware accelerated arc
+    nk_rawfb_stroke_line(rawfb, x, y, x + w, y, line_thickness, col);
+    nk_rawfb_stroke_line(rawfb, x, y + h, x + w, y + h, line_thickness, col);
+    nk_rawfb_stroke_line(rawfb, x, y, x, y + h, line_thickness, col);
+    nk_rawfb_stroke_line(rawfb, x + w, y, x + w, y + h, line_thickness, col);
+#else
     if (r == 0) {
         nk_rawfb_stroke_line(rawfb, x, y, x + w, y, line_thickness, col);
         nk_rawfb_stroke_line(rawfb, x, y + h, x + w, y + h, line_thickness, col);
@@ -513,6 +539,7 @@ nk_rawfb_stroke_rect(const struct rawfb_context *rawfb,
         nk_rawfb_stroke_arc(rawfb, xc + wc - r, yc + hc - r,
                 (unsigned)r*2, (unsigned)r*2, 180 , line_thickness, col);
     }
+#endif
 }
 
 static void
@@ -522,6 +549,7 @@ nk_rawfb_fill_rect(const struct rawfb_context *rawfb,
 {
     int i;
     if (r == 0) {
+        //TODO: use specific primitive
         for (i = 0; i < h; i++)
             nk_rawfb_stroke_line(rawfb, x, y + i, x + w, y + i, 1, col);
     } else {
@@ -621,7 +649,7 @@ nk_rawfb_draw_rect_multi_color(const struct rawfb_context *rawfb,
         edge_r[i].b = (((((float)br.b - tr.b)/(h-1))*i) + 0.5) + tr.b;
         edge_r[i].a = (((((float)br.a - tr.a)/(h-1))*i) + 0.5) + tr.a;
     }
-
+#ifndef NK_RAWFB_ACCEL
     for (i=0; i<h; i++) {
         for (j=0; j<w; j++) {
             if (i==0) {
@@ -643,6 +671,7 @@ nk_rawfb_draw_rect_multi_color(const struct rawfb_context *rawfb,
             }
         }
     }
+#endif
 
     free(edge_buf);
 }
@@ -738,6 +767,7 @@ nk_rawfb_stroke_circle(const struct rawfb_context *rawfb,
     short x0, short y0, short w, short h, const short line_thickness,
     const rawfb_color col)
 {
+#ifndef NK_RAWFB_ACCEL
     /* Bresenham's ellipses */
     const int a2 = (w * w) / 4;
     const int b2 = (h * h) / 4;
@@ -774,6 +804,7 @@ nk_rawfb_stroke_circle(const struct rawfb_context *rawfb,
             x--;
         } sigma += a2 * ((4 * y) + 6);
     }
+#endif
 }
 
 static void
@@ -807,14 +838,39 @@ nk_rawfb_stroke_curve(const struct rawfb_context *rawfb,
 static void
 nk_rawfb_clear(const struct rawfb_context *rawfb, const rawfb_color col)
 {
+#ifndef NK_RAWFB_ACCEL
     nk_rawfb_fill_rect(rawfb, 0, 0, rawfb->fb.w, rawfb->fb.h, 0, col);
+#else
+    nk_accel_clear(&rawfb->fb, col);
+#endif
+}
+
+
+static void nk_premultiply_image(nk_color *dst, unsigned dstpitch, const nk_color *src, unsigned srcpitch,
+  unsigned w, unsigned h)
+{
+  for(int y = 0; y < h; ++y)
+  {
+		for(int x = 0; x < w; ++x)
+		{
+			uint16_t a1 = src[x].a + 1;
+			dst[x].r = (src[x].r * a1) >> 8;
+			dst[x].g = (src[x].g * a1) >> 8;
+			dst[x].b = (src[x].b * a1) >> 8;
+			dst[x].a = src[x].a;
+			//printf("x y %d %d, src %d %d %d %d\n", x, y, src[x].r, src[x].g, src[x].b, src[x].a);
+		}
+		//assert(0);
+		src += srcpitch;
+		dst += dstpitch;
+	}
 }
 
 NK_API struct rawfb_context*
 nk_rawfb_init(void *fb, void *tex_mem, const unsigned int w, const unsigned int h,
     const unsigned int pitch, const struct rawfb_pl pl)
 {
-    const void *tex;
+    const void *tex = NULL;
     struct rawfb_context *rawfb;
 
     rawfb = (rawfb_context*) malloc(sizeof(struct rawfb_context));
@@ -823,7 +879,11 @@ nk_rawfb_init(void *fb, void *tex_mem, const unsigned int w, const unsigned int 
 
     memset(rawfb, 0, sizeof(struct rawfb_context));
     rawfb->font_tex.pixels = tex_mem;
+#ifdef NK_RAWFB_ACCEL
+    rawfb->font_tex.pl.bytesPerPixel = 4;
+#else
     rawfb->font_tex.pl.bytesPerPixel = 1;
+#endif
     rawfb->font_tex.pl.rshift = 0;
     rawfb->font_tex.pl.gshift = 0;
     rawfb->font_tex.pl.bshift = 0;
@@ -847,18 +907,53 @@ nk_rawfb_init(void *fb, void *tex_mem, const unsigned int w, const unsigned int 
 
     nk_font_atlas_init_default(&rawfb->atlas);
     nk_font_atlas_begin(&rawfb->atlas);
+#ifdef NK_RAWFB_ACCEL
+	struct nk_font_config default_font_config;
+    default_font_config = nk_font_config(13.0f);
+	default_font_config.oversample_v = 1;
+	default_font_config.oversample_h = 1; //this allows non-stretched image blit
+
+    rawfb->atlas.default_font = nk_font_atlas_add_default(&rawfb->atlas, default_font_config.size, &default_font_config);
+    
+    tex = nk_font_atlas_bake(&rawfb->atlas, &rawfb->font_tex.w, &rawfb->font_tex.h, NK_FONT_ATLAS_RGBA32);
+#else
     tex = nk_font_atlas_bake(&rawfb->atlas, &rawfb->font_tex.w, &rawfb->font_tex.h, NK_FONT_ATLAS_ALPHA8);
+#endif
+    printf("font text w/h %d %d\n", int(rawfb->font_tex.w), int(rawfb->font_tex.h));
+    printf("atlas.config %p\n", rawfb->atlas.config);
+
     if (!tex) {
         free(rawfb);
         return NULL;
     }
 
-    rawfb->font_tex.pitch = rawfb->font_tex.w * 1;
+	rawfb->font_tex.pitch = rawfb->font_tex.w * rawfb->font_tex.pl.bytesPerPixel;
+
+
+    // Store the font texture in tex scratch memory
+    //if(!rawfb->font_tex.pixels)
+    {
+    	void *tex_buf = malloc(rawfb->font_tex.pitch * rawfb->font_tex.h);
+    	if(!tex_buf)
+    	  return NULL;
+    	rawfb->font_tex.pixels = tex_buf;
+    }
+
+#ifndef NK_RAWFB_ACCEL
     memcpy(rawfb->font_tex.pixels, tex, rawfb->font_tex.pitch * rawfb->font_tex.h);
+#else
+    //premultiply atlas
+    nk_premultiply_image((nk_color*) rawfb->font_tex.pixels, rawfb->font_tex.pitch/4,
+      (nk_color*) tex, rawfb->font_tex.w,
+      rawfb->font_tex.w, rawfb->font_tex.h);
+#endif
+    
     nk_font_atlas_end(&rawfb->atlas, nk_handle_ptr(NULL), NULL);
     if (rawfb->atlas.default_font)
         nk_style_set_font(&rawfb->ctx, &rawfb->atlas.default_font->handle);
+//#ifndef NK_RAWFB_ACCEL
     nk_style_load_all_cursors(&rawfb->ctx, rawfb->atlas.cursors);
+//#endif
     nk_rawfb_scissor(rawfb, 0, 0, rawfb->fb.w, rawfb->fb.h);
 
     return rawfb;
@@ -870,6 +965,7 @@ nk_rawfb_stretch_image(const struct rawfb_image *dst,
     const struct nk_rect *src_rect, const struct nk_rect *dst_scissors,
     const struct nk_color *fg)
 {
+#ifndef NK_RAWFB_ACCEL
     short i, j;
     struct nk_color col;
     float xinc = src_rect->w / dst_rect->w;
@@ -899,6 +995,9 @@ nk_rawfb_stretch_image(const struct rawfb_image *dst,
         xoff = src_rect->x;
         yoff += yinc;
     }
+#else
+	nk_accel_image(dst, src, *dst_rect, *src_rect, *dst_scissors, nk_rawfb_color2int(*fg, &dst->pl), 0);
+#endif
 }
 
 static void
