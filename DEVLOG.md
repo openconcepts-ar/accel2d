@@ -281,3 +281,27 @@ The demo draws a "g" letter showing a very basic "3d-like" effect, implemented b
 To draw complete strings, an easy _text_ method was added, see function _text()_ in [accel_canvas.h](./accel_canvas.h). A font cache is also provided to speed up repeated drawing of a same letter in a same size, see _FontManager_ class in the referenced source.
 
 
+
+# C++ canvas-like API
+
+An easy to use drawing API is provided, based on the popular [Processing](https://processingfoundation.org) API which is widely used by artists. It resembles the Arduino API but for graphics, so it should be quite straightforward for developers to learn, if not already known.
+
+An artistic-looking demo that shows how to make graphics in a few lines of code is provided, entitled "moonlight":
+  
+  
+<img src="./doc/moonlight.png" height=480>
+
+The demo uses the basic drawing primitives: circles for the moon, points as stars, lines as the tree branches and leaves, text for the title, and a rounded rect as background.
+
+## Implementation details
+
+Main source is [canvas_app.cpp](./canvas_app.cpp).
+  
+A generic canvas API is implemented using he [AGG](https://github.com/suarezvictor/agg-2.4) library (Anti Grain Geometry, BSD licensed). It's used mainly in the source [accel_canvas.h](./accel_canvas.h).
+  
+The implementation is hardware accelerated by the use of the [line32.cc](./line32.cc) core, similarly for the font rasterizer implementation but for any kind of shapes (i.e rounded rectangles and ellipses as in the demo). That is solved by a specific implementation of a pixel format class (see function _copy_hline_ and _blend_hline_).
+
+That generic canvas is then subclassed for the specifics of the Processing API, see [processing_api.h](./processing_api.h).
+
+
+
