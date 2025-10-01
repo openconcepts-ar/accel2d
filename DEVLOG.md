@@ -1,3 +1,35 @@
+# eDP adapter board
+## Connect touch-enabled displays with 40-pin connector eDP (embedded Display Port)
+
+This board is based on the NCS8801S IC from NewCoSemi, a not so famous IC manufacturer but the only one with a chip capable of converting RGB signals to the eDP protocol, instead of requiring LVDS signals like many other similar ICs.
+
+Requirement for this boards are:
+
+- Compatible input connectors (30-pin NORTH and SOUTH)
+- Exposure of Touch function pins (I2C protocol)
+- Selectable power for touch function: 3.3V or 5V
+- Single supply: internal DC-DC for powering backlight from 5V supply (for single supply systems)
+- Cable output protection diodes
+
+The design of this board required just 2 layers, providing adequate power supply and ground planes and small size:  
+
+![eDP_adapter.png](./doc/eDP_adapter.png)
+
+
+<img src="./doc/NCS8801_symbol.png" alt="NCS8801 symbol" height="400">
+<img src="./doc/NCS8801_pinout.png" alt="NCS8801 pinout" height="400">  
+
+This special IC required the design of a custom symbol, according to its [datasheet](https://www.newcosemi.com/product/93.html)
+
+The connector is 40-pin (mostly standarized) with its touch panel interface in pins 30-40:  
+
+![touch pins](./doc/display_touch_pins.png)
+
+Relevant design files are in Kicad format:  
+[Schematics](./hardware/eDP_adapter/eDP_adapter.kicad_sch)  
+[PCB design file](./hardware/eDP_adapter/eDP_adapter.kicad_pcb)  
+
+
 # Widget-based UI integration
 ## Port of Nuklear Immediate mode UI project to use hardware accelerators
 After evaluation of various UI frameworks, the Nuklear Immediate Mode UI was selected for since its good balance of simplicity and features. As widgets it support labels, combo boxes, buttons, etc. The Nuklear framework supports various implementations for rendering its mid-level drawing primitives including rectangles (filled and outline), bitmap images, text, shapes like lines/circles/trianges/polygons (filled and outlines). etc. All such high-level UI widgets are drawn based on the mid-level drawing primitives   
