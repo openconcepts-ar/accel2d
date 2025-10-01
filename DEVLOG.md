@@ -305,3 +305,21 @@ That generic canvas is then subclassed for the specifics of the Processing API, 
 
 
 
+
+# C++ support
+This documentation explain how suport for C++ was added in a bare metal environment.
+
+The main difficulty with supporting C++ were lack of standard C++ functions (like support for _new_ and _delete_ keywords) and adequate initialization of global objects (calling of constructors before main).
+  
+Then some compiling modes were tried: first one was to stick to the bare metal as much as possible, and second one, full C++ support. For the first case, the C linker was used, providing functions for _new_/_delete_ and related requirements. Exceptions weren't supported (i.e `-fno-exceptions` flag was set for the compiler).
+  
+Support was anyways was required for more complex libraries like the AGG referenced above. This mandated linking with the C++ compiler which implies the standard C++ library (`-lstdc++`) and enabling of exception handing: `-fexceptions`. To solve some an undefined reference to `__cxa_guard_acquire`, caused by instantation of static objects local to a function, the solution was just to disable threading by setting `-fno-threadsafe-statics` compiler flag. 
+  
+This is reflected on the [Makefile](./Makefile). The C++ case required to specify the "triplet" at 32-bit: `-march=rv32im -mabi=ilp32` plus disabling of default C++ startup code (`-nostartfiles`) to avoid duplicated symbols. Bringing C++ support produced some other missing symbols like file I/O, what were solved in [fs.c](./fs.c) by providing empty implementations.
+ 
+In regards to the issue of missing constructor calls for global objects -a quite hard to spot bug since zero-initialized object works-, the solution was to adapt the linker script (see [linked.ld](./linked.ld) file) and provide custom initialization functions (see main.c, functions *_init_array* and *_fini_array*). Those are usually implemented in assembler but for portability, a C implementation was chosen.
+  
+Of particular importance is that newer versions of GCC automatically put pointers to initialization functions in the `.init_array` section, while previous versions relies on a more verbose linker including `.ctors` sections (now deprecated), so many solution by others didn't work until the logic behind the new implementation was understood.
+  
+The result is that now complex C++ code like the currently included (i.e. the AGG library) works correctly, and so the C++ demos.
+
