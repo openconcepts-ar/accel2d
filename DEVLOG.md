@@ -260,3 +260,24 @@ As always with this project, the graphic core can be run in software mode (using
 * [bus.h](./bus.h): add macros to allow access to simultaneous ports in accelerators implementations
 * [blit_app.cpp](./blit_app.cpp): main testing application
 
+
+
+
+
+# Scalable font support in vector format
+
+Support for scalable fonts (vector format) was added. It was tested with the openly licensed DejaVuSansMono font (TrueType), drawn at various scales.
+
+<img src="./doc/freetype.png" width=384 height=384>
+
+Two ways of implementation for the glyph rasterization were tested: one based on signed distance fields (Chlumsky's multichannel version to preserve corners) and a more traditional scanline rasterization.
+  
+The scanline rasterizer resulted of more performance (about 2X). It's based on the project [Freetype](https://freetype.org/) (GPL licensed), since it allows for a custom scanline drawing callback, that was implemented using the line hardware accelerator core [line32.cc](./line32.cc) for fast drawing of horizontal lines. See the implementation in [freetype_app.cpp](freetype_app.cpp).  
+
+For easy inclusion of the FreeType library (that's certainly quite big), an "amalgamated" version was used which uses just a [header file](./freetype/FreeTypeAmalgam.h) and a [.c source file](./freetype/FreeTypeAmalgam.c).
+  
+The demo draws a "g" letter showing a very basic "3d-like" effect, implemented by drawing the glyph at different scales and colors. The program shows how to change scale without reloading the glyph at a different size.
+  
+To draw complete strings, an easy _text_ method was added, see function _text()_ in [accel_canvas.h](./accel_canvas.h). A font cache is also provided to speed up repeated drawing of a same letter in a same size, see _FontManager_ class in the referenced source.
+
+
