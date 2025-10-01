@@ -1,3 +1,101 @@
+# Visual debugging
+The following documentation explains how to run code step by step and explore the MCU's CPU state.
+The CPU is accessed via its JTAG pins, so a suitable adapter is required for connection to the development host.
+
+## JTAG adapters
+JTAG signals are by default exposed via the SD card interface on the CPU board. To achieve that a homemade adapter was designed using a uSD to MMC adaper:  
+  
+<img src="./doc/custom-JTAG.png" alt="custom JTAG" width=600>
+
+
+Alternatively you can use uSD to JTAG adapter the one below. More info [here](https://linux-sunxi.org/MicroSD_Breakout) and [here](https://linux-sunxi.org/JTAG).  
+  
+<img src="./doc/JTAG_MicroSD_UART-front.jpeg" alt="JTAG adapter" height="400">
+
+To connect to the development host, you can use a homemade JTAG adapter based on a FTDI chip, testing was done  with a DLP-USB1232H module but there are [many other options](https://openocd.org/doc/html/Debug-Adapter-Hardware.html).
+  
+
+## OpenOCD config
+This is the main development: a configuration that works for this combination of CPU and adapter case. It's loosely based on [this configuration](https://linux-sunxi.org/JTAG/sun4iconfig), note among other changes the correct CPU ID `0x5ba00477`.
+
+```
+adapter speed 1000
+adapter driver ftdi
+ftdi vid_pid 0x0403 0x6010
+ftdi layout_init 0x0008 0x000b
+ftdi device_desc "Dual RS232-HS"
+ftdi channel 0
+
+reset_config none srst_pulls_trst
+transport select jtag
+
+set _CHIPNAME t113s3
+jtag newtap $_CHIPNAME cpu -irlen 4 -ircapture 0x1 -irmask 0xf -expected-id 0x5ba00477
+dap create $_CHIPNAME.dap -chain-position $_CHIPNAME.cpu
+target create $_CHIPNAME.cpu cortex_a -dap $_CHIPNAME.dap
+```
+See the file in the repo [here](./target-cpu/f133-bare/openocd-dlp1232h-t113s3.cfg).
+
+## Running OpenOCD
+To run OpenOCD with the correct configuration, issue the following command:
+```
+openocd -f openocd-dlp1232h-t113s3.cfg
+```
+Which results in the CPU being found:
+```
+Open On-Chip Debugger 0.12.0-rc3+dev-00001-gdfe57baa1-dirty (2022-12-21-01:55)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+T113s3 JTAG Ready for Remote Connections
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : clock speed 1000 kHz
+Info : JTAG tap: t113s3.cpu tap/device found: 0x5ba00477 (mfg: 0x23b (ARM Ltd), part: 0xba00, ver: 0x5)
+Info : t113s3.cpu: hardware has 6 breakpoints, 4 watchpoints
+Info : t113s3.cpu: MPIDR level2 0, cluster 0, core 0, multi core, no SMT
+Info : starting gdb server for t113s3.cpu on 3333
+Info : Listening on port 3333 for gdb connections
+```
+Then you test it by running GDB (use multiarch version)
+
+```
+gdb-multiarch helloworld_fel
+target remote :3333
+monitor halt
+load
+tbreak main
+jump _start
+```
+
+NOTE: the commands can be put into a .gdbinit file to be automatically loaded with GDB.
+  
+
+## Visual GDB
+
+For a nice GDB UI, ease to setup, you can try [gdbgui](https://www.gdbgui.com/)
+```
+pip install gdbgui
+python -m gdbgui
+```
+
+Go to [http://127.0.0.1:5000/dashboard](http://127.0.0.1:5000/dashboard)  
+Use as command:
+```gdb-multiarch helloworld_fel```
+
+And then the GDB commands as above (`target remote :3333`, etc.)
+  
+
+
+## Caveats
+Debugging the F133A/D1s (RISC-V) chips **does not work** with open source/custom tools, thus proprietary and expensive tools like [CKLINK](https://github.com/ylyamin/RT-Thread-on-Allwinner-D1H/blob/master/documentation/D1_2_boot_process.md#debbuging-gdb-via-jtag) are required, which works with also propietary software: [Xuantie's](https://www.xrvm.com/) [T-Head Debug Server](https://doc.winnermicro.net/download/debug_server/T-Head_Debugger_Server_User_Guide_EN-US.pdf).  
+  
+Ater too many failed attemps, including writing a custom firmware to a STM32F103-base board to emulate a CKLINK, this route was abandoned in favor of the open source tools, which works for ARM CPUs so the T113-S3 was used.  
+  
+For possible alternatives to make the RISC-V CPU work, you can try a [Sipeed debugger](https://github.com/sipeed/RV-Debugger-BL702) since state that the using its debugger hardware, the Xuantie C906 CPU works.
+
+Also you can see [here](https://github.com/cjacker/opensource-toolchain-bouffalo-lab?tab=readme-ov-file#option-2--use-sipeed-rv-debugger-plus-or-m0s-dock-with-cklink-lite-firmware) and [here](https://wiki.sipeed.com/hardware/en/logic_analyzer/combo8/use_cklink_function.html).  
+
 # eDP adapter board
 ## Connect touch-enabled displays with 40-pin connector eDP (embedded Display Port)
 
