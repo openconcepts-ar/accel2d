@@ -323,3 +323,25 @@ Of particular importance is that newer versions of GCC automatically put pointer
   
 The result is that now complex C++ code like the currently included (i.e. the AGG library) works correctly, and so the C++ demos.
 
+
+
+# Performance optimization (FPGA)
+## Write-back cache / 128-bits access / benchmarking
+
+
+Some methods were tried to access the framebuffer (backed by the 16-bit DDR memory) for access by the custom accelerators, in a faster fashion: almost 2X gains were achieved.
+  
+The main development is the addition of a write-back cache with lazy eviction, connected to the DDR memory in 4:1 fashion (so the hardware 16-bit bus width results in a logical 128-bit bus).
+  
+The new code to take as reference, with the implementation of the different bus access architectures, is at [accel_glue.py](./accel_glue.py).
+  
+The benchmarking code is in [test_app.cpp](./test_app.cpp) which calculates how many clocks are required for each pixel actually written to the framebuffer, by the accelerator. The core selected as a test is implemented in [line32.cc](./line32.cc) which is used for the previous tasks. It's capable of a pixel per clock in the ideal setup, but the access to dynamic memory is slower, among other things since the DRAM is concurrently accessed by the CPU and also constantly read to display the pixels at a high frequency (dozens of MHz per pixel).
+  
+The cache allowed to lower from 11 clocks per pixel to 6, thanks to the lazy eviction that allows the line accelerator to push pixels to the cache while the dynamic RAM is busy. Note the need of the eviction, that's not needed by the CPU, since without such eviction the pixels doesn't appear in the display for a long time (that's not a problem with the CPU since it will read the previously written data from the cache, with no effect on processing as viewed from the CPU). This cache supports a read-write mode and a write-only mode, the latest was selected since it's faster and consumes less resources.
+  
+## Implementation details
+The core supports an **AUTO_EVICT** state that's entered when the accelerator isn't active (**IDLE** state). The eviction state uses a counter (_autoevict_counter_) that will test if the entries are in the dirty state (meaning previously written data) and in such case, issue a write to the dynamic memory. There's a simple but effective algorithm to avoid writing to a recently cached address, to allow some time for the RAM to get ready again before a new write: with each write to the cache by the accelerator, the counter is set to an address "far" from the currently written address.
+  
+Far enough is half the cache size, since the counter wraps around. Note that the cache is not large, since it just need to catch writes while the RAM is busy. In testing, 32 entries allowed a considerable speedup with not much space. That way, in just 16 cycles maximum, the latest written pixel by the accelerator will be automatically sent to the framebuffer, and displayed.
+  
+Then there's the need to widen the bus from 32-bits (the pixel size in RGBA8888 mode) to the native 128-bit DRAM bus. For this, an adapter [core from LiteX](https://github.com/enjoy-digital/litex/blob/master/litex/soc/interconnect/wishbone.py#L442) is used: `wishbone.Converter`. It allows to widen a wishbone bus from 32-bit to 128-bit (or other power-of-two sizes), and viceversa. This was tested as required since using the cache in 32-bit mode didn't give much improvement, as with the 128-bit one.
