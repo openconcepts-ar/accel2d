@@ -5,14 +5,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <string.h>
- 
-#include "driver/gpio.h"
-#include "sdkconfig.h"
-#include "driver/timer.h"
-#include "soc/soc.h"
-#include "soc/rtc.h"
-#include <math.h>
-#include "esp_heap_caps.h"
 /*******************************
 *    warning!!!: any copy of this code or his part must include this: 
 *  "The original was written by Dima Samsonov @ Israel sdima1357@gmail.com on 3/2021" *
@@ -53,21 +45,12 @@
 #define SMALL_NO_DATA 36
 
 
-///cpufreq (must be 240) /8 count = 30MHz  convinient number for measure 1.5MHz  of  low speed USB
-
-//~ static inline uint32_t _getCycleCount32(void) {
-  //~ uint32_t ccount;
-  //~ __asm__ __volatile__("rsr %0,ccount":"=a" (ccount));
-  //~ return ccount;
-//~ }
 
 
-//timing calibrations which depends CPU_FREQ, calibrated in initPins()
-
-int TRANSMIT_TIME_DELAY = 110;  //delay each bit transmit
-int TIME_MULT 		  = 25;    //received time factor delta clocks* TIME_MULT/TIME_SCALE
-int TM_OUT 			  = 64;    //receive time out no activity on bus
-#define  TIME_SCALE (1024)
+int USB_FAST_DATA TRANSMIT_TIME_DELAY = 110;  //delay each bit transmit
+int USB_FAST_DATA TIME_MULT           = 25;    //received time factor delta clocks* TIME_MULT/TIME_SCALE
+int USB_FAST_DATA TM_OUT              = 64;    //receive time out no activity on bus
+#define  TIME_SCALE       1024
 
 //#define TEST
 #ifdef TEST
@@ -76,195 +59,73 @@ int TM_OUT 			  = 64;    //receive time out no activity on bus
 #define TOUT  (TM_OUT)
 #endif	
 
+#define TIME_FACTOR_BITS 3
 
-#include "hal/cpu_hal.h"
-#include "hal/gpio_hal.h"
-static inline uint32_t _getCycleCount32()
+static inline uint32_t _getCycleCount32(void)
 {
 	uint32_t ccount = cpu_hal_get_cycle_count();
 	return  ccount;
 }
 static inline uint8_t _getCycleCount8d8(void) 
 {
-  uint32_t ccount = cpu_hal_get_cycle_count();
-  return ccount>>3;
+  uint32_t ccount = _getCycleCount32();
+  return ccount>>TIME_FACTOR_BITS;
 }
 
+//must be setup each time with setPins
+uint32_t USB_FAST_DATA DP_PIN;
+uint32_t USB_FAST_DATA DM_PIN;
 
-#if CONFIG_IDF_TARGET_ESP32
-#define SET_I     { PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DP_PIN]); PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DM_PIN]); GPIO.enable_w1tc = (1 << DP_PIN) | (1 << DM_PIN);  }
-#define SET_O    { GPIO.enable_w1ts = (1 << DP_PIN) | (1 << DM_PIN);  PIN_INPUT_DISABLE(GPIO_PIN_MUX_REG[DP_PIN]); PIN_INPUT_DISABLE(GPIO_PIN_MUX_REG[DM_PIN]);  }
-#define SE_J        { *snd[1][0] = (1 << DM_PIN);*snd[1][1] = (1 << DP_PIN); }
-#define SE_0       { *snd[2][0] = (1 << DM_PIN);*snd[2][1] = (1 << DP_PIN); }
-
-#define READ_BOTH_PINS (((GPIO.in&RD_MASK)<<8)>>RD_SHIFT)
-uint32_t *   snd[4][2]  = {
-					{&GPIO.out_w1tc,&GPIO.out_w1ts},	
-					{&GPIO.out_w1ts,&GPIO.out_w1tc},	
-					{&GPIO.out_w1tc,&GPIO.out_w1tc},
-					{&GPIO.out_w1tc,&GPIO.out_w1tc}
-				  } ;
-#else
-#define SET_I     { PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DP_PIN]); PIN_INPUT_ENABLE(GPIO_PIN_MUX_REG[DM_PIN]);  gpio_ll_output_disable(&GPIO,DM_PIN); gpio_ll_output_disable(&GPIO,DP_PIN);}
-#define SET_O    { GPIO.enable_w1ts.val = (1 << DP_PIN) | (1 << DM_PIN);  PIN_INPUT_DISABLE(GPIO_PIN_MUX_REG[DP_PIN]); PIN_INPUT_DISABLE(GPIO_PIN_MUX_REG[DM_PIN]);  }
-#define SE_J        { *snd[1][0] = (1 << DM_PIN);*snd[1][1] = (1 << DP_PIN); }
-#define SE_0       { *snd[2][0] = (1 << DM_PIN);*snd[2][1] = (1 << DP_PIN); }
-#define READ_BOTH_PINS (((GPIO.in.val&RD_MASK)<<8)>>RD_SHIFT)
-uint32_t *   snd[4][2]  = {
-					{&GPIO.out_w1tc.val,&GPIO.out_w1ts.val},	
-					{&GPIO.out_w1ts.val,&GPIO.out_w1tc.val},	
-					{&GPIO.out_w1tc.val,&GPIO.out_w1tc.val},
-					{&GPIO.out_w1tc.val,&GPIO.out_w1tc.val}
-				  } ;
-#endif
-
-//must be setup ech time with setPins
-uint32_t DP_PIN;
-uint32_t DM_PIN;
-
-uint32_t DM_PIN_M; 
-uint32_t DP_PIN_M; 
-uint16_t M_ONE;
-uint16_t P_ONE;
-uint32_t RD_MASK;
-uint32_t RD_SHIFT;
+uint32_t USB_FAST_DATA DM_PIN_M;
+uint32_t USB_FAST_DATA DP_PIN_M;
+uint16_t USB_FAST_DATA M_ONE;
+uint16_t USB_FAST_DATA P_ONE;
+uint32_t USB_FAST_DATA RD_MASK;
+uint32_t USB_FAST_DATA RD_SHIFT;
 //end must be setup ech time with setPins
 
 
 // temporary used insize lowlevel
-volatile 	uint8_t received_NRZI_buffer_bytesCnt;
-uint16_t 	received_NRZI_buffer[DEF_BUFF_SIZE];
+volatile uint8_t USB_FAST_DATA received_NRZI_buffer_bytesCnt;
+uint16_t USB_FAST_DATA received_NRZI_buffer[DEF_BUFF_SIZE];
 
 volatile uint8_t transmit_bits_buffer_store_cnt;
 
 
 //uint8_t transmit_bits_buffer_store[DEF_BUFF_SIZE];
 // share same memory as received_NRZI_buffer
-uint8_t*  transmit_bits_buffer_store = (uint8_t*)&received_NRZI_buffer[0];
+uint8_t* USB_FAST_DATA transmit_bits_buffer_store = (uint8_t*)&received_NRZI_buffer[0];
 
 
 volatile uint8_t transmit_NRZI_buffer_cnt;
 uint8_t  transmit_NRZI_buffer[DEF_BUFF_SIZE];
 
-volatile uint8_t decoded_receive_buffer_head;
-volatile uint8_t decoded_receive_buffer_tail;
-uint8_t decoded_receive_buffer[DEF_BUFF_SIZE];
+volatile uint8_t USB_FAST_DATA decoded_receive_buffer_head;
+volatile uint8_t USB_FAST_DATA decoded_receive_buffer_tail;
+uint8_t USB_FAST_DATA decoded_receive_buffer[DEF_BUFF_SIZE];
 // end temporary used insize lowlevel
 
 
 
 
-#if 1
-void (*delay_pntA)() =NULL;
-#define cpuDelay(x) {(*delay_pntA)();}
+#define TIMING_PREC 4 //optional use of optmized bit-output timings, and configure added precision
 
-#if CONFIG_IDF_TARGET_ESP32
-void setDelay(uint8_t ticks)
-{
-// opcodes of void test_delay() {__asm__ (" nop"); __asm__ (" nop"); __asm__ (" nop"); ...}
-//36 41 00 3d f0 1d f0 00 // one  nop
-//36 41 00 3d f0 3d f0 3d f0 3d f0 3d f0 1d f0 00  // five  nops
-//36 41 00 3d f0 3d f0 3d f0 3d f0 3d f0 3d f0 1d  f0 00 00 00 //
-int    MAX_DELAY_CODE_SIZE = 0x280;
-uint8_t*     pntS;
-	// it can't execute but can read & write
-	if(!delay_pntA)
-	{
-		pntS = malloc(MAX_DELAY_CODE_SIZE);
-	}
-	else
-	{
-		pntS = heap_caps_realloc(delay_pntA, MAX_DELAY_CODE_SIZE, MALLOC_CAP_8BIT);
-	}
-	uint8_t* pnt = (uint8_t*)pntS;
-	//put head of delay procedure
-	*pnt++ = 0x36;
-	*pnt++ = 0x41;
-	*pnt++ = 0; 
-	for(int k=0;k<ticks;k++)
-	{
-		//put NOPs
-		*pnt++ = 0x3d;
-		*pnt++ = 0xf0;
-	}
-	//put tail of delay procedure
-	*pnt++ = 0x1d;
-	*pnt++ = 0xf0;
-	*pnt++ = 0x00;
-	*pnt++ = 0x00;
-	// move it to executable memory segment
-	// it can't  write  but can read & execute
-	delay_pntA = heap_caps_realloc(pntS,MAX_DELAY_CODE_SIZE,MALLOC_CAP_EXEC);
-	if(!delay_pntA)
-	{
-		printf("Some goind wrong. Disable memory prot !\n delay_pntA = %p\n",delay_pntA);
-		
-	}
-}
-#else
-void setDelay(uint8_t ticks)
-{
-// opcodes of void test_delay() {__asm__ (" nop"); __asm__ (" nop"); __asm__ (" nop"); ...}
-//36 41 00 3d f0 1d f0 00 // one  nop
-//36 41 00 3d f0 3d f0 3d f0 3d f0 3d f0 1d f0 00  // five  nops
-//36 41 00 3d f0 3d f0 3d f0 3d f0 3d f0 3d f0 1d  f0 00 00 00 //
-int    MAX_DELAY_CODE_SIZE = 0x210;
-uint8_t*     pntS;
-	// it can't execute but can read & write
-	if(!delay_pntA)
-	{
-		pntS = heap_caps_aligned_alloc(32,MAX_DELAY_CODE_SIZE, MALLOC_CAP_8BIT);
-		//~ printf("zero pntS = %p\n",pntS);
-	}
-	else
-	{
-		pntS = heap_caps_realloc(delay_pntA, MAX_DELAY_CODE_SIZE, MALLOC_CAP_8BIT);
-		//~ printf("pntS = %p\n",pntS);
-	}
-	uint8_t* pnt = (uint8_t*)pntS;
-	//put head of delay procedure
-	//~ uint8_t* pnt = (uint8_t*)pntS;
-	//put head of delay procedure
-	for(int k=0;k<ticks;k++)
-	{
-		//put NOPs
-		*pnt++ = 0x1;
-		*pnt++ = 0x0;
-	}
-	//put tail of delay procedure
-	*pnt++ = 0x82;
-	*pnt++ = 0x80;
-	// move it to executable memory segment
-	// it can't  write  but can read & execute
-	//delay_pntA = heap_caps_realloc(pntS,MAX_DELAY_CODE_SIZE,MALLOC_CAP_EXEC);
-	//delay_pntA = (void*)dram_alloc_to_iram_addr(pntS,MAX_DELAY_CODE_SIZE);
-	delay_pntA = heap_caps_realloc(pntS,MAX_DELAY_CODE_SIZE,MALLOC_CAP_32BIT | MALLOC_CAP_EXEC);
-	if(!delay_pntA)
-	{
-		printf("idf.py menuconfig\n Component config-> ESP System Setting -> Memory protectiom-> Disable.\n memory prot must be disabled!!!\n delay_pntA = %p\n",delay_pntA);
-		exit(0);
-	}
-}
-#endif
-#else
+
 void setDelay(uint32_t tick)
 {
 
 }
-inline  void cpuDelayNop(uint32_t ticks)
+inline  void cpuDelay(uint32_t x)
 {
-	for(int k=0;k<ticks;k++)
-	{
-		__asm__ __volatile__("   nop"); 
-	}
+ register uint32_t t0 = cpu_hal_get_cycle_count();
+ for(;;)
+ {
+   register uint32_t t1 =  cpu_hal_get_cycle_count();
+   t1 -= t0;
+   if(t1 > x)
+     break;
+  }
 }
-inline  void cpuDelay(uint32_t tick)
-{
-	uint32_t stop =_getCycleCount32() + tick;
-	while((_getCycleCount32() - stop)&0x80000000u);
-}
-#endif
-
 
 typedef __packed struct
 {
@@ -331,108 +192,41 @@ uint8_t    transmitL1[DEF_BUFF_SIZE];
 } sUsbContStruct;
 
 sUsbContStruct * current;
-
-void parseImmed(sUsbContStruct * pcurrent)
-{
-static sCfgDesc  	cfg;
-static sIntfDesc 		sIntf;
-static HIDDescriptor 	hid[4];
-static sEPDesc 		epd;
-static int 			cfgCount   = 0;
-static int 			sIntfCount   = 0;
-static int 			hidCount   = 0;
-
-int 			pos = 0;
-#define STDCLASS        0x00
-#define HIDCLASS        0x03
-#define HUBCLASS	 	0x09      /* bDeviceClass, bInterfaceClass */
-pcurrent->epCount     = 0;
-while(pos<pcurrent->descrBufferLen-2)
-	
-	{
-		uint8_t len  =  pcurrent->descrBuffer[pos];
-		uint8_t type =  pcurrent->descrBuffer[pos+1];
-		if(len==0)
-		{
-			//printf("pos = %02x type = %02x cfg.wLength = %02x pcurrent->acc_decoded_resp_counter = %02x\n ",pos,type,cfg.wLength,pcurrent->acc_decoded_resp_counter);
-			pos = pcurrent->descrBufferLen;
-		}
-		if(pos+len<=pcurrent->descrBufferLen)
-		{
-				if(type == 0x2)
-				{
-					memcpy(&cfg,&pcurrent->descrBuffer[pos],len);
-					
-				}
-				else if (type == 0x4)
-				{
-					memcpy(&sIntf,&pcurrent->descrBuffer[pos],len);
-				}
-				else if (type == 0x21)
-				{
-
-					hidCount++;
-					int i = hidCount-1;
-					memcpy(&hid[i],&pcurrent->descrBuffer[pos],len);
-				}
-				else if (type == 0x5)
-				{
-					pcurrent->epCount++;
-					memcpy(&epd,&pcurrent->descrBuffer[pos],len);
-				}
-		}
-		pos+=len;
-	}
-}
-
-
-
-
-
-// received data from ep0,ep1!!!!
-//uint8_t   current->Resp0[DEF_BUFF_SIZE];
-//uint8_t   current->R0Bytes;
-//uint8_t   current->Resp1[DEF_BUFF_SIZE];
-//uint8_t   current->R1Bytes;
-
-
-
-
 				  
 #ifdef WR_SIMULTA	
-uint32_t sndA[4]  = {0,0,0,0};
+uint32_t USB_FAST_DATA sndA[4]  = {0,0,0,0};
 #endif
 				  
 
 
 
-inline void restart()
+static inline void restart(void)
 {
 	transmit_NRZI_buffer_cnt = 0;
 }
 
-void decoded_receive_buffer_clear()
+static inline void decoded_receive_buffer_clear(void)
 {
 	decoded_receive_buffer_tail = decoded_receive_buffer_head;
 }
 
-inline void decoded_receive_buffer_put(uint8_t val)
+static inline void decoded_receive_buffer_put(uint8_t val)
 {
 	decoded_receive_buffer[decoded_receive_buffer_head] = val;
 	decoded_receive_buffer_head++;
 }
 
-uint8_t decoded_receive_buffer_get()
+static inline uint8_t decoded_receive_buffer_get(void)
 {
 	return decoded_receive_buffer[decoded_receive_buffer_tail++];
 }
 
-uint8_t decoded_receive_buffer_size()
+static inline uint8_t decoded_receive_buffer_size(void)
 {
 	return (uint8_t )(decoded_receive_buffer_head-decoded_receive_buffer_tail);
 }
 
-uint8_t cal5()
+static uint8_t USB_FAST_CODE cal5(void)
 {
 	uint8_t   crcb;
 	uint8_t   rem;
@@ -452,7 +246,7 @@ uint8_t cal5()
 	}
 	return (~rem)&0b11111;
 }
-uint32_t cal16()
+static uint32_t USB_FAST_CODE cal16(void)
 {
 	uint32_t   crcb;
 	uint32_t   rem;
@@ -472,19 +266,19 @@ uint32_t cal16()
 	}
 	return (~rem)&0b1111111111111111;
 }
-inline void seB(int bit)
+static inline void seB(int bit)
 {
 	transmit_bits_buffer_store[transmit_bits_buffer_store_cnt++] = bit;
 }
 
-inline void pu_MSB(uint16_t msg,int N)
+static void USB_FAST_CODE pu_MSB(uint16_t msg,int N)
 {
 	for(int k=0;k<N;k++)
 	{
 		seB(msg&(1<<(N-1-k))?1:0);
 	}
 }
-inline void pu_LSB(uint16_t msg,int N)
+static void USB_FAST_CODE pu_LSB(uint16_t msg,int N)
 {
 	for(int k=0;k<N;k++)
 	{
@@ -494,7 +288,7 @@ inline void pu_LSB(uint16_t msg,int N)
 
 
 
-void repack()
+static void USB_FAST_CODE repack(void)
 {
 	int last = USB_LS_J;
 	int cntOnes = 0;
@@ -550,7 +344,9 @@ void repack()
 
 }
 
-uint8_t rev8(uint8_t j)
+
+
+static uint8_t USB_FAST_CODE rev8(uint8_t j)
 {
 	uint8_t res = 0;
 	for(int i=0;i<8;i++)
@@ -560,7 +356,10 @@ uint8_t rev8(uint8_t j)
 	}
 	return res;
 }
-uint16_t rev16(uint16_t j)
+
+
+
+static uint16_t USB_FAST_CODE rev16(uint16_t j)
 {
 	uint16_t res = 0;
 	for(int i=0;i<16;i++)
@@ -571,10 +370,14 @@ uint16_t rev16(uint16_t j)
 	return res;
 }
 #ifdef DEBUG_ALL
-uint16_t debug_buff[0x100];
+static uint16_t debug_buff[0x100];
 #endif
 
-int parse_received_NRZI_buffer()
+static void USB_FAST_DATA (*onLedBlinkCB)(int on_off) = NULL;
+static inline void led(int on_off) { if( onLedBlinkCB ) onLedBlinkCB(on_off); }
+#define NOTIFY() led(1)
+
+static int USB_FAST_CODE parse_received_NRZI_buffer(void)
 {
 
 	if(!received_NRZI_buffer_bytesCnt) return 0;
@@ -701,7 +504,7 @@ int parse_received_NRZI_buffer()
 void sendOnly()
 {
 	uint8_t k;
-	SET_O;
+	SET_O(DP_PIN, DM_PIN);
 #ifdef WR_SIMULTA	
 	uint32_t out_base = GPIO.out;
 	sndA[0] = (out_base | DP) &~DM;
@@ -709,55 +512,28 @@ void sendOnly()
 	sndA[2] = (out_base )&~(DP | DM);
 	sndA[3] = out_base | (DM | DP);
 #endif	
-	for(k=0;k<transmit_NRZI_buffer_cnt;k++)
-	{
-		//usb_transmit_delay(10);
-		cpuDelay(TRANSMIT_TIME_DELAY);
-#ifdef WR_SIMULTA	
-		GPIO.out = sndA[transmit_NRZI_buffer[k]];
-#else		
-		//*snd[transmit_NRZI_buffer[k]][0] = (1 << DM_PIN);
-		//*snd[transmit_NRZI_buffer[k]][1] = (1 << DP_PIN);
-		*snd[transmit_NRZI_buffer[k]][0] = DM_PIN_M;
-		*snd[transmit_NRZI_buffer[k]][1] = DP_PIN_M;
-#endif		
-		
-	}
-	restart();
-	SET_I;
-}
-#if 0
-// safety  option, but slower and works with high cpu freq >=160MHz .
-void sendRecieveNParse()
-{
-	uint8_t locRec = 0;
-	uint32_t val   = 0xff;//DM_GPIO_Port->IDR&(0x3*DP_Pin);
-	uint32_t nval  = 0xff;
-	int32_t act = TOUT;
-//	portDISABLE_INTERRUPTS();
-	sendOnly();
-	while(act>0 && (val||nval) )
-	{
-		val  = nval;
-		nval = READ_BOTH_PINS;
-		received_NRZI_buffer[locRec] = _getCycleCount8d8() |  nval;
-		if(val!=nval)
-		{
-			locRec++;
-			act = TOUT;
-		}
-		else act--;
+  uint8_t bitcount = transmit_NRZI_buffer_cnt;
+  uint32_t pin_values[4] = {
+    hal_pin2value(DP_PIN, DM_PIN, 0),
+    hal_pin2value(DP_PIN, DM_PIN, 1),
+    hal_pin2value(DP_PIN, DM_PIN, 2),
+    hal_pin2value(DP_PIN, DM_PIN, 3),
+  };
 
-		//~ int flag =  val!=nval;
-		//~ locRec  +=  flag;
-		//~ act 	 = (flag)?TOUT:(act-1);
-	}
-//	portENABLE_INTERRUPTS();
-	received_NRZI_buffer_bytesCnt = locRec;
+  #pragma GCC unroll 0
+  for(int k=0, td = 0, tdk=0, t1 = cpu_hal_get_cycle_count(); k<bitcount; ) {
+    if((int)(cpu_hal_get_cycle_count() - t1) < tdk) continue;
+
+    hal_gpio_set_pins_value(pin_values[transmit_NRZI_buffer[k]]); //3.13Mhz
+    td += TRANSMIT_TIME_DELAY;
+    tdk = td/TIMING_PREC;
+    ++k;
+  }
+
+	restart();
+	SET_I(DP_PIN, DM_PIN);
 }
-#else
-// dangerous option, but faster and works with low cpu freq ~80MHz . If we have noise on bus it can overflow received_NRZI_buffer[]
-void sendRecieveNParse()
+static void USB_FAST_CODE sendRecieveNParse(void)
 		{
 	register uint32_t R3;
 	register uint16_t *STORE = received_NRZI_buffer;
@@ -783,7 +559,6 @@ START:
 	//__enable_irq();
 	received_NRZI_buffer_bytesCnt = STORE-received_NRZI_buffer;
 }
-#endif
 
 
 int sendRecieve()
@@ -851,9 +626,10 @@ void pu_Cmd(uint8_t cmd,uint8_t bmRequestType, uint8_t bmRequest,uint16_t wValue
 	repack();
 }
 
-uint8_t ACK_BUFF[0x20];
-int    ACK_BUFF_CNT = 0;
-void ACK()
+uint8_t USB_FAST_DATA ACK_BUFF[0x20];
+int USB_FAST_DATA ACK_BUFF_CNT = 0;
+
+static void USB_FAST_CODE ACK(void)
 {
 	transmit_NRZI_buffer_cnt =0;
 	if(ACK_BUFF_CNT==0)
@@ -875,16 +651,13 @@ void ACK()
 	sendOnly();
 }
 
-//enum  CallbackCmd {CB_CHECK,CB_RESET,CB_WAIT0,CB_POWER,CB_TICK,CB_2,CB_3,CB_4,CB_5,CB_6,CB_7,CB_8,CB_9,CB_WAIT1} ;
-//char*  CallbackCmdCtr[] = {"CB_CHECK","CB_RESET","CB_WAIT0","CB_POWER","CB_TICK","CB_2","CB_3","CB_4","CB_5","CB_6","CB_7","CB_8","CB_9","CB_WAIT1"} ;
-
-void timerCallBack()
+static void USB_FAST_CODE timerCallBack(void)
 {
 	decoded_receive_buffer_clear();
 	
 	if(current->cb_Cmd==CB_CHECK)
 	{
-		SET_I;
+		SET_I(DP_PIN, DM_PIN);
 		current->wires_last_state = READ_BOTH_PINS>>8;
 		if(current->wires_last_state==M_ONE)
 		{
@@ -908,7 +681,7 @@ void timerCallBack()
 	{
 		SOF();
 		sendRecieveNParse();
-		SET_O;
+		SET_O(DP_PIN, DM_PIN);
 		SE_0;
 		current->cmdTimeOut  = 	31;
 		current->cb_Cmd  	     = 	CB_WAIT0;
@@ -949,9 +722,9 @@ void timerCallBack()
 		SOF();
 		SOF();
 #else
-		SET_O;
+		SET_O(DP_PIN, DM_PIN);
 		SE_J;
-		SET_I;
+		SET_I(DP_PIN, DM_PIN);
 		current->cmdTimeOut  = 	 2;
 		current->cb_Cmd  = CB_WAIT1;
 #endif		
@@ -1252,8 +1025,7 @@ void timerCallBack()
 }
 
 
-void Request(uint8_t cmd,	 uint8_t addr,uint8_t eop,
-			uint8_t  dataCmd,uint8_t bmRequestType, uint8_t bmRequest,uint16_t wValue,uint16_t wIndex,uint16_t wLen,uint16_t waitForBytes)
+static void /*USB_FAST_CODE*/ Request( uint8_t cmd, uint8_t addr, uint8_t eop, uint8_t dataCmd,uint8_t bmRequestType, uint8_t bmRequest, uint16_t wValue, uint16_t wIndex, uint16_t wLen, uint16_t waitForBytes)
 {
 	 current->rq.cmd  = cmd;
 	 current->rq.addr = addr;
@@ -1275,8 +1047,7 @@ void Request(uint8_t cmd,	 uint8_t addr,uint8_t eop,
 	// HAL_Delay(1);
 }
 
-void RequestSend(uint8_t cmd,	 uint8_t addr,uint8_t eop,
-			uint8_t  dataCmd,uint8_t bmRequestType, uint8_t bmRequest,uint16_t wValue,uint16_t wIndex,uint16_t wLen,uint16_t transmitL1Bytes,uint8_t* data)
+static void /*USB_FAST_CODE*/ RequestSend(uint8_t cmd,   uint8_t addr,uint8_t eop, uint8_t  dataCmd,uint8_t bmRequestType, uint8_t bmRequest,uint16_t wValue,uint16_t wIndex,uint16_t wLen,uint16_t transmitL1Bytes,uint8_t* data)
 {
 	 current->rq.cmd  = cmd;
 	 current->rq.addr = addr;
@@ -1300,7 +1071,8 @@ void RequestSend(uint8_t cmd,	 uint8_t addr,uint8_t eop,
 //	 }
 }
 
-void RequestIn(uint8_t cmd,	 uint8_t addr,uint8_t eop,uint16_t waitForBytes)
+
+static void /*USB_FAST_CODE*/ RequestIn(uint8_t cmd,   uint8_t addr,uint8_t eop,uint16_t waitForBytes)
 {
 	 current->rq.cmd  = cmd;
 	 current->rq.addr = addr;
@@ -1311,22 +1083,22 @@ void RequestIn(uint8_t cmd,	 uint8_t addr,uint8_t eop,uint16_t waitForBytes)
 	 current->cb_Cmd = CB_2;
 }
 
+static void USB_FAST_DATA (*usbMess)(uint8_t src,uint8_t len,uint8_t *data) = NULL;
 
-
-void fsm_Mashine()
+static void USB_FAST_CODE fsm_Mashine(void)
 {
 	if(!current->bComplete) return;
 	current->bComplete = 0;
 	
 	
 	
-	 if(current->fsm_state == 0)
+	 if(current->fsm_state == (enum DeviceState)0)
 	 {
 		current->epCount = 0;
 		current->cb_Cmd     = CB_CHECK;
-		current->fsm_state   = 1;
+		current->fsm_state   = (enum DeviceState)1;
 	 }
-	 if(current->fsm_state == 1)
+	 if(current->fsm_state == (enum DeviceState)1)
 	 {
 		if(current->wires_last_state==M_ONE)
 		// if(1)
@@ -1334,34 +1106,34 @@ void fsm_Mashine()
 			current->cmdTimeOut = 100+current->selfNum*73;
 			//current->cmdTimeOut = 100;
 			current->cb_Cmd      = CB_WAIT0;
-			current->fsm_state   = 2;
+			current->fsm_state   = (enum DeviceState)2;
 		}
 		else
 		{
-			current->fsm_state   = 0;
+			current->fsm_state   = (enum DeviceState)0;
 			current->cb_Cmd      = CB_CHECK;
 		}
 	 }
-	 else if(current->fsm_state==2)
+	 else if(current->fsm_state==(enum DeviceState)2)
 	 {
 		current->cb_Cmd       = CB_RESET;
-		current->fsm_state    = 3;
+		current->fsm_state    = (enum DeviceState)3;
 	 }
-	 else if(current->fsm_state==3)
+	 else if(current->fsm_state==(enum DeviceState)3)
 	 {
 		current->cb_Cmd       = CB_POWER;
 #ifdef TEST
-		current->fsm_state    =  3;
+		current->fsm_state    =  (enum DeviceState)3;
 #else
-		current->fsm_state    =  4;
+		current->fsm_state    =  (enum DeviceState)4;
 #endif
 	 }
-	 else if(current->fsm_state==4)
+	 else if(current->fsm_state==(enum DeviceState)4)
 	 {
 		Request(T_SETUP,ZERO_USB_ADDRESS,0b0000,T_DATA0,0x80,0x6,0x0100,0x0000,0x0012,0x0012); 
-		current->fsm_state    = 5; 
+		current->fsm_state    = (enum DeviceState)5; 
 	 }
-	 else if(current->fsm_state==5)
+	 else if(current->fsm_state==(enum DeviceState)5)
 	 {
 		if(current->acc_decoded_resp_counter==0x12)
 		{
@@ -1372,75 +1144,76 @@ void fsm_Mashine()
 		{
 			if(current->numb_reps_errors_allowed<=0)
 			{
-				current->fsm_state    =  0; 
+				current->fsm_state    = (enum DeviceState) 0; 
 				return;
 			}
 		}
 #if 1
 		Request(T_SETUP,ZERO_USB_ADDRESS,0b0000,T_DATA0,0x00,0x5,0x0000+ASSIGNED_USB_ADDRESS,0x0000,0x0000,0x0000);
-		current->fsm_state    =  6; 
+		current->fsm_state    =  (enum DeviceState)6; 
 #else
-		current->fsm_state    =  0;
+		current->fsm_state    =  (enum DeviceState)0;
 #endif
 	 }
-	 else if(current->fsm_state==6)
+	 else if(current->fsm_state==(enum DeviceState)6)
 	 {
 		current->cmdTimeOut = 5; 
 		current->cb_Cmd       = CB_WAIT1;
-		current->fsm_state    = 7;
+		current->fsm_state    = (enum DeviceState)7;
 	 }
 	 
-	 else if(current->fsm_state==7)
+	 else if(current->fsm_state==(enum DeviceState)7)
 	 {
 		Request(T_SETUP,ASSIGNED_USB_ADDRESS,0b0000,T_DATA0,0x80,0x6,0x0200,0x0000,0x0009,0x0009); 
-		current->fsm_state    = 8; 
+		current->fsm_state    = (enum DeviceState)8; 
 	 }
-	 else if(current->fsm_state==8)
+	 else if(current->fsm_state==(enum DeviceState)8)
 	 {
 		if(current->acc_decoded_resp_counter==0x9)
 		{
 			memcpy(&current->cfg,current->acc_decoded_resp,0x9);
 			current->ufPrintDesc |= 2;
 			Request(T_SETUP,ASSIGNED_USB_ADDRESS,0b0000,T_DATA0,0x80,0x6,0x0200,0x0000,current->cfg.wLength,current->cfg.wLength);
-			current->fsm_state    = 9;
+			current->fsm_state    = (enum DeviceState)9;
 		}
 		else
 		{
-			current->fsm_state      = 0;
+			current->fsm_state      =(enum DeviceState)0;
 			return ;
 		}
 	 }
-	 else if(current->fsm_state==9)
+	 else if(current->fsm_state==(enum DeviceState)9)
 	 {
 		if(current->acc_decoded_resp_counter==current->cfg.wLength)
 		{
 			current->ufPrintDesc |= 4;
 			current->descrBufferLen = current->acc_decoded_resp_counter;
 			memcpy(current->descrBuffer,current->acc_decoded_resp,current->descrBufferLen);
-			parseImmed(current);
-			current->fsm_state    = 97; 
+#warning: TODO: why the need of parseImmed?
+			//parseImmed(current);
+			current->fsm_state    = (enum DeviceState)97; 
 		}
 		else
 		{
 			current->cmdTimeOut = 5;
 			current->cb_Cmd       = CB_WAIT1;
-			current->fsm_state    = 7;
+			current->fsm_state    = (enum DeviceState)7;
 		}
 	 } 
-	 else if(current->fsm_state==97)
+	 else if(current->fsm_state==(enum DeviceState)97)
 	 {
 		// config interfaces??
 		//printf("set configuration 1\n");
 		Request(T_SETUP,ASSIGNED_USB_ADDRESS,0b0000,T_DATA0,0x00,0x9,0x0001,0x0000,0x0000,0x0000);
-		 current->fsm_state    = 98; 
+		 current->fsm_state    = (enum DeviceState)98; 
 	 }
-	 else if(current->fsm_state==98)
+	 else if(current->fsm_state==(enum DeviceState)98)
 	 {
 		// config interfaces??
 		Request(T_SETUP,ASSIGNED_USB_ADDRESS,0b0000,T_DATA0,0x21,0xa,0x0000,0x0000,0x0000,0x0000);
-		current->fsm_state    = 99; 
+		current->fsm_state    = (enum DeviceState)99; 
 	 }
-	 else if(current->fsm_state==99)
+	 else if(current->fsm_state==(enum DeviceState)99)
 	 {
 		//uint8_t cmd0 = current->cnt&0x20?0x7:0x0;
 		//current->cnt++;
@@ -1460,15 +1233,15 @@ void fsm_Mashine()
 		//	current->cmdTimeOut = 1; 
 		//	current->cb_Cmd        = CB_WAIT1;
 		//}
-		current->fsm_state    = 100; 
+		current->fsm_state    = (enum DeviceState)100; 
 	 }
-	 else if(current->fsm_state==100)
+	 else if(current->fsm_state==(enum DeviceState)100)
 	 {
 		 led(0);
 		RequestIn(T_IN,	ASSIGNED_USB_ADDRESS,1,8);
-		current->fsm_state    = 101; 
+		current->fsm_state    = (enum DeviceState)101; 
 	 }
-	 else if(current->fsm_state==101)
+	 else if(current->fsm_state==(enum DeviceState)101)
 	 {
 		 if(current->acc_decoded_resp_counter>=1)
 		 {
@@ -1481,20 +1254,20 @@ void fsm_Mashine()
 			//gpio_set_level(B23_GPIO, 1);
 		 }
 			//~ RequestIn(T_IN,	ASSIGNED_USB_ADDRESS,2,8);
-			//~ current->fsm_state    = 102; 
+			//~ current->fsm_state    = (enum DeviceState)102; 
 			if(current->epCount>=2)
 			  {
 				RequestIn(T_IN,	ASSIGNED_USB_ADDRESS,2,8);
-				current->fsm_state    = 102; 
+				current->fsm_state    = (enum DeviceState)102; 
 			 }
 			 else
 			 {
 				current->cmdTimeOut = 3; 
 				current->cb_Cmd        = CB_WAIT1;
-				current->fsm_state      = 104; 
+				current->fsm_state      = (enum DeviceState)104; 
 			 }
 	 }
-	 else if(current->fsm_state==102)
+	 else if(current->fsm_state==(enum DeviceState)102)
 	 {
 		 if(current->acc_decoded_resp_counter>=1)
 		 {
@@ -1506,9 +1279,9 @@ void fsm_Mashine()
 		 }
 		current->cmdTimeOut = 2; 
 		current->cb_Cmd        = CB_WAIT1;
-		current->fsm_state      = 104; 
+		current->fsm_state      = (enum DeviceState)104; 
 	 }
-	 else if (current->fsm_state==104)
+	 else if (current->fsm_state==(enum DeviceState)104)
 	 {
 		current->cmdTimeOut = 4; 
 		current->cb_Cmd        = CB_WAIT1;
@@ -1520,21 +1293,21 @@ void fsm_Mashine()
 		 if(current->wires_last_state!=M_ONE)
 #endif			 
 		{
-			current->fsm_state      = 0; 
+			current->fsm_state      = (enum DeviceState)0; 
 			return ;
 		}
-		current->fsm_state      = 99; 
+		current->fsm_state      = (enum DeviceState)99; 
 	 }
 	 else
 	 {
 		current->cmdTimeOut = 2; 
 		current->cb_Cmd        = CB_WAIT1;
-		current->fsm_state      = 0; 
+		current->fsm_state      = (enum DeviceState)0; 
 	 }
 }
 
 
-void setPins(int DPPin,int DMPin)
+static inline void setPins(int DPPin,int DMPin)
 {
 	DP_PIN = DPPin;
 	DM_PIN = DMPin;
@@ -1555,7 +1328,7 @@ void setPins(int DPPin,int DMPin)
 	P_ONE = 1<<(DP_PIN-MIN_PIN);
 }
 
-sUsbContStruct  current_usb[NUM_USB];
+static sUsbContStruct /*USB_FAST_DATA*/ current_usb[NUM_USB]; //this array is too big for SRAM
 int checkPins(int dp,int dm)
 {
 	int diff = abs(dp-dm);
@@ -1565,8 +1338,6 @@ int checkPins(int dp,int dm)
 	}
 	return 1;
 }
-
-int64_t get_system_time_us();
 
 float testDelay6(float freq_MHz)
 {
@@ -1581,14 +1352,14 @@ float testDelay6(float freq_MHz)
 			transmit_NRZI_buffer[transmit_NRZI_buffer_cnt++] = USB_LS_K;
 			transmit_NRZI_buffer[transmit_NRZI_buffer_cnt++] = USB_LS_J;
 		}
-		int64_t stimb = get_system_time_us();
+		int64_t stimb = cpu_hal_get_cycle_count()/hal_get_cpu_mhz();
 		for(int k=0;k<REPS;k++)
 		{
 			sendOnly();
 			transmit_NRZI_buffer_cnt = SEND_BITS;
 		}
 		
-		uint32_t stim =  get_system_time_us()- stimb;
+		uint32_t stim =  cpu_hal_get_cycle_count()/hal_get_cpu_mhz() - stimb;
 		freq_MHz = 1.0f;
 		res = stim*6.0/freq_MHz/(SEND_BITS*REPS);
 		printf("%d bits in %f uSec %f MHz  6 ticks in %f uS\n",(SEND_BITS*REPS),stim/(float)freq_MHz,(SEND_BITS*REPS)*freq_MHz/stim,stim*6.0/freq_MHz/(SEND_BITS*REPS));
@@ -1597,7 +1368,7 @@ float testDelay6(float freq_MHz)
 }
 
 
-void initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
+static void /*USB_FAST_CODE*/ initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
 {
 	decoded_receive_buffer_head = 0;
 	decoded_receive_buffer_tail = 0;
@@ -1640,94 +1411,81 @@ void initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
 			current->cmdTimeOut = 0;
 			current->ufPrintDesc =0;
 			current->cb_Cmd     = CB_CHECK;
-			current->fsm_state  = 0;
+			current->fsm_state  = (enum DeviceState) 0;
 			current->wires_last_state = 0;
 			current->counterNAck = 0;
 			current->counterAck = 0;
 			current->epCount = 0;
-			gpio_pad_select_gpio(current->DP);
-			gpio_set_direction(current->DP, GPIO_MODE_OUTPUT);
-			gpio_set_level(current->DP, 0);
-			gpio_set_direction(current->DP, GPIO_MODE_INPUT);
-			gpio_pulldown_en(current->DP);
+			hal_gpio_pad_select_gpio(current->DP);
+			hal_gpio_set_direction(current->DP, GPIO_MODE_OUTPUT);
+			hal_gpio_set_level(current->DP, 0);
+			hal_gpio_set_direction(current->DP, GPIO_MODE_INPUT);
+			hal_gpio_pulldown_en(current->DP);
 			
-			gpio_pad_select_gpio(current->DM);
-			gpio_set_direction(current->DM, GPIO_MODE_OUTPUT);
-			gpio_set_level(current->DM, 0);
-			gpio_set_direction(current->DM, GPIO_MODE_INPUT);
-			gpio_pulldown_en(current->DM);
+			hal_gpio_pad_select_gpio(current->DM);
+			hal_gpio_set_direction(current->DM, GPIO_MODE_OUTPUT);
+			hal_gpio_set_level(current->DM, 0);
+			hal_gpio_set_direction(current->DM, GPIO_MODE_INPUT);
+			hal_gpio_pulldown_en(current->DM);
 			current->isValid = 1;
 			
 			// TEST
 			setPins(current->DP,current->DM);
 			printf("READ_BOTH_PINS = %04x\n",READ_BOTH_PINS);
-			SET_O;
+			SET_O(DP_PIN, DM_PIN);
 			SE_0;
 			SE_J;
 			SE_0;
-			SET_I;
+			SET_I(DP_PIN, DM_PIN);
 			printf("READ_BOTH_PINS = %04x\n",READ_BOTH_PINS);
-			gpio_set_direction(current->DP, GPIO_MODE_OUTPUT);
-			gpio_set_direction(current->DM, GPIO_MODE_OUTPUT);
+			hal_gpio_set_direction(current->DP, GPIO_MODE_OUTPUT);
+			hal_gpio_set_direction(current->DM, GPIO_MODE_OUTPUT);
 			printf("READ_BOTH_PINS = %04x\n",READ_BOTH_PINS);
-			SET_I;
+			SET_I(DP_PIN, DM_PIN);
 			printf("READ_BOTH_PINS = %04x\n",READ_BOTH_PINS);
-			if(!calibrated)
-			{	
-				//calibrate delay divide 2
-#define DELAY_CORR 2
-				int  uTime = 255-DELAY_CORR;
-				int  dTime = 0;
-				
-				rtc_cpu_freq_config_t  out_config;
-				
-				rtc_clk_cpu_freq_get_config(&out_config);
-				
-				//uint32_t freq = rtc_clk_cpu_freq_value(rtc_clk_cpu_freq_get());
-				printf("cpu freq = %d MHz\n",out_config.freq_mhz);
-				
-				TM_OUT = out_config.freq_mhz/2;
-				
-				// 8  - func divided clock to 8, 1.5 - MHz USB LS
-				TIME_MULT = (int)(TIME_SCALE/(out_config.freq_mhz/8/1.5)+0.5);
-				printf("TIME_MULT = %d \n",TIME_MULT);
-				
-				int     TRANSMIT_TIME_DELAY_OPT = 0;
-				TRANSMIT_TIME_DELAY = TRANSMIT_TIME_DELAY_OPT;
-				printf("D=%4d ",TRANSMIT_TIME_DELAY);
-				setDelay(TRANSMIT_TIME_DELAY);
-				float  cS_opt = testDelay6(out_config.freq_mhz);
-#define OPT_TIME (4.00f)
-				for(int p=0;p<9;p++)
-				{
-					TRANSMIT_TIME_DELAY = (uTime+dTime)/2;
-					printf("D=%4d ",TRANSMIT_TIME_DELAY);
-					setDelay(TRANSMIT_TIME_DELAY);
-					float cS = testDelay6(out_config.freq_mhz);
-					if(fabsf(OPT_TIME-cS)<fabsf(OPT_TIME-cS_opt))
-					{
-						cS_opt = cS;
-						TRANSMIT_TIME_DELAY_OPT = TRANSMIT_TIME_DELAY;
-					}
-					if(cS<OPT_TIME)
-					{
-						dTime = TRANSMIT_TIME_DELAY;
-					}
-					else
-					{
-						uTime = TRANSMIT_TIME_DELAY;
-					}
-				}
-				//TRANSMIT_TIME_DELAY_OPT = 100;
-				// 80MHz cpu measure corr. Add anyway for all cpu freq
-				
-				TRANSMIT_TIME_DELAY = TRANSMIT_TIME_DELAY_OPT+DELAY_CORR; 
-				//printf("D=%03d ",TRANSMIT_TIME_DELAY);
-				setDelay(TRANSMIT_TIME_DELAY);
-				printf("TRANSMIT_TIME_DELAY = %d time = %f error = %f%% \n",TRANSMIT_TIME_DELAY,cS_opt,(cS_opt-OPT_TIME)/OPT_TIME*100);
-				//calibrated = 1;
-			}
-		}
+      if(!calibrated) {
+        //calibrate delay divide 2
+        #define DELAY_CORR 0 //correction not needed with new timing algorithm
+        int freq_mhz = hal_get_cpu_mhz();
+
+        int  uTime = freq_mhz*8; //upper time can be a large value
+/*        int  uTime = freq_mhz;
+#ifdef TIMING_PREC
+        uTime *= TIMING_PREC*2; //TODO: tested on ECP5, recheck on Artix
+#endif
+*/
+        int  dTime = 0;
+        printf("cpu freq = %d MHz\n", freq_mhz);
+        TM_OUT = freq_mhz/2;
+        // 8  - func divided clock to 8, 1.5 - MHz USB LS //NOTE: N=8 not anymore a constant, depends on clock frequency
+        TIME_MULT = (int)(TIME_SCALE*(1.5*(1<<TIME_FACTOR_BITS))/freq_mhz+0.5); //this fixes the timing bug!!
+        printf("TIME_MULT = %d, TM_OUT %d \n",TIME_MULT, TM_OUT);
+
+        int     TRANSMIT_TIME_DELAY_OPT = 0;
+        TRANSMIT_TIME_DELAY = TRANSMIT_TIME_DELAY_OPT;
+        setDelay(TRANSMIT_TIME_DELAY);
+        float  cS_opt = testDelay6(freq_mhz);
+
+        const float OPT_TIME = 4; //us
+        for(int p=0;p<12;p++) {
+          TRANSMIT_TIME_DELAY = (uTime+dTime)/2;
+          setDelay(TRANSMIT_TIME_DELAY);
+          float cS = testDelay6(freq_mhz);
+          printf("Testing delay %4d: sent 6 ticks in %f us (average)\n", TRANSMIT_TIME_DELAY, cS);
+          if(fabsf(OPT_TIME-cS)<fabsf(OPT_TIME-cS_opt)) {
+            cS_opt = cS;
+            TRANSMIT_TIME_DELAY_OPT = TRANSMIT_TIME_DELAY;
+          }
+          if(cS<OPT_TIME) {
+            dTime = TRANSMIT_TIME_DELAY;
+          } else {
+            uTime = TRANSMIT_TIME_DELAY;
+          }
+        }
+        TRANSMIT_TIME_DELAY = TRANSMIT_TIME_DELAY_OPT+DELAY_CORR;
+        setDelay(TRANSMIT_TIME_DELAY);
+        printf("TRANSMIT_TIME_DELAY = %d time = %f error = %f%% \n",TRANSMIT_TIME_DELAY,(double)cS_opt,(double)(cS_opt-OPT_TIME)/(double)OPT_TIME*(double)100);
+      }		}
 		else
 		{
 			printf("pins %d %d is Errors !\n",current->DP,current->DM);
@@ -1735,14 +1493,14 @@ void initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
 		
 	}
 }
-void usbSetFlags(int _usb_num,uint8_t flags)
+static void /*USB_FAST_CODE*/ usbSetFlags(int _usb_num,uint8_t flags)
 {
 	if(_usb_num<NUM_USB&&_usb_num>=0)
 	{
 		current_usb[_usb_num].flags_new =  flags;
 	}
 }
-uint8_t usbGetFlags(int _usb_num)
+static uint8_t /*USB_FAST_CODE*/ usbGetFlags(int _usb_num)
 {
 	if(_usb_num<NUM_USB&&_usb_num>=0)
 	{
@@ -1750,11 +1508,8 @@ uint8_t usbGetFlags(int _usb_num)
 	}
 	return  0;
 }
-void usb_process()
+void /*USB_FAST_CODE*/ usb_process(void)
 {
-#if CONFIG_IDF_TARGET_ESP32C3
-	cpu_ll_enable_cycle_count();
-#endif	
 	for(int k=0;k<NUM_USB;k++)
 	{
 		current = &current_usb[k];
@@ -1767,7 +1522,8 @@ void usb_process()
 		}
 	}
 }
-void printState()
+
+void printState(void)
 {
 	
 static int cntl = 0;		
