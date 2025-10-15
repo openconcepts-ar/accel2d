@@ -1,11 +1,7 @@
 
-#ifndef  USB_HOST_H
+#ifndef USB_HOST_H
 #define USB_HOST_H
 
-
-
-#define TIMER_DIVIDER         2  //  Hardware timer clock divider
-#define TIMER_SCALE           (TIMER_BASE_CLK / TIMER_DIVIDER)  // convert counter value to seconds
 #define TIMER_INTERVAL0_SEC   (0.001) // sample test interval for the first timer
 
 
@@ -20,13 +16,7 @@
 void printState();
 void usb_process();
 
-void led(int on_off);
-
-#define  NUM_USB 4
-void initStates( int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3);
-void usbMess(uint8_t src,uint8_t len,uint8_t *data);
-void usbSetFlags(int _usb_num,uint8_t flags);
-uint8_t usbGetFlags(int _usb_num);
+#define  NUM_USB 1
 
 typedef __packed struct
 {
