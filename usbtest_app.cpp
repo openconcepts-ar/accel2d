@@ -26,170 +26,10 @@ static inline uint32_t cpu_hal_get_cycle_count(void)
 #define hal_get_cpu_mhz() (F_CPU/1000000)
 #define TIMER_SCALE 1000000
 
-
-//GPIO access
-#define USBHOST_GPIO litegpio0 //required by LiteX implementation
-#define USBHOST_ENABLED
-
-#define GPIO_MODE_OUTPUT true
-#define GPIO_MODE_INPUT false
-
-#define hal_gpio_pad_select_gpio(pin)
-#define hal_gpio_set_direction(pin, output) if(output) litegpio_mode_output(USBHOST_GPIO, pin); else litegpio_mode_input(USBHOST_GPIO, pin)
-#define hal_gpio_set_level(pin, level) litegpio_write(USBHOST_GPIO, pin, level)
-#define hal_gpio_read(pin) litegpio_read(USBHOST_GPIO, pin)
-#define hal_gpio_pulldown_en(pin)
-
-#define      hal_enable_irq() irq_setie(1)
-#define      hal_disable_irq() irq_setie(0)
-
-#define hal_set_differential_gpio_value(dp, dm,v) hal_gpio_set_pins_value(hal_pin2value(dp, dm, v))
-#define hal_gpio_set_pins_value(v) USBHOST_GPIO->OUT = (v)
-#define hal_pin2value(dp, dm, v) ((v & 1) << (dm)) | ((v == 0) << (dp)) //| (1 << BLINK_GPIO)
-
-#define SET_I(dp, dm)  USBHOST_GPIO->OE &= ~((1 << dp) | (1 << dm))
-#define SET_O(dp, dm)  USBHOST_GPIO->OE |= (1 << dp) | (1 << dm)
-#define SE_J USBHOST_GPIO->OUT = 1 << DP_PIN //clear / set
-#define SE_0 USBHOST_GPIO->OUT = 0 //clear / clear
-#define READ_BOTH_PINS (((USBHOST_GPIO->IN & RD_MASK)<<8)>>RD_SHIFT)
-
-
-typedef enum
-{
-  USB_HID_PROTO_NONE = 0x00,
-  USB_HID_PROTO_KEYBOARD = 0x01,
-  USB_HID_PROTO_MOUSE = 0x02,
-} hid_protocol_t;
-
-
-void printState(void);
-void usb_process(void);
-hid_protocol_t usb_get_hid_proto(int usbNum);
-typedef void (*onusbmesscb_t)(uint8_t src,uint8_t len,uint8_t *data);
-void set_usb_mess_cb( onusbmesscb_t onUSBMessCb );
-typedef void (*printcb_t)(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
-void set_print_cb( printcb_t onDataCB );
-typedef void (*ondetectcb_t)(uint8_t usbNum, void *device);
-void set_ondetect_cb( ondetectcb_t onDetectCB );
-typedef void(*onledblinkcb_t)(int on_off);
-void set_onled_blink_cb( onledblinkcb_t cb );
-
-
-
-typedef struct
-{
-  uint8_t src;
-  uint8_t len;
-  uint8_t data[0x8];
-} USBMessage;
-
-
-#define USBH_QUEUE_SIZE 100
-
-struct hal_fifo;
-typedef hal_fifo *hal_queue_handle_t;
-
-hal_queue_handle_t hal_queue_create(size_t n, size_t sz, void *buffer);
-void hal_queue_send(hal_queue_handle_t, USBMessage *);
-bool hal_queue_receive(hal_queue_handle_t, USBMessage *);
-
-extern hal_queue_handle_t usb_msg_queue;
-extern hid_protocol_t hid_types[]; //TODO: move to implementation
-void usbh_pins_init(int DP_P0, int DM_P0, int DP_P1, int DM_P1, int queue_size);
-typedef int hal_gpio_num_t;
-
-
-//HID functions
-typedef struct
-{
-  int modifier, key;
-  char inputchar;
-  bool pressed;
-} hid_event_keyboard;
-
-typedef struct
-{
-  int16_t x, y, wheel;
-  uint8_t buttons;
-} hid_event_mouse;
-
-typedef union
-{
-  hid_event_keyboard k;
-  hid_event_mouse m;
-} hid_event;
-
-hid_protocol_t usbh_hid_process(hid_event *evt, int prevupdated, float dt);
-hid_protocol_t usbh_hid_poll(float dt); //call with time passed
-
-
-static void (*printDataCB)(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len) = NULL;
-
-
-#include "usb_host/usb_test/main/usb_host.h"
-#include "usb_host/usb_test/main/usb_host.c"
-///////////////////////////////
-//USB Host C API
-
-void set_usb_mess_cb( onusbmesscb_t onUSBMessCb ) { usbMess = onUSBMessCb; }
-void set_ondetect_cb( ondetectcb_t cb ) { onDetectCB = cb; }
-void set_onled_blink_cb( onledblinkcb_t cb ) { onLedBlinkCB = cb; }
-void set_print_cb( printcb_t cb ) { printDataCB = cb; }
-
-
-hid_protocol_t hid_types[NUM_USB]; //TODO: move to implementation
-
-void usbh_on_message_decode(uint8_t src, uint8_t len, uint8_t *data)
-{
-  USBMessage msg;
-  msg.src = src;
-  msg.len = len<0x8?len:0x8;
-  for(int k=0;k<msg.len;k++) {
-    msg.data[k] = data[k];
-  }
-  hal_queue_send( usb_msg_queue, &msg);
-}
-
-void usbh_on_detect( uint8_t usbNum, void * dev );
 typedef void (*timer_isr_t)(void);
-extern "C" void hal_timer_setup(int timer_num, uint32_t alarm_value, timer_isr_t timer_isr);
-
-
-void usbh_pins_init(int DP_P0, int DM_P0, int DP_P1, int DM_P1, int queue_size)
-{
-
-  //usb_pins_config_t USB_Pins_Config = { DP_P0, DM_P0, DP_P1, DM_P1, -1, -1, -1, -1 };
-  static USBMessage /*USB_FAST_DATA*/ usb_msg_queue_buffer[USBH_QUEUE_SIZE]; //NOTE: too much data makes things slower
-
-//  usbh_init(&USB_Pins_Config, usb_msg_queue_buffer, sizeof(usb_msg_queue_buffer)/sizeof(usb_msg_queue_buffer[0]));
-  
-    usb_msg_queue = hal_queue_create(USBH_QUEUE_SIZE, sizeof(USBMessage), usb_msg_queue_buffer);
-
-  initStates(DP_P0, DM_P0, DP_P1, DM_P1, -1, -1, -1, -1);
-
-  hal_timer_setup(0, (uint64_t) ((double)TIMER_INTERVAL0_SEC * TIMER_SCALE), usb_process);
-
-  //TODO: since weak refs this indirection level isn't needed
-  set_ondetect_cb(usbh_on_detect);
-  set_usb_mess_cb(usbh_on_message_decode);
-  
-}
-
-
-void USB_WEAK usbh_on_hiddata_log(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
-void USB_WEAK usbh_on_detect( uint8_t usbNum, void * dev );
-void USB_WEAK usbh_on_data(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
-int USB_WEAK usbh_on_hidevent_mouse(int dx, int dy, int buttons, int wheel);
-void USB_WEAK usbh_on_hiddata_log(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
-void USB_WEAK usbh_on_activitystatus(int on_off);
-
-#include "usb_host_hid.c"
-#include "usb_fifo.cpp"
-
-extern "C"
-{
 timer_isr_t timer_handler = NULL;
-void timer0_isr(void)
+
+extern "C" void timer0_isr(void)
 {
 	timer0_ev_pending_write(timer0_ev_pending_read());
 	if(timer_handler)
@@ -208,12 +48,56 @@ static void litex_timer_setup(uint32_t usec, timer_isr_t handler)
 	litetimer_start(tim);
 }
 
-void hal_timer_setup(int timer_num, uint32_t alarm_value, timer_isr_t timer_isr)
-{
-	litex_timer_setup(alarm_value, timer_isr);
-}
 
-} //extern "C"
+//GPIO access
+#define USBHOST_GPIO litegpio0 //required by LiteX implementation
+#define USBHOST_ENABLED
+
+#define GPIO_MODE_OUTPUT true
+#define GPIO_MODE_INPUT false
+
+#define hal_gpio_pad_select_gpio(pin)
+#define hal_gpio_set_direction(pin, output) if(output) litegpio_mode_output(USBHOST_GPIO, pin); else litegpio_mode_input(USBHOST_GPIO, pin)
+#define hal_gpio_set_level(pin, level) litegpio_write(USBHOST_GPIO, pin, level)
+#define hal_gpio_read(pin) litegpio_read(USBHOST_GPIO, pin)
+#define hal_gpio_pulldown_en(pin)
+
+#define hal_enable_irq() irq_setie(1)
+#define hal_disable_irq() irq_setie(0)
+
+#define hal_set_differential_gpio_value(dp, dm,v) hal_gpio_set_pins_value(hal_pin2value(dp, dm, v))
+#define hal_gpio_set_pins_value(v) USBHOST_GPIO->OUT = (v)
+#define hal_pin2value(dp, dm, v) ((v & 1) << (dm)) | ((v == 0) << (dp)) //| (1 << BLINK_GPIO)
+
+#define SET_I(dp, dm)  USBHOST_GPIO->OE &= ~((1 << dp) | (1 << dm))
+#define SET_O(dp, dm)  USBHOST_GPIO->OE |= (1 << dp) | (1 << dm)
+#define SE_J USBHOST_GPIO->OUT = 1 << DP_PIN //clear / set
+#define SE_0 USBHOST_GPIO->OUT = 0 //clear / clear
+#define READ_BOTH_PINS (((USBHOST_GPIO->IN & RD_MASK)<<8)>>RD_SHIFT)
+
+
+
+//USB messages queue management
+typedef struct
+{
+  uint8_t src;
+  uint8_t len;
+  uint8_t data[0x8];
+} USBMessage;
+
+
+struct hal_fifo;
+typedef hal_fifo *hal_queue_handle_t;
+
+hal_queue_handle_t hal_queue_create(size_t n, size_t sz, void *buffer);
+void hal_queue_send(hal_queue_handle_t, USBMessage *);
+bool hal_queue_receive(hal_queue_handle_t, USBMessage *);
+
+extern hal_queue_handle_t usb_msg_queue;
+void usbh_pins_init(int DP_P0, int DM_P0, int DP_P1, int DM_P1, int queue_size);
+typedef int hal_gpio_num_t;
+
+#include "usb_host/usb_test/main/usb_host.h"
 
 void usbh_on_detect( uint8_t usbNum, void * dev )
 {
@@ -235,11 +119,33 @@ void usbh_on_detect( uint8_t usbNum, void * dev )
 
 int usbh_on_hidevent_mouse(int dx, int dy, int buttons, int wheel)
 {
-
-	printf("MOUSE EVENT:\tdx=%+4d,\tdy=%+4d,\tbuttons=0x%02X\n",
-		dx, dy, buttons);
-
+	printf("MOUSE EVENT:\tdx=%+4d,\tdy=%+4d,\tbuttons=0x%02X\n", dx, dy, buttons);
 	return false;
+}
+
+void usbh_on_message_decode(uint8_t src, uint8_t len, uint8_t *data)
+{
+	USBMessage msg;
+	msg.src = src;
+	msg.len = len<0x8?len:0x8;
+	for(int k=0;k<msg.len;k++)
+		msg.data[k] = data[k];
+
+	hal_queue_send( usb_msg_queue, &msg);
+}
+
+void usbh_pins_init(int DP_P0, int DM_P0, int DP_P1, int DM_P1, int queue_size)
+{
+  #define USBH_QUEUE_SIZE 100
+  static USBMessage /*USB_FAST_DATA*/ usb_msg_queue_buffer[USBH_QUEUE_SIZE]; //NOTE: too much data makes things slower
+  usb_msg_queue = hal_queue_create(USBH_QUEUE_SIZE, sizeof(USBMessage), usb_msg_queue_buffer);
+
+  initStates(DP_P0, DM_P0, DP_P1, DM_P1, -1, -1, -1, -1);
+
+  litex_timer_setup((uint32_t) ((double)TIMER_INTERVAL0_SEC * TIMER_SCALE), usb_process);
+
+  set_ondetect_cb(usbh_on_detect);
+  set_usb_mess_cb(usbh_on_message_decode);
 }
 
 extern "C" void graphics_app(void)
@@ -251,4 +157,12 @@ extern "C" void graphics_app(void)
 	for(;;)
 		usbh_hid_poll(1./60);
 }
+
+void USB_WEAK usbh_on_hiddata_log(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
+
+//dependencies
+#include "usb_host/usb_test/main/usb_host.c"
+#include "usb_host/usb_test/main/usb_host_hid.c"
+#include "usb_host/usb_test/main/usb_fifo.cpp"
+
 
