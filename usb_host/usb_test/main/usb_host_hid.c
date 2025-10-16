@@ -72,10 +72,8 @@ hid_protocol_t usbh_hid_process(hid_event *evt, int prevupdated, float dt)
     if( hal_queue_receive(usb_msg_queue, &msg) ) //FIXME: move logic
     { 
       int usbNum = msg.src/NUM_USB;
-      if( usbh_on_hiddata_log )
-      {
-        usbh_on_hiddata_log(usbNum, 32, msg.data, msg.len );
-      }
+      //if( usbh_on_hiddata_log )
+      //  usbh_on_hiddata_log(usbNum, 32, msg.data, msg.len );
 
 #ifdef DEBUG_ALL
     static unsigned prev_count = 0;

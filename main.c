@@ -54,6 +54,15 @@ void isr_handler(void)
   if(irqs & (1 << UART_INTERRUPT))
     uart_isr();
 #endif
+
+#if defined(TIMER0_INTERRUPT) && !defined(TIMER0_POLLING)
+	if(irqs & (1 << TIMER0_INTERRUPT))
+	{
+		void timer0_isr(void);
+		timer0_isr();
+	}
+#endif
+
 }
 
 // helpers -----------------------------------------------------------------------------------------
