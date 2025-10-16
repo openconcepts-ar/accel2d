@@ -97,8 +97,8 @@ volatile uint8_t transmit_bits_buffer_store_cnt;
 uint8_t* USB_FAST_DATA transmit_bits_buffer_store = (uint8_t*)&received_NRZI_buffer[0];
 
 
-volatile uint8_t transmit_NRZI_buffer_cnt;
-uint8_t  transmit_NRZI_buffer[DEF_BUFF_SIZE];
+volatile uint8_t USB_FAST_DATA transmit_NRZI_buffer_cnt;
+uint8_t USB_FAST_DATA transmit_NRZI_buffer[DEF_BUFF_SIZE];
 
 volatile uint8_t USB_FAST_DATA decoded_receive_buffer_head;
 volatile uint8_t USB_FAST_DATA decoded_receive_buffer_tail;
@@ -191,7 +191,7 @@ uint8_t    transmitL1[DEF_BUFF_SIZE];
 
 } sUsbContStruct;
 
-sUsbContStruct * current;
+sUsbContStruct USB_FAST_DATA * current;
 				  
 #ifdef WR_SIMULTA	
 uint32_t USB_FAST_DATA sndA[4]  = {0,0,0,0};
@@ -1084,6 +1084,7 @@ static void /*USB_FAST_CODE*/ RequestIn(uint8_t cmd,   uint8_t addr,uint8_t eop,
 }
 
 static void USB_FAST_DATA (*usbMess)(uint8_t src,uint8_t len,uint8_t *data) = NULL;
+static void USB_FAST_DATA (*onDetectCB)(uint8_t usbNum, void *device) = NULL;
 
 static void USB_FAST_CODE fsm_Mashine(void)
 {
@@ -1533,14 +1534,14 @@ static int cntl = 0;
 		if(!pcurrent->isValid) return ;
 		if((cntl%800)<NUM_USB)
 		{
-			printf("USB%d: Ack = %d Nack = %d %02x pcurrent->cb_Cmd = %d  state = %d epCount = %d",cntl%NUM_USB,pcurrent->counterAck,pcurrent->counterNAck,pcurrent->wires_last_state,pcurrent->cb_Cmd,pcurrent->fsm_state,pcurrent->epCount);
 #ifdef DEBUG_ALL
+			printf("USB%d: Ack = %d Nack = %d %02x pcurrent->cb_Cmd = %d  state = %d epCount = %d",cntl%NUM_USB,pcurrent->counterAck,pcurrent->counterNAck,pcurrent->wires_last_state,pcurrent->cb_Cmd,pcurrent->fsm_state,pcurrent->epCount);
 			for(int k=0;k<20;k++)
 			{
 				printf("%04x ", debug_buff[k]);
 			}
-#endif
 			printf("\n");
+#endif
 		}
 		//~ for(int k=0;k<0x14;k++)
 		//~ {
@@ -1557,6 +1558,9 @@ static int cntl = 0;
 		if(pcurrent->ufPrintDesc&1)
 		{
 			pcurrent->ufPrintDesc &= ~(uint32_t)1;
+			if( onDetectCB ) {
+				onDetectCB( ref, (void*)&pcurrent->desc );
+			} else {
 			//~ printf("desc.bcdUSB          = %02x\n",pcurrent->desc.bcdUSB);
 			//~ printf("desc.bDeviceClass    = %02x\n",pcurrent->desc.bDeviceClass);
 			//~ printf("desc.bDeviceSubClass = %02x\n",pcurrent->desc.bDeviceSubClass);
@@ -1569,6 +1573,7 @@ static int cntl = 0;
 			printf("desc.iProduct        = %02x\n",pcurrent->desc.iProduct);
 			printf("desc.iSerialNumber   = %02x\n",pcurrent->desc.iSerialNumber);
 			printf("desc.bNumConfigurations = %02x\n",pcurrent->desc.bNumConfigurations);
+			}
 		}
 		if(pcurrent->ufPrintDesc&2)
 		{
@@ -1661,6 +1666,12 @@ static int cntl = 0;
 								//~ printf("sIntf.iProto       = %d\n",sIntf.iProto);
 								//~ printf("sIntf.iIndex       = %d\n",sIntf.iIndex);
 
+          if(sIntf.iClass == HIDCLASS)
+          {
+           //sIntf.iProto: USB_HID_PROTO_KEYBOARD (0x01) or USB_HID_PROTO_MOUSE (0x02)
+           //printf("HID CLASS DETECTED %d\n", sIntf.iProto);
+           hid_types[ref] = (hid_protocol_t) sIntf.iProto; //FIXME: move this code
+          }
 							}
 							else if (type == 0x21)
 							{
