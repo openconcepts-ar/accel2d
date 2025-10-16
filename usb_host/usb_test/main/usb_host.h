@@ -1,22 +1,15 @@
-
 #ifndef USB_HOST_H
 #define USB_HOST_H
 
-#define TIMER_INTERVAL0_SEC   (0.001) // sample test interval for the first timer
+#define  NUM_USB 1 //max number of supported hosts, up to 4
 
+#define TIMER_INTERVAL0_SEC		(1./1000)	// sample test interval for the first timer (in seconds)
+#define  ZERO_USB_ADDRESS		0			// non configured device -  must be zero
+#define  ASSIGNED_USB_ADDRESS	3 			// any number less 127, but no zero
 
-// non configured device -  must be zero
-#define  ZERO_USB_ADDRESS   0
-
-// any number less 127, but no zero
-#define  ASSIGNED_USB_ADDRESS    3
-
-				  
-
+void initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3);
 void printState();
 void usb_process();
-
-#define  NUM_USB 1
 
 typedef __packed struct
 {
@@ -89,5 +82,42 @@ typedef __packed struct
 } sStrDesc;
 
 
+typedef void (*onusbmesscb_t)(uint8_t src,uint8_t len,uint8_t *data);
+void set_usb_mess_cb( onusbmesscb_t onUSBMessCb );
+
+typedef void (*ondetectcb_t)(uint8_t usbNum, void *device);
+void set_ondetect_cb( ondetectcb_t cb );
+
+//HID management
+typedef enum
+{
+  USB_HID_PROTO_NONE = 0x00,
+  USB_HID_PROTO_KEYBOARD = 0x01,
+  USB_HID_PROTO_MOUSE = 0x02,
+} hid_protocol_t;
+
+extern hid_protocol_t hid_types[];
+
+typedef struct
+{
+  int modifier, key;
+  char inputchar;
+  bool pressed;
+} hid_event_keyboard;
+
+typedef struct
+{
+  int16_t x, y, wheel;
+  uint8_t buttons;
+} hid_event_mouse;
+
+typedef union
+{
+  hid_event_keyboard k;
+  hid_event_mouse m;
+} hid_event;
+
+hid_protocol_t usbh_hid_process(hid_event *evt, int prevupdated, float dt);
+hid_protocol_t usbh_hid_poll(float dt); //call with time elapsed
 
 #endif

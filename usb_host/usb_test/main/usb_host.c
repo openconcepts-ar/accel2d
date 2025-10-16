@@ -1369,7 +1369,7 @@ float testDelay6(float freq_MHz)
 }
 
 
-static void /*USB_FAST_CODE*/ initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
+void initStates(int DP0,int DM0,int DP1,int DM1,int DP2,int DM2,int DP3,int DM3)
 {
 	decoded_receive_buffer_head = 0;
 	decoded_receive_buffer_tail = 0;
@@ -1706,4 +1706,16 @@ static int cntl = 0;
 				}
 		}
 	
+}
+
+typedef void (*onusbmesscb_t)(uint8_t src,uint8_t len,uint8_t *data);
+void set_usb_mess_cb( onusbmesscb_t onUSBMessCb )
+{
+	usbMess = onUSBMessCb;
+}
+
+typedef void (*ondetectcb_t)(uint8_t usbNum, void *device);
+void set_ondetect_cb( ondetectcb_t cb )
+{
+	onDetectCB = cb;
 }
