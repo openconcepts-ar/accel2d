@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "misc.h"
+#include "accel_cores.h"
+#include "graphics.h"
+
+#ifndef DISABLE_HARDWARE_ACCEL 
+
 #include <irq.h>
 
 #ifdef __GNUC__
@@ -22,7 +28,7 @@ static inline uint32_t cpu_hal_get_cycle_count(void)
 	timer0_uptime_latch_write(1);
 	return csr_read_simple(CSR_TIMER0_UPTIME_CYCLES_ADDR+4);
 }
-#define F_CPU LITETIMER_BASE_FREQUENCY
+#define F_CPU CONFIG_CLOCK_FREQUENCY
 #define hal_get_cpu_mhz() (F_CPU/1000000)
 #define TIMER_SCALE 1000000
 
@@ -117,12 +123,6 @@ void usbh_on_detect( uint8_t usbNum, void * dev )
 	printf("desc.bNumConfigurations = 0x%02x\n", device->bNumConfigurations);
 }
 
-int usbh_on_hidevent_mouse(int dx, int dy, int buttons, int wheel)
-{
-	printf("MOUSE EVENT:\tdx=%+4d,\tdy=%+4d,\tbuttons=0x%02X\n", dx, dy, buttons);
-	return false;
-}
-
 void usbh_on_message_decode(uint8_t src, uint8_t len, uint8_t *data)
 {
 	USBMessage msg;
@@ -147,22 +147,80 @@ void usbh_pins_init(int DP_P0, int DM_P0, int DP_P1, int DM_P1, int queue_size)
   set_ondetect_cb(usbh_on_detect);
   set_usb_mess_cb(usbh_on_message_decode);
 }
+#endif //LITEX_SIMULATION
+
+static void draw_line(int x0, int y0, int x1, int y1, uint32_t color, uint32_t tint)
+{
+	uintptr_t fb = VIDEO_FRAMEBUFFER_BASE;
+	fb += x0*sizeof(color) + y0*FRAME_PITCH;
+	accel_linea(accel_line32a_regs, x1-x0, y1-y0, color, tint, 
+		(uintptr_t) fb, FRAME_PITCH/4, (uintptr_t) fb, FRAME_PITCH/4, 1, 1);
+}
+
+int usbh_on_hidevent_mouse(int dx, int dy, int buttons, int wheel)
+{
+	static int mousex = FRAME_WIDTH/2, mousey = FRAME_HEIGHT/2;
+	int x0 = mousex, y0 = mousey, x1 = mousex+dx, y1 = mousey+dy;
+
+	printf("MOUSE EVENT:\tx=%4d(%+4d),\ty=%4d(%+4d),\tbuttons=0x%02X\n",
+		mousex, mousey, dx, dy, buttons);
+	
+	//clamp coordinates
+	if(x1 >= FRAME_WIDTH) x1 = FRAME_WIDTH-1;
+	if(x1 < 0) x1 = 0;
+	if(y1 >= FRAME_HEIGHT) y1 = FRAME_HEIGHT-1;
+	if(y1 < 0) y1 = 0;
+	
+	if(buttons)
+	{
+		uint32_t tint = 0x00808080;
+		uint32_t color = 0xFF000000;
+		color |= (buttons & 1) ? 0x80 : 0; //left button: RED
+		color |= (buttons & 2) ? 0x8000 : 0; //right button: GREEN
+		color |= (buttons & 4) ? 0x800000: 0; //middle button: BLUE
+		draw_line(x0, y0, x1, y1, color, tint);
+	}
+
+	mousex = x1;
+	mousey = y1;
+	return false;
+}
+
+extern "C" void wait_vsync();
 
 extern "C" void graphics_app(void)
 {
+#ifndef DISABLE_HARDWARE_ACCEL 
 	static const int DP_P0 = 14; //D+
 	static const int DM_P0 = 15; //D-
 	usbh_pins_init(DP_P0, DM_P0, -1, -1, USBH_QUEUE_SIZE);
+#endif
+
+	//clears screen
+	for(int y = 0; y < FRAME_HEIGHT; ++y)
+		draw_line(0, y, FRAME_WIDTH, y, 0xFF202050, 0);
 
 	for(;;)
+	{
+#ifndef DISABLE_HARDWARE_ACCEL 
 		usbh_hid_poll(1./60);
+#else
+		wait_vsync();
+#endif
+	}
 }
 
-void USB_WEAK usbh_on_hiddata_log(uint8_t usbNum, uint8_t byte_depth, uint8_t* data, uint8_t data_len);
-
+#ifndef DISABLE_HARDWARE_ACCEL
 //dependencies
 #include "usb_host/usb_test/main/usb_host.c"
 #include "usb_host/usb_test/main/usb_host_hid.c"
 #include "usb_host/usb_test/main/usb_fifo.cpp"
+#else
 
+extern "C" int fb_on_mouse_event(int dx, int dy, int buttons, int wheel) //to be called by simulator
+{
+	printf("mouse event +%d,+%d buttons %d wheel %d\n", dx, dy, buttons, wheel);
+	return usbh_on_hidevent_mouse(dx, dy, buttons, wheel);
+}
+#endif
 
