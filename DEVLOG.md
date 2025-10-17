@@ -1,3 +1,60 @@
+# USB host
+## Software-only USB host implementation keyboard and mouse
+
+It allows to interface HID devices running at 1.5Mbps (USB low speed specifications), like common wired keyboards and mouse.  
+
+The implementation was done by porting this [project](https://github.com/sdima1357/esp32_usb_soft_host), originally hardcoded to target an ESP32 CPU, to now support the current ECP5-based FPGA board. 
+  
+The hardware design is quite simple requiring just two I/O pins, as can be seen in the board's [schematics](./hardware/FPGA_board/fileIO.kicad_sch):  
+  
+
+![usb_host_schematics.png](./doc/usb_host_schematics.png)
+
+## Results
+A basic graphical demo allows to draw lines with the mouse using the standard line drawing accelerator, with line colors depending on which buttons are pressed:  
+  
+![mousedemo.png](./doc/mousedemo.png)
+
+the same image is produced in hardware:  
+  
+
+![mousedemo_hardware.png](./doc/mousedemo_hardware.png)
+
+
+## Building
+For the hardware target just run:
+```
+make LATTICE_SYS_CLK=--sys-clk-freq=80000000
+make APP_SRC=usbtest_app firmware run
+```
+Note the need for a minimal CPU frequency to reach the required speed. Then load the resulting bitstream as usual, the firmware will be automatically uploaded by the 2nd command (invoking `litex_term` tool).
+  
+Or for a software simulation:
+```
+make APP_SRC=usbtest_app run
+```
+
+## Implementation details
+This port required a major refactoring to abstract access to the ESP32 resources like: timers for generating interrupts at 1 KHz, GPIO to access the USB I/O pins, CPU clock counter access as a high precision timer, new algorithms to avoid assumptions about CPU speed thus supporting different CPU clock frequencies, and more precise handling of timings for the realtime access of the I/O pins (should be within 0.25% of the 1.5Mbps required).  
+  
+Note that the base repo was included as a subtree and put in [usb_host/usb_test/main](./usb_host/usb_test/main), thus the required changes are clearly visible in the commit history of the current repo.  
+  
+To run some functions as fast as possible in IRQ handlers, a custom selection of funcions and data is put in fast SRAM accesible from the soft CPU, see [usb_host.c](./usb_host/usb_test/main/usb_host.c) where many of them are marked wth `USB_FAST_DATA` or `USB_FAST_CODE` putting them in executable sections that go to SRAM, and automatically copied from DRAM to SRAM at program's startup by the [crt0.S](./crt0.S) assembly file.
+
+A custom FIFO implementation in C++, using atomics to avoid synchonizations conflicts from the IRQ code and main loop, resulted fast enough to make possible to lower the required CPU frequency to 80Mhz and cut dependency with FreeRTOS FIFO implementation. See [usb_fifo.cpp](./usb_host/usb_test/main/usb_fifo.cpp).
+
+Mouse movement includes an acceleration feature, as typically done in most operating system so a relatively fast movement results in "amplified" movements, and in thwat way making easy to reach the whole screen without requiring a proportional phisical area.
+
+In better `printf` function was [added](./printf.c) that supports floating point types, aiding in debugging and useful for future applications.
+
+Since the it is a software implementation, GPIO pins for D+ and D- are configurable at runtime.
+The port can handle 4 simultaneous USB host ports, but it requires a fast soft core (Vexriscv) of at least 80MHz to run just 1 host, and compilation with optimized code (`-O2` flag) is required. The project's [Makefile](./Makefile) was accordingly updated, and a compilation error is triggered if CPU frequency set is now enough.
+
+A LiteX pheripheral SDK was added too, see [litex_sdk.h](./litex_sdk.h), which allows access to memory mapped peripherals like the timer and GPIO with a clean syntax: `pheripheral->register = value;`. In particular, a LiteX timer is run at the system clock frequency, configured to generate interrupts at 1 KHz and also useful as a high precision counter, and a LiteX' `GPIOTristate` module is used to select and interface the USB connector's pins and made them available to the fimware, see the bitstream generating [script](./gsd_orangecrab.py).
+
+For the simulation, a new `fb_on_mouse_event` function was added, see [sim_fb.c](./sim_fb.c).
+
+
 # Visual debugging
 The following documentation explains how to run code step by step and explore the MCU's CPU state.
 The CPU is accessed via its JTAG pins, so a suitable adapter is required for connection to the development host.
@@ -297,51 +354,4 @@ The demo uses the basic drawing primitives: circles for the moon, points as star
 
 Main source is [canvas_app.cpp](./canvas_app.cpp).
   
-A generic canvas API is implemented using he [AGG](https://github.com/suarezvictor/agg-2.4) library (Anti Grain Geometry, BSD licensed). It's used mainly in the source [accel_canvas.h](./accel_canvas.h).
-  
-The implementation is hardware accelerated by the use of the [line32.cc](./line32.cc) core, similarly for the font rasterizer implementation but for any kind of shapes (i.e rounded rectangles and ellipses as in the demo). That is solved by a specific implementation of a pixel format class (see function _copy_hline_ and _blend_hline_).
-
-That generic canvas is then subclassed for the specifics of the Processing API, see [processing_api.h](./processing_api.h).
-
-
-
-
-# C++ support
-This documentation explain how suport for C++ was added in a bare metal environment.
-
-The main difficulty with supporting C++ were lack of standard C++ functions (like support for _new_ and _delete_ keywords) and adequate initialization of global objects (calling of constructors before main).
-  
-Then some compiling modes were tried: first one was to stick to the bare metal as much as possible, and second one, full C++ support. For the first case, the C linker was used, providing functions for _new_/_delete_ and related requirements. Exceptions weren't supported (i.e `-fno-exceptions` flag was set for the compiler).
-  
-Support was anyways was required for more complex libraries like the AGG referenced above. This mandated linking with the C++ compiler which implies the standard C++ library (`-lstdc++`) and enabling of exception handing: `-fexceptions`. To solve some an undefined reference to `__cxa_guard_acquire`, caused by instantation of static objects local to a function, the solution was just to disable threading by setting `-fno-threadsafe-statics` compiler flag. 
-  
-This is reflected on the [Makefile](./Makefile). The C++ case required to specify the "triplet" at 32-bit: `-march=rv32im -mabi=ilp32` plus disabling of default C++ startup code (`-nostartfiles`) to avoid duplicated symbols. Bringing C++ support produced some other missing symbols like file I/O, what were solved in [fs.c](./fs.c) by providing empty implementations.
- 
-In regards to the issue of missing constructor calls for global objects -a quite hard to spot bug since zero-initialized object works-, the solution was to adapt the linker script (see [linked.ld](./linked.ld) file) and provide custom initialization functions (see main.c, functions *_init_array* and *_fini_array*). Those are usually implemented in assembler but for portability, a C implementation was chosen.
-  
-Of particular importance is that newer versions of GCC automatically put pointers to initialization functions in the `.init_array` section, while previous versions relies on a more verbose linker including `.ctors` sections (now deprecated), so many solution by others didn't work until the logic behind the new implementation was understood.
-  
-The result is that now complex C++ code like the currently included (i.e. the AGG library) works correctly, and so the C++ demos.
-
-
-
-# Performance optimization (FPGA)
-## Write-back cache / 128-bits access / benchmarking
-
-
-Some methods were tried to access the framebuffer (backed by the 16-bit DDR memory) for access by the custom accelerators, in a faster fashion: almost 2X gains were achieved.
-  
-The main development is the addition of a write-back cache with lazy eviction, connected to the DDR memory in 4:1 fashion (so the hardware 16-bit bus width results in a logical 128-bit bus).
-  
-The new code to take as reference, with the implementation of the different bus access architectures, is at [accel_glue.py](./accel_glue.py).
-  
-The benchmarking code is in [test_app.cpp](./test_app.cpp) which calculates how many clocks are required for each pixel actually written to the framebuffer, by the accelerator. The core selected as a test is implemented in [line32.cc](./line32.cc) which is used for the previous tasks. It's capable of a pixel per clock in the ideal setup, but the access to dynamic memory is slower, among other things since the DRAM is concurrently accessed by the CPU and also constantly read to display the pixels at a high frequency (dozens of MHz per pixel).
-  
-The cache allowed to lower from 11 clocks per pixel to 6, thanks to the lazy eviction that allows the line accelerator to push pixels to the cache while the dynamic RAM is busy. Note the need of the eviction, that's not needed by the CPU, since without such eviction the pixels doesn't appear in the display for a long time (that's not a problem with the CPU since it will read the previously written data from the cache, with no effect on processing as viewed from the CPU). This cache supports a read-write mode and a write-only mode, the latest was selected since it's faster and consumes less resources.
-  
-## Implementation details
-The core supports an **AUTO_EVICT** state that's entered when the accelerator isn't active (**IDLE** state). The eviction state uses a counter (_autoevict_counter_) that will test if the entries are in the dirty state (meaning previously written data) and in such case, issue a write to the dynamic memory. There's a simple but effective algorithm to avoid writing to a recently cached address, to allow some time for the RAM to get ready again before a new write: with each write to the cache by the accelerator, the counter is set to an address "far" from the currently written address.
-  
-Far enough is half the cache size, since the counter wraps around. Note that the cache is not large, since it just need to catch writes while the RAM is busy. In testing, 32 entries allowed a considerable speedup with not much space. That way, in just 16 cycles maximum, the latest written pixel by the accelerator will be automatically sent to the framebuffer, and displayed.
-  
-Then there's the need to widen the bus from 32-bits (the pixel size in RGBA8888 mode) to the native 128-bit DRAM bus. For this, an adapter [core from LiteX](https://github.com/enjoy-digital/litex/blob/master/litex/soc/interconnect/wishbone.py#L442) is used: `wishbone.Converter`. It allows to widen a wishbone bus from 32-bit to 128-bit (or other power-of-two sizes), and viceversa. This was tested as required since using the cache in 32-bit mode didn't give much improvement, as with the 128-bit one.
+A generic canvas API is implemented using he [AGG](https://github.com/suarezvictor/agg-2.4
