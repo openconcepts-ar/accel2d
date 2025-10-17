@@ -23,6 +23,7 @@ from litex.soc.cores.clock import *
 from litex.soc.integration.soc_core import *
 from litex.soc.integration.builder import *
 from litex.soc.cores.led import LedChaser
+from litex.soc.cores.gpio import GPIOTristate #required for USB host
 
 from litedram.modules import MT41K64M16, MT41K128M16, MT41K256M16, MT41K512M16
 from litedram.phy import ECP5DDRPHY
@@ -174,6 +175,16 @@ class BaseSoC(SoCCore):
             self.leds = LedChaser(
                 pads         = platform.request_all("user_led"),
                 sys_clk_freq = sys_clk_freq)
+
+        # GPIO -------------------------------------------------------------------------------------
+        with_pmod_gpio = True #GPIO required for USB host, still allows 4 channels of differential outputs on SOUTH connector (i.e. DVI)
+        if with_pmod_gpio:
+            pa = ["F1", "H1", "A8", "H2", "C8", "B8", "B10", "B9"] #bits 0-7 on NORTH connector (outer side): AUX_3+/AUX_3-/IO_11/IO_12/IO_9/IO_10/IO_5/IO_6
+            pd = ["R17", "J2", "C10", "C9", "A10", "C11", "A11", "B11"] #USB device on USB and others: IO_SCK/IO_13/IO_SDA/IO_SCL/SPI_0/SPI_1/USBH_D+/USBH_D- (bits 8-16)
+            ext = [("gpio", 0, Pins(" ".join(pa + pd)), IOStandard("LVCMOS33"))] #first 8 bits are dummy since required by software-only USB host
+            platform.add_extension(ext)
+            self.submodules.gpio = GPIOTristate(platform.request("gpio"))
+            self.add_constant("LITEX_SOFTUSB_HOST");
 
 
         with_video_framebuffer = True
