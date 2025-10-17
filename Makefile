@@ -1,7 +1,7 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-APP_SRC?=nuklear_app#blit_app#test_app#canvas_app
+APP_SRC?=usbtest_app#nuklear_app#blit_app#test_app#canvas_app
 
 #BOARD?=digilent_arty
 #BOARD?=lambdaconcept_ecpix5
@@ -15,7 +15,7 @@ SERIAL_BAURDATE?=960000
 
 #AMDTOOLCHAIN?=--toolchain=yosys+nextpnr #FIXME: some glitches
 CPU_TYPE?=--cpu-type=vexriscv #only supports vexriscv
-LATTICE_SYS_CLK?=--sys-clk-freq 75e6 --uart-baudrate $(SERIAL_BAURDATE) #ECP5 pass at 96 MHz if just rectangles, but glitches remains
+LATTICE_SYS_CLK?=--sys-clk-freq 75e6 #ECP5 pass at 96 MHz if just rectangles, but glitches remains
 
 include Makefile.common
 include $(BUILD_DIR)/software/include/generated/variables.mak
@@ -23,13 +23,13 @@ include $(LITEX_ROOT)/litex/soc/software/common.mak
 
 AGG_BASE_DIR=agg-2.4
 NUKLEAR_DIR=./Nuklear
-INC=-I$(AGG_BASE_DIR)/include -I./freetype -I$(NUKLEAR_DIR)
+INC+=-I$(AGG_BASE_DIR)/include -I./freetype -I$(NUKLEAR_DIR)
 
 CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
-CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes
-CXXFLAGS+=$(CCDEFS) $(INC) -fno-threadsafe-statics
+CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes -O2
+CXXFLAGS+=$(CCDEFS) $(INC) -fno-threadsafe-statics -O2
 
-SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE)
+SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE) --uart-baudrate $(SERIAL_BAURDATE)
 
 #FIXME: try crt0 provided by LiteX
 %.o: %.S
@@ -82,8 +82,8 @@ sim_linux: prerequisites sim_linux.c $(APP_SRC).cpp accel_cores.c sim_fb.c sw_co
 firmware: main.bin
 
 
-main.elf: prerequisites main.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o bmpimage.o crt0.o linker.ld
-	$(CX) crt0.o main.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o bmpimage.o -march=rv32im -mabi=ilp32 -nostartfiles -L$(BUILDINC_DIRECTORY) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
+main.elf: prerequisites main.o printf.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o bmpimage.o crt0.o linker.ld
+	$(CX) crt0.o main.o printf.o $(APP_SRC).o accel_cores.o sw_cores.o fs.o bmpimage.o -march=rv32im -mabi=ilp32 -nostartfiles -L$(BUILDINC_DIRECTORY) -T linker.ld -Xlinker -Map=$@.map -N -o $@ \
 		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) $(LIBS:lib%=-l%)
 
 
