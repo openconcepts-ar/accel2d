@@ -15,7 +15,7 @@ A basic graphical demo allows to draw lines with the mouse using the standard li
   
 ![mousedemo.png](./doc/mousedemo.png)
 
-the same image is produced in hardware:  
+the same image is produced in hardware (note the USB-A to USB-C adapter at left and video connector at right):  
   
 
 ![mousedemo_hardware.png](./doc/mousedemo_hardware.png)
