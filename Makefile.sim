@@ -1,0 +1,79 @@
+BOARD=sim
+ACCEL_GEN=$(PYTHON) accel_gen.py
+
+include Makefile
+
+litexvariables: ./build/sim/software/include/generated/variables.mak
+./build/sim/software/include/generated/variables.mak: sim.py
+	$(PYTHON) ./sim.py $(SOCARGS) --no-compile-gateware
+
+.PHONY: verilator
+verilator: c2v litexvariables glue_gen wpu.py main.bin ./sim.py #line32.v # rectangle_fill32.v ellipse_fill32.v palette_fix32.v
+	VIDEO=1 $(PYTHON) ./sim.py $(SOCARGS) --sdram-init main.bin
+
+.PHONY: sim
+sim: verilator
+
+.PHONY: glue_gen
+glue_gen: accel_line32a.v#accel_line32.v accel_rectangle_fill32.v accel_ellipse_fill32.v accel_palette_fix32.v 
+
+#creates glue logic and C headers
+accel_%.v: %.v LITEX-CONTRIBUTORS #spdx-litex.txt
+	$(ACCEL_GEN) --name accel_$(basename $<) --license-file=spdx-litex.txt --no-compile-software \
+	  --build --cpu-type=None --integrated-sram-size=0 --no-timer --no-ident --no-uart --no-ctrl
+
+.PHONY: deepclean
+deepclean: clean
+	$(RM) -R *.v accel*.inl doc iStyle istyle-verilog-formatter
+	
+.PHONY: cflexhdl
+cflexhdl: cflexhdl.h
+cflexhdl.h: $(CFLEXROOT)/include/cflexhdl.h $(CFLEXROOT)/include/types.h
+	cp $^ .
+
+prerequisites: cflexhdl iStyle
+
+iStyle:
+	git clone https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git
+	cd istyle-verilog-formatter && make
+	cp istyle-verilog-formatter/bin/release/iStyle $@
+
+DOC_FILES :=
+DOC_FILES += ../doc/clock.png
+DOC_FILES += ../doc/failed_tests.png
+DOC_FILES += ../doc/hardware1000.jpeg
+DOC_FILES += ../doc/passed_tests.png
+DOC_FILES += ../doc/simulator1000.png
+DOC_FILES += ../doc/nlnet_logo.png
+DOC_FILES += ../doc/linesdemo.png
+DOC_FILES += ../doc/MicropythonRGBdemo.png
+DOC_FILES += ../doc/FPGA-RGBdemo.png
+DOC_FILES += ../doc/CPUboard.png
+DOC_FILES += ../doc/CPUboard.png
+DOC_FILES += ../doc/CPUclockdemo.png
+
+doc: $(DOC_FILES) ../doc/README.md
+	mkdir -p $@
+	cp $^ $@
+	for i in $@/*.md ; do pandoc -f markdown -t html -s "$$i" > "$$i.html" ; done;
+
+.PHONY: backup
+backup: prerequisites backup.tar.gz
+
+backup.tar.gz: doc README.md LICENSE LITEX-CONTRIBUTORS bus.h misc.h crt0.S linker.ld digilent_arty.py lambdaconcept_ecpix5.py graphics.h main.c \
+        accel_cores.h accel_cores.c sw_cores.h sw_cores.cpp Makefile Makefile.common wpu.py accel.py \
+        line32.cc rectangle_fill32.cc ellipse_fill32.cc accel_regs.h verilog-gen-header.txt \
+        *.v *.inl demos \
+        drawing_test.c sim_fb.h sim_fb.c sim_linux.c cflexhdl.h types.h
+
+	./iStyle *.v
+	tar -cvzf $@ $^
+
+.PHONY: restore
+
+restore: backup.tar.gz
+	mkdir restore && tar -xvzf backup.tar.gz -C restore
+	cd restore/doc && retext README.md
+	cd restore && make LITEX_ROOT=../../../litex all upload
+
+

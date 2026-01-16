@@ -14,7 +14,9 @@ from migen import *
 from migen.genlib.misc import WaitTimer
 from migen.genlib.resetsync import AsyncResetSynchronizer
 
-from accel_glue import gen_accel_cores
+from wpu import gen_accel_cores
+#from accel_glue import gen_accel_cores
+
 from litex.gen import LiteXModule
 
 from litex_boards.platforms import gsd_orangecrab

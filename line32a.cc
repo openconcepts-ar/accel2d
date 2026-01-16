@@ -17,16 +17,17 @@ MODULE line32a(
   const int16&	dy,
   const uint32&	rgba, //color to add
   const uint32&	tint, //source color multiply factor
-  const busaddr_t& dst_base,
+  uint32 *dst_base,
   const int16& dst_xstride, //normally 1, but can run backwards
   const int16& dst_ystride, //pixels to skip for next line (usually the framebuffer width)
-  const busaddr_t& src_base,
+  const uint32 *src_base,
   const int16& src_xstride,
   const int16& src_ystride
   )
 {
 
-  bus_setup32();
+  const uint32* src = src_base;
+  uint32 *dst = dst_base;
 
   int16 dxa =  iabs (dx);
   int16 dya = -iabs (dy);
@@ -62,26 +63,17 @@ MODULE line32a(
   tb = tint>>16;
   ta = tint>>24;
  
-  bus_set_write_address(dst_base);
-  bus_set_read_address(src_base);
   while(x != dx || y != dy)
   {
     if(tint == 0) //transparent sources skip reads
     {
-      bus_write_start(rgba);
+      *dst = rgba;
     }
     else
     {
-	    if(!bus_reading() && !bus_writing())
-    	{
-    	  bus_read_start();
-	    }
-
-		if(bus_read_done())
-		{
-		  pix = bus_read_data(); //read pixel, assumes premultiplied alpha
+		  pix = *src; //read pixel, assumes premultiplied alpha
 		  
-		  if(tint == 4294967295 && rgba == 0)
+		  if(tint == 0xFFFFFFFF && rgba == 0)
 		  {
 		    color = pix; //copy
 		  }
@@ -94,14 +86,9 @@ MODULE line32a(
 			  s_rgba.b = alpha_mul(b, inv_a) + alpha_mul(p_rgba.b, tb+1);
 			  s_rgba.a = alpha_mul(a, inv_a) + pix_a;
 		  }
-		  bus_write_start(color);
-		}
+		  *dst = color;
 	}
 
-    if(bus_write_done())
-    {
-      bus_stop();
-      
       //these variables needs to be signed
       busaddr_diff_t dst_xincaddr = 0; 
       busaddr_diff_t dst_yincaddr = 0;
@@ -117,9 +104,6 @@ MODULE line32a(
         y = y + sy;
         dst_yincaddr = dst_ystride;
         src_yincaddr = src_ystride;
-        //TODO: check if not releasing the bus when jumping in y coordinate
-        //(so jumping in memory addres by a long step)
-        //is the cause of the screen going blank when drawing stroked rects
       } 
 
       int16 dye = 0;
@@ -130,12 +114,8 @@ MODULE line32a(
         dst_xincaddr = dst_xstride;
         src_xincaddr = src_xstride;
       }
-      bus_inc_write_address(dst_xincaddr + dst_yincaddr);
-      bus_inc_read_address(src_xincaddr + src_yincaddr);
+      dst = dst + (dst_xincaddr + dst_yincaddr);
+      src = src + (src_xincaddr + src_yincaddr);
       err = err + dxe + dye;
-    }
   }
-
-  while(bus_write_pending()); //wait last transaction
-  bus_release();
 }

@@ -37,10 +37,10 @@ class Accel(Module, AutoCSR):
           
         
     def add_bus_arg(self, bus_ext):
-        bus = bus_ext
+        bus, adr_r = bus_ext
 
         adr_w = Signal(32);
-        adr_r = Signal(32);
+        #adr_r = Signal(32);
 
         # Core instance.
         # -----------------

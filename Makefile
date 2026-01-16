@@ -1,11 +1,12 @@
 # This file is Copyright (c) 2023 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: AGPL-3.0-only
 
-APP_SRC?=nuklear_app#blit_app#test_app#canvas_app
+APP_SRC?=blit_app#test_app#canvas_app#nuklear_app
 
 #BOARD?=digilent_arty
 #BOARD?=lambdaconcept_ecpix5
-BOARD?=gsd_orangecrab
+#BOARD?=gsd_orangecrab
+BOARD=sim
 #LATTICETOOLCHAIN=--toolchain diamond
 LATTICETOOLCHAIN=--toolchain trellis --nextpnr-seed 0 --nextpnr-timingstrict 
 SDRAM_BUS_BITS?=32
@@ -45,7 +46,10 @@ SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE)
 	$(OBJCOPY) -O binary $< $@
 	chmod -x $@
 	
-prerequisites: LITEX-CONTRIBUTORS 
+prerequisites: LITEX-CONTRIBUTORS litexvariables
+	make -f Makefile.sim glue_gen
+
+litexvariables: ./build/$(BOARD)/software/include/generated/variables.mak
 
 ./build/digilent_arty/software/include/generated/variables.mak: ./digilent_arty.py
 	$(PYTHON) ./digilent_arty.py $(SOCARGS) --no-compile-gateware
@@ -65,7 +69,14 @@ prerequisites: LITEX-CONTRIBUTORS
 ./build/gsd_orangecrab/gateware/gsd_orangecrab.bit: ./gsd_orangecrab.py c2v
 	$(PYTHON) ./gsd_orangecrab.py --build $(SOCARGS) $(LATTICE_SYS_CLK) # $(LATTICETOOLCHAIN)
 
-everything: $(BOARD) #run
+./build/sim/software/include/generated/variables.mak: ./sim.py
+	$(PYTHON) sim.py $(SOCARGS) --no-compile-gateware
+
+sim: ./sim.py firmware
+	VIDEO=1 $(PYTHON) sim.py $(SOCARGS) --sdram-init main.bin
+
+bitstream: $(BOARD)
+everything: $(BOARD)
 
 .PHONY: run
 run: sim_linux

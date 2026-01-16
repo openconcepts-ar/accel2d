@@ -14,7 +14,8 @@ all: everything
 
 %.v: %.cc
 	cpp -DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS) -D$(basename $@)=_$(FNPREFIX)$(basename $@) -I$(CFLEXROOT)/include -E $< > $(BUILD_DIR)/$@.tmp.cpp
-	PYTHONPATH=$(CFLEXROOT)/cflexparser $(GENERATOR) $(BUILD_DIR)/$@.tmp.cpp > $(BUILD_DIR)/$@.tmp.si
+	echo "\$$\$$ addr_size = 32" > $(BUILD_DIR)/$@.tmp.si
+	PYTHONPATH=$(CFLEXROOT)/cflexparser $(GENERATOR) $(BUILD_DIR)/$@.tmp.cpp >> $(BUILD_DIR)/$@.tmp.si
 	silice -f verilog-gen-header.txt $(BUILD_DIR)/$@.tmp.si -o $@ --export $(FNPREFIX)$(basename $@)
 	
 c2v: line32a.v #rectangle_fill32.v ellipse_fill32.v line32.v

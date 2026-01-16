@@ -96,8 +96,8 @@ void sw_linea(accel_line32a_layout_t *regs)
   int16 src_ystride = regs->src_ystride;
   
   line32a(BUSMASTER_ARG, dx, dy, rgba, tint,
-    dst_base, dst_xstride, dst_ystride,
-    src_base, src_xstride, src_ystride
+    (uint32*) dst_base, dst_xstride, dst_ystride,
+    (const uint32*) src_base, src_xstride, src_ystride
   );
 }
 

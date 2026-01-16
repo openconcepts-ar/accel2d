@@ -258,7 +258,7 @@ class ConverterWriteCache(Module):
 def connect_accel_to_native_wbcache(wpu, port):
 	bus = wishbone.Interface(port.data_width)
 	busx = wishbone.Interface(port.data_width)
-	dma_bus = wpu.dma_bus
+	dma_bus, adr_r = wpu.dma_bus
 	wb_cnv = wishbone.Converter(master=dma_bus, slave=busx) #adapts width prior to cache
 	wpu.submodules.wb_cnv = wb_cnv
 	
@@ -269,12 +269,12 @@ def connect_accel_to_native_wbcache(wpu, port):
 	wpu.submodules += s1
 
 def connect_accel_to_native(wpu, port):
-	bus = wpu.dma_bus
+	bus, adr_r = wpu.dma_bus
 	s1 = wb_to_native_adapter(bus, port)
 	wpu.submodules += s1
 
 def connect_accel_wbcache(wpu):
-	dma_bus= wpu.dma_bus
+	dma_bus, adr_r = wpu.dma_bus
 	bus = wishbone.Interface(dma_bus.data_width)
 	cache = ConverterWriteCache(dma_bus, bus) 
 	wpu.submodules.cache = cache
@@ -282,6 +282,7 @@ def connect_accel_wbcache(wpu):
 
 
 def gen_accel_cores(soc, active_cores, pixel_bus_width=32):
+    assert False #this is not well tested with pointers
     for core in active_cores:
         corename = "accel_" + core
         fb_offset = 0xC00000

@@ -33,7 +33,7 @@ class WPUBase(Accel):
 
         super().__init__(name, arg_desc_layout)
         self.adr_r = Signal(30)
-        self.dma_bus = wishbone.Interface(pixel_bus_width)
+        self.dma_bus = [wishbone.Interface(pixel_bus_width), self.adr_r]
         self.add_bus_arg(self.dma_bus)
         
           
@@ -53,7 +53,6 @@ class WPUBase(Accel):
 # Core adder ---------------------------------------------------------------------------------------
 
 def gen_accel_cores(soc, active_cores, pixel_bus_width=32):
-    assert False #not well tested
     for core in active_cores:
         corename = "accel_" + core
         fb_offset = 0xC00000
