@@ -23811,6 +23811,17 @@
 		)
 		(uuid "f2367d6d-f786-4788-beb0-599447d051b4")
 	)
+	(label "PSEL"
+		(at 146.05 231.14 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "f23dc5f2-4adc-46a7-a9e6-8c87b746d76c")
+	)
 	(label "SDC0_CD"
 		(at 358.14 109.22 0)
 		(fields_autoplaced yes)

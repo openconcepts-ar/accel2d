@@ -2940,6 +2940,19 @@
 				)
 			)
 		)
+		(property "MPN" "EA3036CQBR"
+			(at 0 0 -90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "cf35be0c-31b3-4682-85a9-e0ab9d0b412c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		
 		(property "JLC_3DModel" "71760926877f42c6b0f5954e672bfe89"
 			(at 0 0 -90)
 			(unlocked yes)
@@ -9864,6 +9877,18 @@
 			)
 		)
 		(property "Description" ""
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fb6056ca-8eb7-40da-af20-17ce27a74085")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part Number" "C5365285"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
