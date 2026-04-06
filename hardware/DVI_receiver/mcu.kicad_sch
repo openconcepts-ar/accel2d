@@ -1,0 +1,13 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "b39116fd-fde5-482e-93a4-0598f074e4db")
+	(paper "A4")
+	(title_block
+		(title "DVI receiver based on Caster EPDC")
+		(date "2025-08-05")
+		(rev "v0.9")
+	)
+	(lib_symbols)
+)
