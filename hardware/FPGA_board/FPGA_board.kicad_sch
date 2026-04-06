@@ -5,14 +5,13 @@
 	(uuid "66670491-5507-4d5c-bc12-3561ec3542a1")
 	(paper "A4")
 	(title_block
-		(title "Orange Crab")
-		(date "2024-04-20")
-		(rev "0.9")
-		(company "(C) 2024 Victor Suarez Rovere")
-		(comment 1 "Baed on OrangeCrab r0.1 board by GsD")
-		(comment 2 "https://github.com/orangecrab-fpga/orangecrab-hardware")
-		(comment 3 "Original License: CERN-OHL")
-		(comment 4 "Current License:  CERN-OHL-S")
+		(title "FPGA board")
+		(date "2026-03-16")
+		(rev "0.1")
+		(company "(C) 2023-2026 Victor Suarez Rovere")
+		(comment 1 "Based on OrangeCrab board r0.1")
+		(comment 2 "https://github.com/orangecrab-fpga/orangecrab-hardware/tree/main/hardware/orangecrab_r0.1")
+		(comment 3 "﻿CERN Open Hardware Licence v1.2 ")
 	)
 	(lib_symbols
 		(symbol "Mechanical:MountingHole"
@@ -104,7 +103,7 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board yes)
+		(on_board no)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005d2429c7")
 		(property "Reference" "H4"
@@ -582,6 +581,44 @@
 			(project "FPGA_board"
 				(path "/66670491-5507-4d5c-bc12-3561ec3542a1"
 					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 45.72 140.97)
+		(size 35.56 20.32)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "b3f8c084-5a26-424c-9de3-875be0a4a948")
+		(property "Sheetname" "doc"
+			(at 45.72 140.2584 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 45.72 161.8746 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "FPGA_board"
+				(path "/66670491-5507-4d5c-bc12-3561ec3542a1"
+					(page "8")
 				)
 			)
 		)

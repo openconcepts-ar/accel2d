@@ -5,7 +5,13 @@
 	(uuid "e4d30dc7-bdd3-483c-87f6-8a54cbeb70a8")
 	(paper "A4")
 	(title_block
-		(date "2024-04-20")
+		(title "FPGA board")
+		(date "2026-03-16")
+		(rev "0.1")
+		(company "(C) 2023-2026 Victor Suarez Rovere")
+		(comment 1 "Based on OrangeCrab board r0.1")
+		(comment 2 "https://github.com/orangecrab-fpga/orangecrab-hardware/tree/main/hardware/orangecrab_r0.1")
+		(comment 3 "﻿CERN Open Hardware Licence v1.2 ")
 	)
 	(lib_symbols
 		(symbol "Device:C"
@@ -897,23 +903,23 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U"
-				(at 0 36.83 0)
+			(property "Reference" "U4"
+				(at 0.635 37.3126 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "gkl_mem_MT41K64M16TW-107_J-TR"
-				(at 0 34.29 0)
+			(property "Value" "MT41K64M16TW-107_J-TR"
+				(at 0.635 35.0012 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Footprint" ""
+			(property "Footprint" "Package_BGA:BGA-96_9.0x13.0mm_Layout2x3x16_P0.8mm"
 				(at 1.27 38.1 0)
 				(effects
 					(font
@@ -932,6 +938,24 @@
 				)
 			)
 			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MPN" "MT41K64M16TW-107:J TR"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Mfg" "Micron Technology Inc."
 				(at 0 0 0)
 				(effects
 					(font
@@ -1674,6 +1698,24 @@
 						)
 					)
 				)
+				(pin power_in line
+					(at 17.78 -36.83 180)
+					(length 3.81)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "G8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 				(pin input line
 					(at 17.78 17.78 180)
 					(length 0)
@@ -1800,6 +1842,24 @@
 						)
 					)
 				)
+				(pin free line
+					(at -3.81 -57.15 90)
+					(length 3.81)
+					(name "J1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "J1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 				(pin input line
 					(at 17.78 20.32 180)
 					(length 0)
@@ -1868,6 +1928,24 @@
 						(effects
 							(font
 								(size 0 0)
+							)
+						)
+					)
+				)
+				(pin free line
+					(at -1.27 -57.15 90)
+					(length 3.81)
+					(name "J9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "J9"
+						(effects
+							(font
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -1980,6 +2058,24 @@
 						)
 					)
 				)
+				(pin free line
+					(at 1.27 -57.15 90)
+					(length 3.81)
+					(name "L1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "L1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 				(pin input line
 					(at -16.51 -43.18 0)
 					(length 3.81)
@@ -2045,6 +2141,24 @@
 						)
 					)
 					(number "L8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin free line
+					(at 3.81 -57.15 90)
+					(length 3.81)
+					(name "L9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "L9"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2866,8 +2980,20 @@
 		(uuid "fbc92ca3-d609-44e8-9417-6eae539207d6")
 	)
 	(no_connect
+		(at 199.39 161.29)
+		(uuid "061e2c48-556b-4f5f-bf51-6b6c8b2e381d")
+	)
+	(no_connect
 		(at 179.07 111.76)
 		(uuid "2a4b8913-8181-4d1a-b242-6aab4ab8dd14")
+	)
+	(no_connect
+		(at 194.31 161.29)
+		(uuid "41f2bec2-15a8-4b4a-b0de-08ce3f995ca3")
+	)
+	(no_connect
+		(at 191.77 161.29)
+		(uuid "46d65260-74ef-434c-abed-740be8c1a598")
 	)
 	(no_connect
 		(at 179.07 106.68)
@@ -2876,6 +3002,10 @@
 	(no_connect
 		(at 179.07 109.22)
 		(uuid "be7545a8-d40c-477c-8b9c-83be9c5e8213")
+	)
+	(no_connect
+		(at 196.85 161.29)
+		(uuid "c8a990d2-4596-46ae-a246-b306a0ca34ab")
 	)
 	(wire
 		(pts
@@ -3006,6 +3136,16 @@
 			(type default)
 		)
 		(uuid "12799c23-5562-4e74-b099-e78c4639b8e4")
+	)
+	(wire
+		(pts
+			(xy 229.87 140.97) (xy 213.36 140.97)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13a18706-8d33-4b17-9193-69a8b4f12bdc")
 	)
 	(wire
 		(pts
@@ -6044,7 +6184,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "MT41K64M16TW-107:J TR"
+		(property "MPN" "MT41K64M16TW-107:J TR"
 			(at 195.58 104.14 0)
 			(effects
 				(font
@@ -6338,6 +6478,21 @@
 		(pin "T9"
 			(uuid "0c40e78b-9eb1-46fa-853b-6ea1f3e3ae13")
 		)
+		(pin "G8"
+			(uuid "34337d49-2743-4c38-9579-367a50037964")
+		)
+		(pin "L9"
+			(uuid "27e9f3d2-ce72-463b-acea-d8095feafd43")
+		)
+		(pin "J1"
+			(uuid "999ca6ee-a847-4052-860f-ab57fdaa642f")
+		)
+		(pin "J9"
+			(uuid "d9e5e900-c8dc-4998-bce9-8208042b2b61")
+		)
+		(pin "L1"
+			(uuid "f6768474-e3db-4072-987e-78dd3091d2de")
+		)
 		(instances
 			(project "FPGA_board"
 				(path "/66670491-5507-4d5c-bc12-3561ec3542a1/00000000-0000-0000-0000-00005abd38f2"
@@ -6408,7 +6563,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "RC0201FR-070RL"
+		(property "MPN" "RC0201FR-070RL"
 			(at 124.46 124.46 0)
 			(effects
 				(font
@@ -6496,7 +6651,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 207.01 55.88 0)
 			(effects
 				(font
@@ -6648,7 +6803,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 212.09 55.88 0)
 			(effects
 				(font
@@ -6736,7 +6891,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 184.15 55.88 0)
 			(effects
 				(font
@@ -6823,7 +6978,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 189.23 55.88 0)
 			(effects
 				(font
@@ -6911,7 +7066,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 207.01 36.83 0)
 			(effects
 				(font
@@ -7063,7 +7218,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 212.09 36.83 0)
 			(effects
 				(font
@@ -7151,7 +7306,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 184.15 36.83 0)
 			(effects
 				(font
@@ -7238,7 +7393,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 189.23 36.83 0)
 			(effects
 				(font
@@ -7326,7 +7481,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 104.14 38.1 0)
 			(effects
 				(font
@@ -7480,7 +7635,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 104.14 62.23 0)
 			(effects
 				(font
@@ -7633,7 +7788,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 110.49 38.1 0)
 			(effects
 				(font
@@ -7785,7 +7940,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 110.49 62.23 0)
 			(effects
 				(font
@@ -7937,7 +8092,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 121.92 38.1 0)
 			(effects
 				(font
@@ -8089,7 +8244,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 121.92 62.23 0)
 			(effects
 				(font
@@ -8242,7 +8397,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 105.41 97.79 0)
 			(effects
 				(font
@@ -8395,7 +8550,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 111.76 97.79 0)
 			(effects
 				(font
@@ -8547,7 +8702,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "RC0402FR-07240RL"
+		(property "MPN" "RC0402FR-07240RL"
 			(at 228.6 96.52 0)
 			(effects
 				(font
@@ -8700,7 +8855,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 250.19 55.88 0)
 			(effects
 				(font
@@ -8787,7 +8942,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM188R60J226MEA0D"
+		(property "MPN" "GRM188R60J226MEA0D"
 			(at 255.27 55.88 0)
 			(effects
 				(font
@@ -8937,7 +9092,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "BLM15AG601SN1D"
+		(property "MPN" "BLM15AG601SN1D"
 			(at 260.35 49.53 0)
 			(effects
 				(font
@@ -9025,7 +9180,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "JMK105C6105KV-F"
+		(property "MPN" "JMK105C6105KV-F"
 			(at 250.19 82.55 0)
 			(effects
 				(font
@@ -9112,7 +9267,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM188R60J226MEA0D"
+		(property "MPN" "GRM188R60J226MEA0D"
 			(at 255.27 82.55 0)
 			(effects
 				(font
@@ -9262,7 +9417,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "BLM15AG601SN1D"
+		(property "MPN" "BLM15AG601SN1D"
 			(at 260.35 76.2 0)
 			(effects
 				(font
@@ -9403,7 +9558,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 45.72 0)
 			(effects
 				(font
@@ -9506,7 +9661,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 60.96 0)
 			(effects
 				(font
@@ -9609,7 +9764,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 76.2 0)
 			(effects
 				(font
@@ -9712,7 +9867,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 91.44 0)
 			(effects
 				(font
@@ -9815,7 +9970,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 106.68 0)
 			(effects
 				(font
@@ -9918,7 +10073,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "WA04X49R9FTL"
+		(property "MPN" "WA04X49R9FTL"
 			(at 67.31 121.92 0)
 			(effects
 				(font
@@ -10030,7 +10185,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 52.07 123.19 0)
 			(effects
 				(font
@@ -10049,6 +10204,71 @@
 			(project "FPGA_board"
 				(path "/66670491-5507-4d5c-bc12-3561ec3542a1/00000000-0000-0000-0000-00005abd38f2"
 					(reference "C27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "OrangeCrab-rescue:GND-gkl_power")
+		(at 229.87 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ed0e7f7c-20aa-4a58-8223-0a1b6a0172af")
+		(property "Reference" "#PWR015"
+			(at 229.87 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 229.9462 144.1704 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 227.33 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 229.87 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 229.87 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "20bff317-65ec-4a7f-9db8-ac4e64885f82")
+		)
+		(instances
+			(project "FPGA_board"
+				(path "/66670491-5507-4d5c-bc12-3561ec3542a1/00000000-0000-0000-0000-00005abd38f2"
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
