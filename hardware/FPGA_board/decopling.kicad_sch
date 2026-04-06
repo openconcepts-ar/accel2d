@@ -4,6 +4,15 @@
 	(generator_version "8.0")
 	(uuid "c4b2f397-c25e-4325-8074-abe5abadec47")
 	(paper "A4")
+	(title_block
+		(title "FPGA board")
+		(date "2026-03-16")
+		(rev "0.1")
+		(company "(C) 2023-2026 Victor Suarez Rovere")
+		(comment 1 "Based on OrangeCrab board r0.1")
+		(comment 2 "https://github.com/orangecrab-fpga/orangecrab-hardware/tree/main/hardware/orangecrab_r0.1")
+		(comment 3 "﻿CERN Open Hardware Licence v1.2 ")
+	)
 	(lib_symbols
 		(symbol "Device:C"
 			(pin_numbers hide)
@@ -1648,7 +1657,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 33.02 34.29 0)
 			(effects
 				(font
@@ -1800,7 +1809,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 38.1 34.29 0)
 			(effects
 				(font
@@ -1887,7 +1896,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 54.61 34.29 0)
 			(effects
 				(font
@@ -2039,7 +2048,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 59.69 34.29 0)
 			(effects
 				(font
@@ -2126,7 +2135,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 76.2 34.29 0)
 			(effects
 				(font
@@ -2278,7 +2287,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 81.28 34.29 0)
 			(effects
 				(font
@@ -2365,7 +2374,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 97.79 34.29 0)
 			(effects
 				(font
@@ -2517,7 +2526,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 102.87 34.29 0)
 			(effects
 				(font
@@ -2604,7 +2613,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 118.11 34.29 0)
 			(effects
 				(font
@@ -2756,7 +2765,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 123.19 34.29 0)
 			(effects
 				(font
@@ -2843,7 +2852,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 33.02 67.31 0)
 			(effects
 				(font
@@ -2995,7 +3004,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 38.1 67.31 0)
 			(effects
 				(font
@@ -3082,7 +3091,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 54.61 67.31 0)
 			(effects
 				(font
@@ -3234,7 +3243,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 59.69 67.31 0)
 			(effects
 				(font
@@ -3321,7 +3330,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 97.79 67.31 0)
 			(effects
 				(font
@@ -3473,7 +3482,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 102.87 67.31 0)
 			(effects
 				(font
@@ -3560,7 +3569,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 119.38 67.31 0)
 			(effects
 				(font
@@ -3712,7 +3721,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 124.46 67.31 0)
 			(effects
 				(font
@@ -3799,7 +3808,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 97.79 96.52 0)
 			(effects
 				(font
@@ -3951,7 +3960,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 102.87 96.52 0)
 			(effects
 				(font
@@ -4038,7 +4047,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 119.38 96.52 0)
 			(effects
 				(font
@@ -4190,7 +4199,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 124.46 96.52 0)
 			(effects
 				(font
@@ -4277,7 +4286,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "GRM033R61C103KA12D"
+		(property "MPN" "GRM033R61C103KA12D"
 			(at 142.24 96.52 0)
 			(effects
 				(font
@@ -4429,7 +4438,7 @@
 				(hide yes)
 			)
 		)
-		(property "PN" "CL03A104KQ3NNNC"
+		(property "MPN" "CL03A104KQ3NNNC"
 			(at 147.32 96.52 0)
 			(effects
 				(font

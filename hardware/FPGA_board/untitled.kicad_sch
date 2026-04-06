@@ -1,0 +1,17 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "4780261f-1a21-4ce2-85d7-34682695c12d")
+	(paper "A4")
+	(title_block
+		(title "FPGA board")
+		(date "2026-03-16")
+		(rev "0.1")
+		(company "(C) 2023-2026 Victor Suarez Rovere")
+		(comment 1 "Based on OrangeCrab board r0.1")
+		(comment 2 "https://github.com/orangecrab-fpga/orangecrab-hardware/tree/main/hardware/orangecrab_r0.1")
+		(comment 3 "﻿CERN Open Hardware Licence v1.2 ")
+	)
+	(lib_symbols)
+)
