@@ -181,7 +181,7 @@ PDF schematics for the adapter are [here](./LVDS_DVI_adapter/LVDS_DVI_adapter.pd
 <img src="../doc/LVDS_DVI_adapter_layers.png" height=160>  
 
 
-## DVI receiver
+## DVI receiver board
 
 This board converts DVI (TDMS) signals to parallel RGB signals + H/V sync. It is based on the TFP401 chip from TI.
 
@@ -226,7 +226,7 @@ The design is done with the open-source EDA tool [Kicad](https://kicad.org), the
 
 # Latest updates
 
-See relevant [commit](./commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
+See relevant [commit](/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
 
   * Added [eDP adapter board](#edp-adapter-design)
   * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
