@@ -1,18 +1,25 @@
-# BOARDS
+# HARDWARE (boards)
 
-Here are design files for the various board of this project:  
+Here are the design files for the current 11 boards of this project:  
 
 Processing boards:  
   * [CPU board](#cpu-board-design)  
-  * [FPGA board](#fpga-board-design)  
+  * [ECP5 FPGA board](#ECP5-fpga-board-design)  
+  * [Spartan-6 FPGA board](#spartan-6-fpga-board)
 
 Adapter boards:  
+  * [eDP adapter board](#edp-adapter-design)  
   * [VGA adapter](#vga-adapter-board-design) & connector  
-  * [LVDS adapter](#lvds-adapter-board-design)  
+  * [LVDS adapters](#lvds-adapter-board-design) single and dual channel  
   * [DVI adapter](#dvi-adapter-board-design)  
-  * [I/O board](#io-board-design)  
+  * [DVI passive adapter](#dvi-passive-adapter-board-design)  
 
+Debugging boards:  
+  * [DVI receiver](#dvi-receiver-board)  
+  * [Touch splitter](#touch-splitter-board)  
+  * [I/O board](#io-board-design)  
   
+
 ## CPU board design
 A second, smaller version of the CPU board was designed, based again on the Allwinner F133A CPU  
   
@@ -37,9 +44,9 @@ PDF schematics are [here](./CPU_board/CPU_board_schematics.pdf).
 <img src="../doc/CPU_boardBACK.png" width=640>  
 <img src="../doc/CPU_board_layers.png" width=640>  
   
-## FPGA board design
+## ECP5 FPGA board design
 
-The FPGA board is capable of instancing a RISC-V CPU along with the hardware acellerators desiged in C and automatically translated to Verilog.
+The ECP5 FPGA board is capable of instancing a RISC-V CPU along with the hardware accelerators desiged in C and automatically translated to Verilog.
 Not only the board has the same layout as the CPU board but the drawing primitives use the same C sources, as one of the main objectives of the project.
 
 Features are:  
@@ -55,7 +62,7 @@ Features are:
 
 
 The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./FPGA_board)  
-The board is 6 layer, based on the [OrgangeCrab board r0.1](https://orangecrab-fpga.github.io/orangecrab-hardware/docs/r0.1/), with **CERN open-source hardware** license.
+The board is 6 layer, based on the [OrangeCrab board r0.1](https://orangecrab-fpga.github.io/orangecrab-hardware/docs/r0.1/), with **CERN open-source hardware** license.
   
 PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).  
 
@@ -65,6 +72,36 @@ PDF schematics are [here](./FPGA_board/FPGA_board_schematics.pdf).
 <img src="../doc/FPGA_board_layers.png" width=640>  
 
 *NOTE: FPGA chip is not shown on the 3D rendering for lack of a 3D model for the part*
+  
+
+## Spartan-6 FPGA board
+
+The Spartan-6 FPGA board is a lower cost version FPGA board. It includes a DDR3 memory and a RP2040 MCU. I/O includes a flash memory connector, USB-C device port, a 20-pin FPC connector for DVI (TDMS) signals, and a SWD debug header.  
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./Spartan6_board)  
+The board is 6 layer, based on the [Modos Glider Lite](https://github.com/Modos-Labs/Glider/tree/df32bba2b8f32c97958a599ba021d12184ffeada/pcb/mainboard_lite), with **CERN open-source hardware** license.
+  
+PDF schematics are [here](./Spartan6_board/pcb.pdf).  
+
+<img src="../doc/Spartan6-FPGA_board3D.png" width=640>  
+<img src="../doc/Spartan6-FPGA_boardFRONT.png" width=640>  
+<img src="../doc/Spartan6-FPGA_boardBACK.png" width=640>  
+<img src="../doc/Spartan6-FPGA_board_layers.png" width=640>  
+
+## eDP adapter design
+
+This adapter is capable of converting digital RGB parallel signals to embedded display port (eDP) for diredct driving of laptop replacement displays using a standard FPC cable. The converter IC is NCS8801 from NewCoSemi.
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./eDP_adapter).  
+PDF schematics for the adapter are [here](./eDP_adapter/eDP_adapter.pdf).  
+  
+This design is relased under a **CERN open-source hardware** license.
+
+<img src="../doc/eDP_adapter3D.png" height=240>  
+<img src="../doc/eDP_adapterFRONT.png" height=240>
+<img src="../doc/eDP_adapterBACK.png" height=240>
+<img src="../doc/eDP_adapter_layers.png" height=240>  
+
   
 ## VGA adapter board design
 
@@ -84,7 +121,7 @@ This design is relased under a **CERN open-source hardware** license.
   
 ## LVDS adapter board design
 
-This board connects 4 pairs of differential signals to a LCD using LVDS signalling (of the kind commonly used for laptops), to directly drive the display (1-channel). It also connect signals that can identify the display model and resolution.
+This board connects 4 or 8 pairs of differential signals to a LCD using LVDS signalling (of the kind commonly used for older laptops displays), to directly drive them (single and dual channel). It also connect signals that can identify the display model and resolution using I2C.
 
 Features:  
   * 40-pin FPC cable connector  
@@ -94,13 +131,19 @@ Features:
 
 The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./LVDS_adapter), licensed under a **CERN open-source hardware** license.  
   
-PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf).  
+PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf) (single channel) and [here](./LVDS_adapter/LVDS_adapter_2ch.pdf)  (dual channel).  
 
+### Dual channel
+<img src="../doc/LVDS_adapter3D-2ch.png" width=480>  
+<img src="../doc/LVDS_adapterFRONT-2ch.png" width=240>
+<img src="../doc/LVDS_adapterBACK-2ch.png" width=240>  
+<img src="../doc/LVDS_adapter_layers-2ch.png" width=240>  
+
+### Single channel
 <img src="../doc/LVDS_adapter3D.png" width=480>  
 <img src="../doc/LVDS_adapterFRONT.png" width=240>
 <img src="../doc/LVDS_adapterBACK.png" width=240>  
 <img src="../doc/LVDS_adapter_layers.png" width=240>  
-
   
 ## DVI adapter board design
 
@@ -123,6 +166,51 @@ PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.p
 <img src="../doc/DVI_adapter_layers.png" height=160>  
 
 
+## DVI passive adapter board design
+
+This is for outputting LVDS signals from a FPGA using AC-coupling to drive a TDMS receiver, using a standard connector for carring DVI video signals.
+It includes a level adapter to convert 5V I2C to 3.3V (VIO).
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./LVDS_DVI_adapter), licensed under a **CERN open-source hardware** license.  
+  
+PDF schematics for the adapter are [here](./LVDS_DVI_adapter/LVDS_DVI_adapter.pdf).  
+
+<img src="../doc/LVDS_DVI_adapter3D.png" width=320>  
+<img src="../doc/LVDS_DVI_adapterFRONT.png" height=160>
+<img src="../doc/LVDS_DVI_adapterBACK.png" height=160>
+<img src="../doc/LVDS_DVI_adapter_layers.png" height=160>  
+
+
+## DVI receiver
+
+This board converts DVI (TDMS) signals to parallel RGB signals + H/V sync. It is based on the TFP401 chip from TI.
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./DVI_adapter) (adapter) and [here](./DVI_connector_board) (connector), licensed under a **CERN open-source hardware** license.  
+  
+PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.pdf).  
+
+<img src="../doc/DVI_receiver3D.png" height=200>  
+<img src="../doc/DVI_receiverFRONT.png" height=200>
+<img src="../doc/DVI_receiverBACK.png" height=200>
+<img src="../doc/DVI_receiver_layers.png" height=200>  
+
+
+  
+## Touch splitter board
+
+The touch splitter board allows to split the signals from a 40-pin eDP display woth on-cell touch, separating the 30-pin eDP signals and the USB touch signals. It supports powering the touch model with 5V or 3.3V.
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./Touch_splitter). 
+  
+PDF schematics are [here](./Touch_splitter/eDP_touch_adapter.pdf).  
+
+<img src="../doc/Touch_splitter3D.png" height=200>  
+<img src="../doc/Touch_splitterFRONT.png" height=200>
+<img src="../doc/Touch_splitterBACK.png" height=200>
+<img src="../doc/Touch_splitter_layers.png" height=200>  
+
+
+
   
 ## I/O board design
 
@@ -135,6 +223,19 @@ All the wiring are directo connections to the video connectors. A header to acce
 
 The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./IO_board), licensed under a **CERN open-source hardware** license.  
 
-  
-<img src="../doc/IO_boardTOP.png" width=320>
 
+# Latest updates
+
+See relevant [commit](./commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
+
+  * Added [eDP adapter board](#edp-adapter-design)
+  * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
+  * Added [DVI receiver board](#dvi-receiver-board)
+  * Added [Touch splitter board](#touch-splitter-board)
+  * FPGA board: Add support to larger 85F version, support for larger flash, add Replacement of 2.5V source (DC-DC or LDO option), Fixes to USB host, thermal fix (wrong voltage of previous flash)
+  * [DVI passive adapter](#dvi-passive-adapter-board-design): make PCB significantly shorter
+  * [DVI connector](#dvi-adapter-board-design) board: fixed DVI connector (previously mini version of 0.4mm pitch, now 0.5mm like the standard version)
+  * [LVDS adapters](#lvds-adapter-board-design)  (2ch): Fixed bug of bad GND plane fill, which produced massive shorts
+  * [CPU board](#cpu-board-design): Add impedance control to differential tracks, corrected size of vias for , bootsel fix, dim led
+  * DRC checks for all boards, with DFM checks for 4 and 6 layers boards
+  
