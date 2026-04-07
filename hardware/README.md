@@ -226,13 +226,13 @@ The design is done with the open-source EDA tool [Kicad](https://kicad.org), the
 
 # Latest updates
 
-See relevant [commit](https://github.com/openconcepts-ar/accel2d/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
+See most relevant [commit](https://github.com/openconcepts-ar/accel2d/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
 
   * Added [eDP adapter board](#edp-adapter-design)
   * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
   * Added [DVI receiver board](#dvi-receiver-board)
   * Added [Touch splitter board](#touch-splitter-board)
-  * FPGA board: Add support to larger 85F version, support for larger flash, add Replacement of 2.5V source (DC-DC or LDO option), Fixes to USB host, thermal fix (wrong voltage of previous flash)
+  * [ECP5 FPGA board](#ECP5-fpga-board-design): Added support to larger 85F version, add Replacement of 2.5V source (DC-DC or LDO option), USB connectors swap (note location matches the CPU board), thermal fix (replaced flash of wrong voltage, now larger to accomodate 85F devices)
   * [DVI passive adapter](#dvi-passive-adapter-board-design): make PCB significantly shorter
   * [DVI connector](#dvi-adapter-board-design) board: fixed DVI connector (previously mini version of 0.4mm pitch, now 0.5mm like the standard version)
   * [LVDS adapters](#lvds-adapter-board-design)  (2ch): Fixed bug of bad GND plane fill, which produced massive shorts
