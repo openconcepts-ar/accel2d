@@ -226,7 +226,7 @@ The design is done with the open-source EDA tool [Kicad](https://kicad.org), the
 
 # Latest updates
 
-See relevant [commit](/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
+See relevant [commit](/openconcepts-ar/accel2d/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
 
   * Added [eDP adapter board](#edp-adapter-design)
   * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
