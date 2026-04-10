@@ -232,7 +232,7 @@ See most relevant [commit](https://github.com/openconcepts-ar/accel2d/commit/213
   * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
   * Added [DVI receiver board](#dvi-receiver-board)
   * Added [Touch splitter board](#touch-splitter-board)
-  * [ECP5 FPGA board](#ECP5-fpga-board-design): Added support to larger 85F version, add Replacement of 2.5V source (DC-DC or LDO option), USB connectors swap (note location matches the CPU board), thermal fix (replaced flash of wrong voltage, now larger to accomodate 85F devices)
+  * [ECP5 FPGA board](#ECP5-fpga-board-design): Added support to larger 85F version, add Replacement of 2.5V source (DC-DC or LDO option), USB connectors swap (note location matches the CPU board), thermal fix (replaced flash of wrong voltage, now larger to accomodate 85F devices, and added both LDO and higher capacity DC-DC for the 2.5V rail, selectable via solder pad)
   * [DVI passive adapter](#dvi-passive-adapter-board-design): make PCB significantly shorter
   * [DVI connector](#dvi-adapter-board-design) board: fixed DVI connector (previously mini version of 0.4mm pitch, now 0.5mm like the standard version)
   * [LVDS adapters](#lvds-adapter-board-design)  (2ch): Fixed bug of bad GND plane fill, which produced massive shorts
