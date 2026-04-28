@@ -4200,6 +4200,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part Number" "C18214311"
+			(at 82.55 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ff3cc0ba-9e8c-4734-aeb8-7290e9c3b142")
 		)
