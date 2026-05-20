@@ -26,7 +26,7 @@ int main(void)
     // Run test
     test_app();
 
-
+    for(;;);
     return 0;
 }
 
@@ -53,20 +53,20 @@ sunxi_serial_t uart_dbg = {
 				},
 };
 
-
-//general dependencies
+//SyterKit dependencies
 #include "uart.c"
 #include "drivers/sys-uart.c" //used in main
 #include "drivers/chips/sun20iw1/sys-clk.c" //used in main
 #include "arch/riscv/riscv64_c906/timer.c" //used in sys-sdcard.c
-#include "arch/riscv/riscv64_c906/exception.c" //used in start.S
-#include "log/xformat.c"
 #include "log/log.c"
-//#include "100ask-d1-h/head.c" //seems optional
+#include "log/xformat.c"
 
 //sd card demo dependencies
 #include "drivers/sdhci/sys-sdcard.c" //800 lines, used in main: sdmmc_init, card0
 #include "drivers/sdhci/sys-sdhci.c" //750 lines, sunxi_sdhci_init (set gpios), used in main
 #include "drivers/gpio/sys-gpio-v2.c" //used by sys-sdhci.c
+
+//general dependencies
+#include "driver_uart.c"
 
 

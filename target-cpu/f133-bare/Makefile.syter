@@ -1,6 +1,9 @@
 APP_SRC=sdtest_app
-RISCV_ROOT_PATH?=~/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.1/bin
-CROSS_COMPILE=$(RISCV_ROOT_PATH)/riscv64-unknown-linux-gnu-
+
+#RISCV_ROOT_PATH?=~/Xuantie-900-gcc-linux-5.10.4-glibc-x86_64-V2.6.1/bin/
+#RISCV_ROOT_PATH?=~/riscv64-glibc-ubuntu-20.04-nightly-2023.03.21-nightly/riscv/bin
+CROSS_COMPILE=$(RISCV_ROOT_PATH)riscv64-unknown-linux-gnu-
+
 SDK_ROOT=../SyterKit
 
 INC=-I$(SDK_ROOT)/include \
@@ -8,35 +11,36 @@ INC=-I$(SDK_ROOT)/include \
 	-I$(SDK_ROOT)/include/arch/riscv \
 	-I$(SDK_ROOT)/include/drivers/chips \
 	-I$(SDK_ROOT)/include/drivers/reg \
-	-I$(SDK_ROOT)/src \
-	-I$(SDK_ROOT)/board
+	-I$(SDK_ROOT)/src
 
-ASM=$(SDK_ROOT)/src/arch/riscv/riscv64_c906
-ASM_SRC=$(SDK_ROOT)/board/100ask-d1-h/start.S $(ASM)/memset.S $(ASM)/memcpy.S $(ASM)/fprw.S 
+ASM_SRC=start.o memcpy.o memset.o fprw.o
 
-CXXDEF=-DCONFIG_CHIP_SUN20IW1 -DDEBUG_MODE -nostdlib -nostdinc -Os -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c906 -mcmodel=medlow -fno-stack-protector -mstrict-align -g \
--Wno-int-to-pointer-cast -Wno-builtin-declaration-mismatch 
+CXXDEF=-DCONFIG_CHIP_SUN20IW1 -DDEBUG_MODE -nostdinc -Os -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c906 -mcmodel=medlow -fno-stack-protector -mstrict-align -g \
+-Wno-int-to-pointer-cast -Wno-builtin-declaration-mismatch
 CDEF=$(CXXDEF) -Wno-pointer-to-int-cast -Wno-implicit-function-declaration -Wno-discarded-qualifiers
 
-LDFLAGS=-Tsyter.ld -Wl,-z,noexecstack,-Map,main.map
+LDFLAGS=-Tlinker.ld -Wl,-z,noexecstack,-Map,main.map -nostdlib
 
 all: upload
 
-%.o: %.cpp
-	@$(CROSS_COMPILE)g++ $(INC) $(CXXDEF) -c $< -o $@
+%.o: %.S
+	$(CROSS_COMPILE)gcc $(INC) $(CDEF) -c $< -o $@
 
-main.elf: $(ASM_SRC) $(APP_SRC).o main-syter.c
-	@$(CROSS_COMPILE)gcc $(INC) $(CDEF) $^ $(LDFLAGS) -o main.elf
+%.o: %.cpp
+	$(CROSS_COMPILE)g++ $(INC) $(CXXDEF) -c $< -o $@
+
+main.elf: $(ASM_SRC) $(APP_SRC).o main-syter.c sys.c
+	$(CROSS_COMPILE)gcc $(INC) $(CDEF) $^ $(LDFLAGS) -o main.elf
 
 main: main.elf
-	@$(CROSS_COMPILE)objcopy -O binary $@.elf $@
+	$(CROSS_COMPILE)objcopy -O binary $@.elf $@
 
 clean:
 	rm -Rf *.o main main.elf main.map
 
 upload: main
 	xfel ddr f133
-	xfel write 0x28000 main
-	xfel exec 0x28000
+	xfel write 0x40000000 main
+	xfel exec 0x40000000
 
 	
