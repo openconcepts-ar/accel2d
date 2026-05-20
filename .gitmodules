@@ -9,3 +9,6 @@
 [submodule "agg-2.4"]
 	path = agg-2.4
 	url = https://github.com/suarezvictor/agg-2.4.git
+[submodule "target-cpu/SyterKit"]
+	path = target-cpu/SyterKit
+	url = https://github.com/YuzukiHD/SyterKit.git
