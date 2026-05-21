@@ -1,29 +1,45 @@
-# Canvas demo
+# Canvas demo (Moonlight)
 ## API emulation of the [Processing API](https://processing.org/reference)
 
 An artistic-looking demo that shows how to make graphics in a few lines of code is provided:  
   
-[<img src="../../raw/master/doc/moonlight.png" height=480>](doc/moonlight.png "Moonlight canvas demo")  
+[<img src="doc/moonlight.png" height=480>](doc/moonlight.png "Moonlight canvas demo")  
 
 The demo uses the basic drawing primitives: **circles** for the moon, **points** as stars, **lines** as the tree branches and leaves, **text** for the title, and a **rounded rect** as background.  
 Code is in [canvas_app.cpp](canvas_app.cpp)
 
 ## Setup function:  
-[<img src="../../raw/master/doc/canvas_app_setup.png">](doc/canvas_app_setup.png "setup function")  
+[<img src="doc/canvas_app_setup.png">](doc/canvas_app_setup.png "setup function")  
 
 ## Drawing function:  
-[<img src="../../raw/master/doc/canvas_app_draw.png">](doc/canvas_app_draw.png "drawing function")  
+[<img src="doc/canvas_app_draw.png">](doc/canvas_app_draw.png "drawing function")  
 
 ## Line-based fractal drawing:  
-[<img src="../../raw/master/doc/canvas_app_tree.png">](doc/canvas_app_tree.png "fractal tree drawing function")  
+[<img src="doc/canvas_app_tree.png">](doc/canvas_app_tree.png "fractal tree drawing function")  
 
+# OSHW logo
+
+A spinning OSHW logo gear animation, using vector drawing primitives (lines and arcs) with anti-aliased edges and alpha blending for a shadow effect, over a background bitmap to demonstrate raster + vector usage.
+  
+Code is in [canvas_app.cpp](canvas_app.cpp)  
+
+<img src="doc/oshw_demo.jpg" height=480>
+  
+<img src="doc/oshw_demo_code.jpg">
+
+# CAR game
+
+Retro-style car game animation using simple rectangle drawing. I is the simplest example that show how to use the rectangle fill core running as software or tanspiled to verilog for hardware acceleration
+I's adheres to the [ImDrawList coding party](https://github.com/ocornut/imgui/issues/3606) interface, so other demos could be easily ported, see [game_app.cpp](game_app.cpp) and [game_app.inl](game_app.inl).
+
+<img src="doc/car_game_demo.jpg" height=480>
 
 # Font renderer
 Scalable font rendering support:
 Demo source: [freetype_app.cpp](freetype_app.cpp)  
 It's based on a hardware accelerator for fast drawing of solid-color horizontal lines.
 
-[<img src="../../raw/master/doc/freetype.png" width=384 height=384>](doc/freetype.png "Freetype Demo")  
+<img src="./doc/freetype.png" width=384 height=384>  
 
 The demo shows how to change scale without reloading the glyph at a different size: just applying a matrix transform to scale the outline coordinates, that thus allows for skew and rotation.
 
@@ -33,7 +49,7 @@ This one of the most useful features and challenging tasks of this project: A ha
 The working principle to play movies is akin to the MJPEG format (Motion JPEG): it decodes individual JPEG files in sequence.
 
 See it in action:  
-[<img src="../../raw/master/doc/demo_video.png">](doc/demo_video.webm "Video demo")
+[<img src="doc/demo_video.png">](doc/demo_video.webm "Video demo")
 
 
 The video file format is a very simple to manage one: just a TAR file of single JPEG-encoded frames, [accessed](untar.c) from a [SD](fs.c) card by using a provided [FAT filesystem layer](https://github.com/ultraembedded/fat_io_lib) (git submodule fat_io_lib). Each encoded frame is read from the filesystem, while at the same time a previous frame is decoded in hardware. This provides gains in reproduction speed from the simultaneity of software and hardware components.

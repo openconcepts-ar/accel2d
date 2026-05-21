@@ -354,4 +354,17 @@ The demo uses the basic drawing primitives: circles for the moon, points as star
 
 Main source is [canvas_app.cpp](./canvas_app.cpp).
   
-A generic canvas API is implemented using he [AGG](https://github.com/suarezvictor/agg-2.4
+A generic canvas API is implemented using the [AGG](https://github.com/suarezvictor/agg-2.4) library.
+
+# Native SD card access
+
+The native SD access was implemented which is capable of accessing the card at 4-bits witin the bare metal environment. See the result of the [demo](target-cpu/f133-bare/sdtest_app.cpp), which correctly identifies an inserted card and reports its parameters like full capacity and serial number:  
+
+<img src="./doc/SD%20app%20test.png">
+
+The [SyterKit](https://github.com/suarezvictor/SyterKit) driver library was ported to the project's CPU-based platform board, which uses an F133A CPU (previously unsupported in SyterKit) with a different arrangement of peripheral pins, and different DRAM initialization. Also, the build system was simplified by using a single [Makefile](target-cpu/f133-bare/Makefile.syter) instead of a complex [cmake-based](target-cpu/SyterKit/CMakeLists.txt) build system which involves multiple configuration files. The port includes reusing the project's existing [linker script](target-cpu/f133-bare/linker.ld) and [startup assembly](target-cpu/f133-bare/start.S), which are more complete, instead of the ones from SyterKit.  
+
+Main commit is [here](https://github.com/openconcepts-ar/accel2d/commit/d9bf3fa11cc7789c3265207d2022f519329f09b0).
+  
+
+
