@@ -13,7 +13,7 @@ INC=-I$(SDK_ROOT)/include \
 	-I$(SDK_ROOT)/include/drivers/reg \
 	-I$(SDK_ROOT)/src
 
-ASM_SRC=start.o memcpy.o memset.o fprw.o
+ASM_SRC=start.o memcpy.o memset.o 
 
 CXXDEF=-DCONFIG_CHIP_SUN20IW1 -DDEBUG_MODE -nostdinc -Os -march=rv64gcv0p7_zfh_xtheadc -mabi=lp64d -mtune=c906 -mcmodel=medlow -fno-stack-protector -mstrict-align -g \
 -Wno-int-to-pointer-cast -Wno-builtin-declaration-mismatch
@@ -24,16 +24,16 @@ LDFLAGS=-Tlinker.ld -Wl,-z,noexecstack,-Map,main.map -nostdlib
 all: upload
 
 %.o: %.S
-	$(CROSS_COMPILE)gcc $(INC) $(CDEF) -c $< -o $@
+	@$(CROSS_COMPILE)gcc $(INC) $(CDEF) -c $< -o $@
 
 %.o: %.cpp
-	$(CROSS_COMPILE)g++ $(INC) $(CXXDEF) -c $< -o $@
+	@$(CROSS_COMPILE)g++ $(INC) $(CXXDEF) -c $< -o $@
 
 main.elf: $(ASM_SRC) $(APP_SRC).o main-syter.c sys.c
-	$(CROSS_COMPILE)gcc $(INC) $(CDEF) $^ $(LDFLAGS) -o main.elf
+	@$(CROSS_COMPILE)gcc $(INC) $(CDEF) $^ $(LDFLAGS) -o main.elf
 
 main: main.elf
-	$(CROSS_COMPILE)objcopy -O binary $@.elf $@
+	@$(CROSS_COMPILE)objcopy -O binary $@.elf $@
 
 clean:
 	rm -Rf *.o main main.elf main.map
