@@ -1,34 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0+ */
 
-#include <stdbool.h>
-
-#include "log.h"
-#include "uart.h"
-
-extern sunxi_serial_t uart_dbg;
-
-void test_app(void);
-
-int main(void)
-{
-    // Initialize the debug serial interface
-    sunxi_serial_init(&uart_dbg);
-
-    // Initialize the system clock
-    sunxi_clk_init();
-
-    // Initialize the DRAM FIXME: not working in D1s, but not needed in FEL
-    //uint32_t dram_size = sunxi_dram_init(&dram_para);
-
-    // Dump information about the system clocks
-    sunxi_clk_dump();
-    
-    // Run test
-    test_app();
-
-    for(;;);
-    return 0;
-}
+#include "drivers/sys-uart.h"
 
 sunxi_serial_t uart_dbg = {
 		.base = SUNXI_UART0_BASE,
@@ -53,8 +25,31 @@ sunxi_serial_t uart_dbg = {
 				},
 };
 
+void test_app(void);
+
+int main(void)
+{
+    // Initialize the debug serial interface
+    sunxi_serial_init(&uart_dbg);
+
+    // Initialize the system clock
+    sunxi_clk_init();
+
+    // Initialize the DRAM FIXME: not working in D1s, but not needed in FEL
+    //uint32_t dram_size = sunxi_dram_init(&dram_para);
+
+    // Dump information about the system clocks
+    sunxi_clk_dump();
+    
+    // Run test
+    test_app();
+
+    for(;;);
+    return 0;
+}
+
 //SyterKit dependencies
-#include "uart.c"
+#include "uart.c" //used in xvformat
 #include "drivers/sys-uart.c" //used in main
 #include "drivers/chips/sun20iw1/sys-clk.c" //used in main
 #include "arch/riscv/riscv64_c906/timer.c" //used in sys-sdcard.c
