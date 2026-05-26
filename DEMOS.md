@@ -104,3 +104,15 @@ For the client:
 cd demos/queue-client
 make flash
 ```
+
+#Touch sensor example
+A demo capable of interfacing to a multitouch sensor for panels up to 15.6" is [here](demos/micropython/i2c_touch_test.py).
+Here it is shown reporting the coordinates of up to 6 simultaneous touches:  
+  
+<img src="doc/touch_example.png">  
+  
+The I2C protocol was reverse engineered based on [this code](https://github.com/Infineon/touch-ctp-ili2511/blob/master/mtb_ctp_ili2511.h). Note it is different than [Microsoft's](https://download.microsoft.com/download/7/d/d/7dd44bb7-2a7a-4505-ac1c-7227d3d96d5b/hid-over-i2c-protocol-spec-v1-0.docx), and to USB HID which is also handed by the IC.  
+  
+
+
+
