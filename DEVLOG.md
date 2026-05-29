@@ -376,13 +376,18 @@ Below a log of the CPU board is shown, correctly reporting the coordinates of up
 Since the [ILI2511 datasheet](https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=487) doesn't specify the I2C protocol, it was reverse engineered based on [this code](https://github.com/Infineon/touch-ctp-ili2511/blob/master/mtb_ctp_ili2511.h). Note it is different than [Microsoft's](https://download.microsoft.com/download/7/d/d/7dd44bb7-2a7a-4505-ac1c-7227d3d96d5b/hid-over-i2c-protocol-spec-v1-0.docx), and to USB HID which is also handed by the IC.  
   
 # I2C control of the eDP adapter
-The eDP adapter board is based on the NCS8801 IC, which has its control registers accesible by I2C. Since at the time of this writing, the board is still in transit from the manufacturer (by unusual and documented delays on their side), it was impossible to test the IC. As an alternative, an script for accessing the I2C port of a display was implemented and tested, based on a port of [micropython](https://github.com/suarezvictor/micropython/tree/gpu2d/ports/f133) to the CPU board, which was correctly [updated](https://github.com/suarezvictor/micropython/commit/e9ab93567e9d5d9a462b3eeefac8f7d97bb4e1ef) to support a second I2C port (see LVDS EDID example below).
+The eDP adapter board is based on the NCS8801 IC, which has its control registers accesible by I2C. Since at the time of this writing, the board is still in transit from the manufacturer (by unusual and documented delays on their side), it was impossible to test the IC. As an alternative, an script for accessing the I2C port of a display was implemented and tested, based on a port of [micropython](https://github.com/suarezvictor/micropython/tree/gpu2d/ports/f133) to the CPU board, which was correctly [updated](https://github.com/suarezvictor/micropython/commit/e9ab93567e9d5d9a462b3eeefac8f7d97bb4e1ef) to support a second I2C port. See LVDS EDID example [below](#i2c-lvds-edid-example).
 
 <img src="doc/eDP_adapter3D.png" height=240>
 
 # I2C LVDS EDID example
-This is an example of using an alternative I2C port on the CPU board to access the EDID information of a LVDS-based display using its native I2C protocol, which is basically a I2C EEPROM accesible from the display pins. That way the size, resolution and refresh rate of the connected display can be determined. The [example](demos/micropython/i2c_lvds_edid.py) is implemented using micropython, which can be conveniently run from the command line by means of the `pyboard` script:
+  
+This is an example of using an alternative I2C port on the CPU board to access the EDID information of a LVDS-based display using its native I2C protocol, which is basically a I2C EEPROM accesible from the display pins. That way the size, resolution and refresh rate of the connected display can be determined.
+  
+<img src="doc/lvds_adapter_connected.png" height=480>  
 
+The [example](demos/micropython/i2c_lvds_edid.py) is implemented using micropython, which can be conveniently run from the command line by means of the `pyboard` script:
+  
 ## Build and run
 ```
 cd micropython/ports/f133
