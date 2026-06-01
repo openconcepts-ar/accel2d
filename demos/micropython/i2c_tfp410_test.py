@@ -74,47 +74,46 @@ def readregs():
   return i2c.readfrom_mem(I2C_ADDR, 0,  0x3D+1) #read 62 bytes
 
 def dumpregs(r):
-  for i in range(len(r)):
-    if (i <= 0x0E or i >= 0x32) and i != 0x35: print("0x{0:02X}: 0x{1:02X}".format(i,r[i]))
+  #for i in range(len(r)):
+  #  if (i <= 0x0E or i >= 0x32) and i != 0x35: print("0x{0:02X}: 0x{1:02X}".format(i,r[i]))
+  print(hex(TFP410_VID_LO)+"-"+hex(TFP410_V_RES_HI), r)
 
-  print("CTL_1_MODE:")
-  print("\tTDIS:\t", (r[TFP410_CTL_1] & TFP410_CTL_1_TDIS) != 0)
-  print("\tVEN:\t",  (r[TFP410_CTL_1] & TFP410_CTL_1_VEN) != 0)
-  print("\tHEN:\t",  (r[TFP410_CTL_1] & TFP410_CTL_1_HEN) != 0)
+  print(hex(TFP410_CTL_1), "CTL_1_MODE:", hex(r[TFP410_CTL_1]))
+  print("\tTDIS:\t", "TDMS disabled" if r[TFP410_CTL_1] & TFP410_CTL_1_TDIS else "TDMS enable as PD")
+  print("\tVEN:\t",  "VSYNC as original" if r[TFP410_CTL_1] & TFP410_CTL_1_VEN else "VSYNC always low")
+  print("\tHEN:\t",  "HSYNC as original" if r[TFP410_CTL_1] & TFP410_CTL_1_HEN else "HSYNC always low")
   print("\tDSEL:\t", (r[TFP410_CTL_1] & TFP410_CTL_1_DSEL) != 0)
-  print("\tBSEL:\t", (r[TFP410_CTL_1] & TFP410_CTL_1_BSEL) != 0)
-  print("\tEDGE:\t", (r[TFP410_CTL_1] & TFP410_CTL_1_EDGE) != 0)
-  print("\tnPD:\t",  (r[TFP410_CTL_1] & TFP410_CTL_1_PD) != 0)
+  print("\tBSEL:\t", "24-bit single-edge" if r[TFP410_CTL_1] & TFP410_CTL_1_BSEL else "12-bit dual-edge")
+  print("\tEDGE:\t", "rising IDCK+" if r[TFP410_CTL_1] & TFP410_CTL_1_EDGE else "falling IDCK+")
+  print("\tnPD:\t",  "not power down" if r[TFP410_CTL_1] & TFP410_CTL_1_PD else "power down")
 
-  print("CTL_2_MODE:")
-  print("\tVLOW:\t", (r[TFP410_CTL_2] & TFP410_CTL_2_VLOW) != 0)
-  print("\tMSEL:\t", (r[TFP410_CTL_2] & TFP410_CTL_2_MSEL_MASK) >> 4)
-  print("\tTSEL:\t", (r[TFP410_CTL_2] & TFP410_CTL_2_TSEL) != 0)
-  print("\tRSEN:\t", (r[TFP410_CTL_2] & TFP410_CTL_2_RSEN) != 0)
-  print("\tHTPLG:\t", (r[TFP410_CTL_2] & TFP410_CTL_2_HTPLG) != 0)
-  print("\tMDI:\t",  (r[TFP410_CTL_2] & TFP410_CTL_2_MDI) != 0)
+  print(hex(TFP410_CTL_2), "CTL_2_MODE:", hex(r[TFP410_CTL_2]))
+  print("\tVLOW:\t",  "low-swing inputs" if r[TFP410_CTL_2] & TFP410_CTL_2_VLOW else "high-swing inputs")
+  print("\tMSEL:\t", "Outputs " + ({0:"always high",1:"MDI",2:"RSEN",3:"HTPLG"}[(r[TFP410_CTL_2] & TFP410_CTL_2_MSEL_MASK) >> 4]))
+  print("\tTSEL:\t", "HTPLG as interrupt" if r[TFP410_CTL_2] & TFP410_CTL_2_TSEL else "RSEN as interrupt")
+  print("\tRSEN:\t", "receiver detected" if r[TFP410_CTL_2] & TFP410_CTL_2_RSEN else "receiver not detected")
+  print("\tHTPLG:\t", "pin 9 high" if r[TFP410_CTL_2] & TFP410_CTL_2_HTPLG else "pin 9 low")
+  print("\tMDI:\t",  "change detected" if r[TFP410_CTL_2] & TFP410_CTL_2_MDI else "no change")
 
-  print("CTL_3_MODE:")
-  print("\tDK:\t", (r[TFP410_CTL_3] & TFP410_CTL_3_DK_MASK) >> 5)
-  print("\tDKEN:\t", (r[TFP410_CTL_3] & TFP410_CTL_3_DKEN) != 0)
-  print("\tCTL:\t", (r[TFP410_CTL_3] & TFP410_CTL_3_CTL_MASK) >> 1)
+  print(hex(TFP410_CTL_3), "CTL_3_MODE:", hex(r[TFP410_CTL_3]))
+  print("\tDK:\t", "Step", ((r[TFP410_CTL_3] & TFP410_CTL_3_DK_MASK) >> 5) + 1)
+  print("\tDKEN:\t", "de-skew as DK[3:1]" if r[TFP410_CTL_3] & TFP410_CTL_3_DKEN else "de-skew is disabled")
+  print("\tCTL[2:1]:\t", (r[TFP410_CTL_3] & TFP410_CTL_3_CTL_MASK) >> 1)
   
-  print("CFG:\t", hex(r[TFP410_USERCFG]))
+  print(hex(TFP410_USERCFG), "CFG:\t", hex(r[TFP410_USERCFG]))
 
-  print("DE_DLY w/bit 8:\t", r[TFP410_DE_DLY] | ((r[TFP410_DE_CTL] & TFP410_DE_CTL_DEDLY8)<<8))
-
-  print("DE_CTL:")
+  print(hex(TFP410_DE_CTL), "DE_CTL:")
   print("\tDEGEN:\t", (r[TFP410_DE_CTL] & TFP410_DE_CTL_DEGEN) != 0)
   print("\tVSPOL:\t", (r[TFP410_DE_CTL] & TFP410_DE_CTL_VSPOL) != 0)
   print("\tHSPOL:\t", (r[TFP410_DE_CTL] & TFP410_DE_CTL_HSPOL) != 0)
 
-  print("DE_TOP:\t", r[TFP410_DE_TOP])
+  print(hex(TFP410_DE_DLY), "     DE_DLY:\t", r[TFP410_DE_DLY] | ((r[TFP410_DE_CTL] & TFP410_DE_CTL_DEDLY8)<<8))
+  print(hex(TFP410_DE_TOP), "     DE_TOP:\t", r[TFP410_DE_TOP])
+  print(hex(TFP410_DE_CNT_LO)+"-"+hex(TFP410_DE_CNT_HI), "DE_CNT:\t", int.from_bytes(r[TFP410_DE_CNT_LO:TFP410_DE_CNT_LO+2], 'little'))
+  print(hex(TFP410_DE_LIN_LO)+"-"+hex(TFP410_DE_LIN_HI), "DE_LIN:\t", int.from_bytes(r[TFP410_DE_LIN_LO:TFP410_DE_LIN_LO+2], 'little'))
   
-  print("DE_CNT:\t", int.from_bytes(r[TFP410_DE_CNT_LO:TFP410_DE_CNT_LO+2], 'little'))
-  print("DE_LIN:\t", int.from_bytes(r[TFP410_DE_LIN_LO:TFP410_DE_LIN_LO+2], 'little'))
-  
-  print("H_RES:\t", int.from_bytes(r[TFP410_H_RES_LO:TFP410_H_RES_LO+2], 'little'))
-  print("V_RES:\t", int.from_bytes(r[TFP410_V_RES_LO:TFP410_V_RES_LO+2], 'little'))
+  print(hex(TFP410_H_RES_LO)+"-"+hex(TFP410_H_RES_HI), "H_RES:\t", int.from_bytes(r[TFP410_H_RES_LO:TFP410_H_RES_LO+2], 'little'))
+  print(hex(TFP410_V_RES_LO)+"-"+hex(TFP410_V_RES_HI), "V_RES:\t", int.from_bytes(r[TFP410_V_RES_LO:TFP410_V_RES_LO+2], 'little'))
 
 regs = readregs()
 assert(len(regs)==62 and regs[0:4] == b'\x4c\x01\x10\x04') #test correct VEN_ID and DEV_ID
@@ -123,33 +122,36 @@ print("original register values")
 dumpregs(regs)
 
 """
-values of register without a hardware reset
-0x00: 0x4C VEN_ID_LO
-0x01: 0x01 VEN_ID_HI
-0x02: 0x10 DEV_ID_LO
-0x03: 0x04 DEV_ID_HI
-0x04: 0x00 REV_ID
-0x05: 0x00 RESERVED
-0x06: 0x14 RESERVED
-0x07: 0x64 RESERVED
-0x08: 0xBA CTL_1_MODE
-0x09: 0x02 CTL_2_MODE
-0x0A: 0x90 CTL_3_MODE
-0x0B: 0x80 CFG
-0x0C: 0xA1 RESERVED
-0x0D: 0x0B RESERVED
-0x0E: 0x85 RESERVED
-0x32: 0x08 DE_DLY
-0x33: 0x00 DE_CTL
-0x34: 0x00 DE_TOP
-0x36: 0x10 DE_CNT_LO
-0x37: 0x00 DE_CNT_HI
-0x38: 0x00 DE_LIN_LO
-0x39: 0xA8 DE_LIN_HI
-0x3A: 0x00 H_RES_LO
-0x3B: 0x00 H_RES_HI
-0x3C: 0x00 V_RES_LO
-0x3D: 0x00 V_RES_HI
+0x8 CTL_1_MODE: 0xbe
+	TDIS:	 TDMS enable as PD
+	VEN:	 VSYNC as original
+	HEN:	 HSYNC as original
+	DSEL:	 True
+	BSEL:	 24-bit single-edge
+	EDGE:	 rising IDCK+
+	nPD:	 power down
+0x9 CTL_2_MODE: 0x2
+	VLOW:	 high-swing inputs
+	MSEL:	 Outputs always high
+	TSEL:	 RSEN as interrupt
+	RSEN:	 receiver not detected
+	HTPLG:	 pin 9 high
+	MDI:	 no change
+0xa CTL_3_MODE: 0x80
+	DK:	 Step 5
+	DKEN:	 de-skew is disabled
+	CTL[2:1]:	 0
+0xb CFG:	 0x80
+0x33 DE_CTL:
+	DEGEN:	 False
+	VSPOL:	 False
+	HSPOL:	 False
+0x32      DE_DLY:	 0
+0x34      DE_TOP:	 0
+0x36-0x37 DE_CNT:	 0
+0x38-0x39 DE_LIN:	 0
+0x3a-0x3b H_RES:	 0
+0x3c-0x3d V_RES:	 0
 """
 
 #this is according to datasheet and board
@@ -192,15 +194,15 @@ VTotal = Ver Total Time (525)
 HSync_pol = 0 #0: negative 1: positive
 VSync_pol = 0 #0: negative 1: positive
 
-#HDisplay HSyncStart HSyncEnd HTotal VDisplay VSyncStart VSyncEnd VTotal HSync_pol VSync_pol
+#HActive HSyncStart HSyncEnd HTotal VActive VSyncStart VSyncEnd VTotal HSync_pol VSync_pol
 modelines = {"640x480@60Hz": [25.175e6, 640, 656, 752, 800, 480, 490, 492, 525, HSync_pol, VSync_pol]}
 timings = modelines["640x480@60Hz"]
 
 #DE_DLY, DE_TOP, DE_CNT, DE_LIN are only used if the DE generator is enabled in DE_CTL register
 DE_DLY = timings[4]-timings[2] # pixels after HSYNC (sync width + back porch = HTotal-HSyncStart = 144)
 DE_TOP = timings[8]-timings[6] # pixels after VSYNC (sync width + back porch = VTotal-VSyncStart = 35)
-DE_CNT = timings[1] #HDisplay (640)
-DE_LIN = timings[5] #VDisplay (480)
+DE_CNT = timings[1] #HActive (640)
+DE_LIN = timings[5] #VActive (480)
 DE_CTL = (
 	0*TFP410_DE_CTL_DEGEN			| #0: DE generator is disabled (signal required on DE pin)
 	timings[10]*TFP410_DE_CTL_VSPOL	| #0: VSYNC is considered active low
@@ -211,9 +213,15 @@ DE_CTL = (
 i2c.writeto_mem(I2C_ADDR, TFP410_CTL_1, bytes([CTL_1_MODE, CTL_2_MODE, CTL_3_MODE]))
 
 DUMMY_0x35 = 0 #undefined register
-i2c.writeto_mem(I2C_ADDR, TFP410_DE_DLY,
-  bytes([DE_DLY & 0xFF, DE_CTL, DE_TOP & 0xFF, DUMMY_0x35, DE_CNT & 0xFF, (DE_CNT >> 8) & 0x07, DE_LIN & 0xFF, (DE_LIN >> 8) & 0x07]))
-
+i2c.writeto_mem(I2C_ADDR, TFP410_DE_DLY, bytes([
+  DE_DLY & 0xFF,
+  DE_CTL, DE_TOP & 0xFF,
+  DUMMY_0x35,
+  DE_CNT & 0xFF,
+  (DE_CNT >> 8) & 0x07,
+  DE_LIN & 0xFF,
+  (DE_LIN >> 8) & 0x07])
+)
 
 print("new register values")
 regs = readregs()
