@@ -376,10 +376,38 @@ Below a log of the CPU board is shown, correctly reporting the coordinates of up
 Since the [ILI2511 datasheet](https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=487) doesn't specify the I2C protocol, it was reverse engineered based on [this code](https://github.com/Infineon/touch-ctp-ili2511/blob/master/mtb_ctp_ili2511.h). Note it is different than [Microsoft's](https://download.microsoft.com/download/7/d/d/7dd44bb7-2a7a-4505-ac1c-7227d3d96d5b/hid-over-i2c-protocol-spec-v1-0.docx), and to USB HID which is also handed by the IC.  
   
 # I2C control of the eDP adapter
-The eDP adapter board is based on the NCS8801 IC, which has its control registers accesible by I2C. Since at the time of this writing, the board is still in transit from the manufacturer (by unusual and documented delays on their side), it was impossible to test the IC. As an alternative, an script for accessing the I2C port of a display was implemented and tested, based on a port of [micropython](https://github.com/suarezvictor/micropython/tree/gpu2d/ports/f133) to the CPU board, which was correctly [updated](https://github.com/suarezvictor/micropython/commit/e9ab93567e9d5d9a462b3eeefac8f7d97bb4e1ef) to support a second I2C port. See LVDS EDID example [below](#i2c-lvds-edid-example).
+The project contemplates two boards to convert 24-bit parallel RGB signals to a serial mode, one using eDP protocol over an LVDS PHY and the other using DVI protocol over a TDMS phy.
+  
+<img src="doc/eDP_adapter.png" height=240>
+<img src="doc/DVI_adapter3D.png" height=240>
+  
+Both ICs on the boards (NCS8801 and TDP410) operates basically in the same way: parallel signals are in, timing configuration for the set resolution is configured by I2C, and the serializer convent parallel to serial data to be conected to the display.  
+The development was based on the [TPF410](https://www.ti.com/product/TFP410) IC [See note 1], which appears mapped at I2C address 0x38.  
+Timings for the IC needs to be configured as this:
+<img src="doc/tfp410timing.png">  
 
-<img src="doc/eDP_adapter3D.png" height=240>
+The default configuration is for 640x480 at 60Hz. This was done according to the [VESA DMT standard](https://glenwing.github.io/docs/VESA-DMT-1.13.pdf). Note that the timings are different that the for [Vesa CVT standard](https://en.wikipedia.org/wiki/Coordinated_Video_Timings) as calculated by the `cvt` linux command (or `gtf`).  
+<img src="doc/vesa_timings.png">  
+  
+[X Modeline](https://en.wikipedia.org/wiki/XFree86_Modeline) for this resolution is as follows:
 
+| Name | Pixel Clock (MHz) | HActive | HSync Start | HSync End | HTotal | VActive | VSync Start | VSync End | VTotal | HSync pol| VSync pol|
+|------|-------------------|----------|--------------|------------|---------|----------|--------------|------------|---------|-------|-------|
+| 640x480@60 | 25.175 | 640 | 656 | 752 | 800 | 480 | 490 | 492 | 525 | Negative | Negative |
+
+Note that the value for the **DE_DLY** register, for matching the two figures above, must be calculated as `HTotal-HSyncStart` (which corresponds to _sync width_ + _back porch_), and equivalently for the vertical register **DE_TOP**.
+
+## Running
+the code that configures the IC and reports its state is [here](demos/micropython/i2c_tfp410_test.py), and it can be run with this command:  
+```
+python micropython/tools/pyboard.py -d /dev/ttyUSB0 demos/micropython/i2c_tfp410_test.py
+```
+Generating this report:  
+  
+<img src="doc/tfp410config.png">  
+
+[1] _The custom board based on the NCS8801 IC has not arrived before the project's deadline. This was because of a PCB manufacturer's fault, which is documented._
+  
 # I2C LVDS EDID example
   
 This is an example of using an alternative I2C port on the CPU board to access the EDID information of a LVDS-based display using its native I2C protocol, which is basically a I2C EEPROM accesible from the display pins. That way the size, resolution and refresh rate of the connected display can be determined.
