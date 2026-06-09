@@ -406,9 +406,12 @@ Generating this report:
   
 <img src="doc/tfp410config.png">  
 
-[1] NCS8801 IC was avoided and the design based on the TFP410 to achieve eDP output for reasons explained [here](hardware/eDP_adapter/EDP.md).
+The design is now based on the TFP410 IC to achieve eDP output. See below the setup, which correctly sends the image over eDP _(top: 1080p display, left: off-the-shelf DVI to EDP board, center: CPU board with the RGB to DVI adapter, right: passive board to convert the FPC connector to HDMI connector in 1:1 wiring)_  
 
- manufacturer's fault, which is documented._
+<img src="doc/eDP_test.jpeg" height=480>  
+
+[1] _The reasons of why the NCS8801 IC `was replaced are explained [here](hardware/eDP_adapter/EDP.md) in full detail._
+
   
 # I2C LVDS EDID example
   
