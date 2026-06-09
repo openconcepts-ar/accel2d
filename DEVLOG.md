@@ -376,7 +376,7 @@ Below a log of the CPU board is shown, correctly reporting the coordinates of up
 Since the [ILI2511 datasheet](https://www.crystalfontz.com/controllers/datasheet-viewer.php?id=487) doesn't specify the I2C protocol, it was reverse engineered based on [this code](https://github.com/Infineon/touch-ctp-ili2511/blob/master/mtb_ctp_ili2511.h). Note it is different than [Microsoft's](https://download.microsoft.com/download/7/d/d/7dd44bb7-2a7a-4505-ac1c-7227d3d96d5b/hid-over-i2c-protocol-spec-v1-0.docx), and to USB HID which is also handed by the IC.  
   
 # I2C control of the eDP adapter
-The project contemplates two boards to convert 24-bit parallel RGB signals to a serial mode, one using eDP protocol over an LVDS PHY and the other using DVI protocol over a TDMS phy.
+The project contemplates two boards to convert 24-bit parallel RGB signals to a serial mode, one using eDP protocol over an LVDS PHY and the other using DVI protocol over a TDMS phy, then converted to eDP.
   
 <img src="doc/eDP_adapter.png" height=240>
 <img src="doc/DVI_adapter3D.png" height=240>
@@ -406,7 +406,9 @@ Generating this report:
   
 <img src="doc/tfp410config.png">  
 
-[1] _The custom board based on the NCS8801 IC has not arrived before the project's deadline. This was because of a PCB manufacturer's fault, which is documented._
+[1] NCS8801 IC was avoided and the design based on the TFP410 to achieve eDP output for reasons explained [here](hardware/eDP_adapter/EDP.md).
+
+ manufacturer's fault, which is documented._
   
 # I2C LVDS EDID example
   
