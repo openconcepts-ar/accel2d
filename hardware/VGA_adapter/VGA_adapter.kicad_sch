@@ -6,13 +6,10 @@
 	(paper "A4")
 	(title_block
 		(title "VGA Adapter Board")
-		(date "2024-05-13")
-		(rev "V0.09")
+		(date "2026-08-13")
+		(rev "0.11")
 		(company "Copyright (C) 2023-2024 Victor Suarez Rovere")
 		(comment 1 "License:  CERN OHL-S")
-		(comment 2 "PCB design:  Mitch Altman & Victor Suarez Rovere")
-		(comment 3 "Schematics capture:  Mitch Altman & Victor Suarez Rovere")
-		(comment 4 "Circuit design & parts selection:  Victor Suarez Rovere")
 	)
 	(lib_symbols
 		(symbol "1-1734248-5_1"
@@ -4233,157 +4230,20 @@
 				)
 			)
 		)
-		(symbol "Device:D_Schottky"
-			(pin_numbers hide)
-			(pin_names
-				(offset 1.016) hide)
+		(symbol "Logic_LevelTranslator:TXS0102DCT"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "D"
-				(at 0 2.54 0)
+			(property "Reference" "U"
+				(at -6.35 11.43 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "D_Schottky"
-				(at 0 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Schottky diode"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "diode Schottky"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "D_Schottky_0_1"
-				(polyline
-					(pts
-						(xy 1.27 0) (xy -1.27 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.905 0.635) (xy -1.905 1.27) (xy -1.27 1.27) (xy -1.27 -1.27) (xy -0.635 -1.27) (xy -0.635 -0.635)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "D_Schottky_1_1"
-				(pin passive line
-					(at -3.81 0 0)
-					(length 2.54)
-					(name "K"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 3.81 0 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
-		(symbol "Logic_LevelTranslator:TXS0102DCU"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "U1"
-				(at 2.1941 -12.7 0)
+			(property "Value" "TXS0102DCT"
+				(at 3.81 11.43 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -4391,16 +4251,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "TXS0102DCU"
-				(at 2.1941 -15.24 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"
+			(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
 				(at 0 -13.97 0)
 				(effects
 					(font
@@ -4418,16 +4269,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, VSSOP-8"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "LCSC Part Number" "C53434"
+			(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, SSOP-8"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4445,7 +4287,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "VSSOP*2.3x2mm*P0.5mm*"
+			(property "ki_fp_filters" "SSOP*2.95x2.8mm*P0.65mm*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4454,7 +4296,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TXS0102DCU_0_1"
+			(symbol "TXS0102DCT_0_1"
 				(rectangle
 					(start -7.62 10.16)
 					(end 7.62 -10.16)
@@ -4551,7 +4393,7 @@
 					)
 				)
 			)
-			(symbol "TXS0102DCU_1_1"
+			(symbol "TXS0102DCT_1_1"
 				(polyline
 					(pts
 						(xy -4.318 2.54) (xy -1.27 2.54)
@@ -5373,6 +5215,554 @@
 				)
 			)
 		)
+		(symbol "easyeda2kicad:HE9009M6R"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 0 7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "HE9009M6R"
+				(at 0 -7.62 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "easyeda2kicad:SOT-23-6_L2.9-W1.7-P0.95-LS2.8-BL"
+				(at 0 -10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.lcsc.com/datasheet/C5123433.pdf"
+				(at 0 -12.7 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "HEERMICR(赫尔半导体)"
+				(at 0 -15.24 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MPN" "HE9009M6R"
+				(at 0 -17.78 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC Part" "C5123433"
+				(at 0 -20.32 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "DC-DC Converters"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "HE9009M6R_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(circle
+					(center -6.35 3.81)
+					(radius 0.38)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "VOUT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "EN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 10.16 -2.54 180)
+					(length 2.54)
+					(name "CN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "VIN"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 10.16 2.54 180)
+					(length 2.54)
+					(name "CP"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "easyeda2kicad:NX3008NBKW,115"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Q"
+				(at 0 11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "NX3008NBKW,115"
+				(at 0 -11.43 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "easyeda2kicad:SOT-323-3_L2.0-W1.3-P1.30-LS2.1-BR"
+				(at 0 -13.97 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://lcsc.com/product-detail/MOSFET_Nexperia_NX3008NBKW-115_Nexperia-NX3008NBKW-115_C282548.html"
+				(at 0 -16.51 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Manufacturer" "Nexperia(安世)"
+				(at 0 -19.05 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MPN" "NX3008NBKW,115"
+				(at 0 -21.59 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "LCSC Part" "C282548"
+				(at 0 -24.13 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "MOSFETs"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "NX3008NBKW,115_0_1"
+				(polyline
+					(pts
+						(xy 0.76 3.56) (xy 0.76 -1.02)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.02) (xy 1.27 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0.76) (xy 1.27 1.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 3.56) (xy 1.27 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -3.81) (xy 3.81 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -0.51) (xy 1.27 -0.51)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -4.57 -1.52) (xy -4.57 -2.03) (xy -3.3 -2.03) (xy -3.05 -2.03)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.81 -1.91) (xy -3.05 -0.64) (xy -4.57 -0.64) (xy -3.81 -1.91)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.76 1.27) (xy -3.81 1.27) (xy -3.81 -3.81) (xy 3.81 -3.81)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.95 -3.81) (xy 2.22 -4.57) (xy 2.22 -3.05) (xy 0.95 -3.81)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -3.05) (xy 0.76 -3.05) (xy 0.76 -4.32) (xy 0.76 -4.57)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 2.79 0.76) (xy 2.79 1.78) (xy 1.27 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 6.35 1.78) (xy 5.59 0.51) (xy 7.11 0.51) (xy 6.35 1.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 7.11 1.78) (xy 6.86 1.78) (xy 5.84 1.78) (xy 5.59 1.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 3.81 1.27) (xy 3.81 -1.27) (xy 6.35 -1.27) (xy 6.35 0.51)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 3.05) (xy 3.81 3.05) (xy 3.81 3.81) (xy 6.35 3.81) (xy 6.35 1.78)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin unspecified line
+					(at -6.35 1.27 0)
+					(length 2.54)
+					(name "G"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 3.81 -6.35 90)
+					(length 2.54)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin unspecified line
+					(at 3.81 6.35 270)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:+3V3"
 			(power)
 			(pin_names
@@ -5493,6 +5883,102 @@
 				)
 			)
 		)
+		(symbol "power:GND"
+			(power)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0) hide
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "power:PWR_FLAG"
 			(power)
 			(pin_numbers hide)
@@ -5591,6 +6077,18 @@
 		)
 	)
 	(junction
+		(at 161.925 179.07)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "020fc823-307d-464a-8aa8-0dcec844842c")
+	)
+	(junction
+		(at 132.715 176.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0dc66450-4790-45c3-b87e-71476b961b1a")
+	)
+	(junction
 		(at 154.94 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5609,6 +6107,12 @@
 		(uuid "1e69acca-ebde-4515-bb68-d1a88b40310c")
 	)
 	(junction
+		(at 180.34 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1ed28a78-0d54-4003-a4b4-09adc195df8b")
+	)
+	(junction
 		(at 209.55 128.27)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5621,10 +6125,22 @@
 		(uuid "276021e4-6b22-4b89-9ea7-f25733921e99")
 	)
 	(junction
+		(at 161.925 186.055)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2be2d922-a42b-4d3c-9d7a-a63634f9481e")
+	)
+	(junction
 		(at 64.77 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "2e662533-9c5c-4a55-9c9a-1e173074f145")
+	)
+	(junction
+		(at 183.515 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "33cc8941-5063-4c24-9941-f60b5f6e4938")
 	)
 	(junction
 		(at 154.94 81.28)
@@ -5789,6 +6305,12 @@
 		(uuid "8fce858e-e17d-48b4-84b8-26571708df43")
 	)
 	(junction
+		(at 117.475 176.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a6a9abad-51e4-4e76-91aa-5fcbb4899e91")
+	)
+	(junction
 		(at 237.49 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5799,6 +6321,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "baad6a71-43b1-4557-8f66-3cf3789416e9")
+	)
+	(junction
+		(at 182.88 83.82)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bc50553d-32e3-4463-bc92-4bb6461cf311")
 	)
 	(junction
 		(at 154.94 50.8)
@@ -5823,12 +6351,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d0064faa-ee5c-48e3-9619-1e0a81e90b11")
-	)
-	(junction
-		(at 158.75 167.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d80c3b59-c8eb-4570-80a9-3315fbc583d7")
 	)
 	(junction
 		(at 77.47 91.44)
@@ -6028,6 +6550,26 @@
 	)
 	(wire
 		(pts
+			(xy 168.275 139.7) (xy 170.18 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "04948af8-9f91-4f2f-9576-a9d2f442b5c7")
+	)
+	(wire
+		(pts
+			(xy 117.475 176.53) (xy 132.715 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0807916e-bf12-4fe8-952e-c946c45f58f1")
+	)
+	(wire
+		(pts
 			(xy 72.39 69.85) (xy 80.01 69.85)
 		)
 		(stroke
@@ -6045,6 +6587,16 @@
 			(type default)
 		)
 		(uuid "0bca0a47-61e1-4fe3-bd12-b3d8835c2024")
+	)
+	(wire
+		(pts
+			(xy 159.385 181.61) (xy 167.005 181.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0bf45e1e-5c54-4d54-9680-3406ac6d1a84")
 	)
 	(wire
 		(pts
@@ -6108,16 +6660,6 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 167.64) (xy 163.83 167.64)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "166c7e8d-1e67-4199-bfda-044e6dee0ced")
-	)
-	(wire
-		(pts
 			(xy 154.94 129.54) (xy 154.94 132.08)
 		)
 		(stroke
@@ -6135,6 +6677,16 @@
 			(type default)
 		)
 		(uuid "17247da4-32ae-409c-bc9e-2f4c210e0702")
+	)
+	(wire
+		(pts
+			(xy 180.34 129.54) (xy 185.42 129.54)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "17797611-ed19-40c0-8166-3f571103856b")
 	)
 	(wire
 		(pts
@@ -6158,13 +6710,13 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 177.8) (xy 153.67 177.8)
+			(xy 213.36 55.88) (xy 231.14 55.88)
 		)
 		(stroke
 			(width 0.254)
 			(type default)
 		)
-		(uuid "1a2c1434-2b8a-4433-bcec-329dcce5e2c8")
+		(uuid "1cf300ac-e200-4cc9-afde-b95252071c7b")
 	)
 	(wire
 		(pts
@@ -6508,6 +7060,26 @@
 	)
 	(wire
 		(pts
+			(xy 161.925 179.07) (xy 161.925 186.055)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d07aabf-f4f7-4958-8197-dbe1c45b46a7")
+	)
+	(wire
+		(pts
+			(xy 117.475 176.53) (xy 117.475 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4d61d5fc-f466-4092-80fb-82036e472a85")
+	)
+	(wire
+		(pts
 			(xy 154.94 96.52) (xy 154.94 101.6)
 		)
 		(stroke
@@ -6548,13 +7120,13 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 163.83) (xy 158.75 167.64)
+			(xy 132.715 171.45) (xy 132.715 176.53)
 		)
 		(stroke
-			(width 0.254)
+			(width 0)
 			(type default)
 		)
-		(uuid "5306dd1c-7357-4676-a4d2-f6c885589a7f")
+		(uuid "532260ab-08bb-418c-a40c-8c47fcfe799e")
 	)
 	(wire
 		(pts
@@ -6578,16 +7150,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 67.31) (xy 80.01 67.31)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "57c8ce6b-997a-4eaf-a9ee-504b85d042b2")
-	)
-	(wire
-		(pts
 			(xy 142.24 20.32) (xy 139.7 20.32)
 		)
 		(stroke
@@ -6608,16 +7170,6 @@
 	)
 	(wire
 		(pts
-			(xy 67.31 64.77) (xy 80.01 64.77)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "5c872f6b-36a8-4c06-88e0-0941c9dda3f6")
-	)
-	(wire
-		(pts
 			(xy 113.03 57.15) (xy 105.41 57.15)
 		)
 		(stroke
@@ -6635,6 +7187,16 @@
 			(type default)
 		)
 		(uuid "5def82c3-84e0-4d27-bcba-756ac29eefe0")
+	)
+	(wire
+		(pts
+			(xy 161.925 186.055) (xy 161.925 186.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f6abaf3-e217-437e-82b9-e6a1a9c4513e")
 	)
 	(wire
 		(pts
@@ -6735,26 +7297,6 @@
 			(type default)
 		)
 		(uuid "6ada782a-4148-47a2-a130-16fea5dab4cb")
-	)
-	(wire
-		(pts
-			(xy 158.75 167.64) (xy 158.75 177.8)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "6cf7cb6f-4e50-45e7-a96f-5bf6fe66688c")
-	)
-	(wire
-		(pts
-			(xy 231.14 55.88) (xy 213.36 55.88)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "6d23e03a-d584-4740-9e20-d0ecfc0779a5")
 	)
 	(wire
 		(pts
@@ -6898,6 +7440,16 @@
 	)
 	(wire
 		(pts
+			(xy 159.385 176.53) (xy 167.005 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a53e765-c231-47ce-846e-e199db876b0d")
+	)
+	(wire
+		(pts
 			(xy 152.4 96.52) (xy 154.94 96.52)
 		)
 		(stroke
@@ -6935,6 +7487,16 @@
 			(type default)
 		)
 		(uuid "83de7ab1-350c-49fb-9a2e-4aab26401e47")
+	)
+	(wire
+		(pts
+			(xy 180.34 134.62) (xy 180.34 129.54)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "83e3a21d-46b4-4181-8a40-b7cd343aba74")
 	)
 	(wire
 		(pts
@@ -7008,6 +7570,16 @@
 	)
 	(wire
 		(pts
+			(xy 170.815 93.98) (xy 172.72 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cceabe5-b4ef-476b-86e3-7c38bae6051b")
+	)
+	(wire
+		(pts
 			(xy 238.76 33.02) (xy 238.76 35.56)
 		)
 		(stroke
@@ -7068,6 +7640,16 @@
 	)
 	(wire
 		(pts
+			(xy 80.01 67.31) (xy 67.31 67.31)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "936940bb-3252-4681-a919-fcb76ba9f423")
+	)
+	(wire
+		(pts
 			(xy 154.94 38.1) (xy 154.94 40.64)
 		)
 		(stroke
@@ -7095,6 +7677,16 @@
 			(type default)
 		)
 		(uuid "960f63b9-04c3-4371-a536-89303070421b")
+	)
+	(wire
+		(pts
+			(xy 171.45 48.26) (xy 173.355 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96c5a0e0-3652-4bb3-b5c5-48e34eeaba4b")
 	)
 	(wire
 		(pts
@@ -7158,6 +7750,16 @@
 	)
 	(wire
 		(pts
+			(xy 183.515 38.1) (xy 187.96 38.1)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "9fd6931e-5d63-496d-86bd-57cbf86a86c6")
+	)
+	(wire
+		(pts
 			(xy 154.94 147.32) (xy 152.4 147.32)
 		)
 		(stroke
@@ -7208,6 +7810,26 @@
 	)
 	(wire
 		(pts
+			(xy 182.88 88.9) (xy 182.88 83.82)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "a4c5428e-f3f2-4958-9b1f-f49dbf1be6f8")
+	)
+	(wire
+		(pts
+			(xy 132.715 176.53) (xy 139.065 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7b00094-77cf-4e3e-966a-990d4d4c231a")
+	)
+	(wire
+		(pts
 			(xy 205.74 43.18) (xy 205.74 71.12)
 		)
 		(stroke
@@ -7238,6 +7860,16 @@
 	)
 	(wire
 		(pts
+			(xy 161.925 173.355) (xy 161.925 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac0afbf4-10ea-4380-aafb-beef8521181d")
+	)
+	(wire
+		(pts
 			(xy 154.94 25.4) (xy 152.4 25.4)
 		)
 		(stroke
@@ -7245,16 +7877,6 @@
 			(type default)
 		)
 		(uuid "ac14e7bf-0276-4cf7-8ab8-a36453951b81")
-	)
-	(wire
-		(pts
-			(xy 142.24 167.64) (xy 146.05 167.64)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "ad86cfb0-2a71-40ac-9c7c-352bff5e3029")
 	)
 	(wire
 		(pts
@@ -7288,7 +7910,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 38.1) (xy 187.96 38.1)
+			(xy 154.94 38.1) (xy 183.515 38.1)
 		)
 		(stroke
 			(width 0.254)
@@ -7298,7 +7920,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 129.54) (xy 185.42 129.54)
+			(xy 154.94 129.54) (xy 180.34 129.54)
 		)
 		(stroke
 			(width 0.254)
@@ -7338,16 +7960,6 @@
 	)
 	(wire
 		(pts
-			(xy 153.67 167.64) (xy 158.75 167.64)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "ba873bac-5ea4-402f-83e9-d38bdd6ab75a")
-	)
-	(wire
-		(pts
 			(xy 209.55 128.27) (xy 209.55 157.48)
 		)
 		(stroke
@@ -7365,6 +7977,16 @@
 			(type default)
 		)
 		(uuid "bd2624b1-b26d-4e8b-80b3-a64560520cb3")
+	)
+	(wire
+		(pts
+			(xy 139.065 181.61) (xy 139.065 186.055)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd5639b5-ece1-43a2-add0-1aef03d3cf3b")
 	)
 	(wire
 		(pts
@@ -7448,6 +8070,16 @@
 	)
 	(wire
 		(pts
+			(xy 182.88 83.82) (xy 187.96 83.82)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "c8cc0efc-329b-45c0-a590-cd775321db43")
+	)
+	(wire
+		(pts
 			(xy 213.36 55.88) (xy 213.36 58.42)
 		)
 		(stroke
@@ -7465,6 +8097,26 @@
 			(type default)
 		)
 		(uuid "c9ba91ce-9e71-4a5b-8fc1-3f94339b1221")
+	)
+	(wire
+		(pts
+			(xy 180.34 149.225) (xy 180.34 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9db62be-17e6-4fbf-b08d-bd61c5715fa4")
+	)
+	(wire
+		(pts
+			(xy 159.385 179.07) (xy 161.925 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d0be783c-f03e-4a7c-9058-3324af88c8e6")
 	)
 	(wire
 		(pts
@@ -7568,6 +8220,26 @@
 	)
 	(wire
 		(pts
+			(xy 111.125 176.53) (xy 117.475 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d883ef92-02c5-47ad-b352-86b6da9df2b8")
+	)
+	(wire
+		(pts
+			(xy 182.88 103.505) (xy 182.88 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "df88d770-b007-4c22-8d44-04b2535fa24c")
+	)
+	(wire
+		(pts
 			(xy 154.94 71.12) (xy 154.94 76.2)
 		)
 		(stroke
@@ -7588,6 +8260,16 @@
 	)
 	(wire
 		(pts
+			(xy 183.515 43.18) (xy 183.515 38.1)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "e16573a7-fe7f-4919-a8fd-1086948aa982")
+	)
+	(wire
+		(pts
 			(xy 90.17 158.75) (xy 97.79 158.75)
 		)
 		(stroke
@@ -7595,16 +8277,6 @@
 			(type default)
 		)
 		(uuid "e34e9d72-bdc4-4141-9d78-1053fc9096b5")
-	)
-	(wire
-		(pts
-			(xy 142.24 177.8) (xy 146.05 177.8)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "e4d3552c-a7cc-4659-920c-f332e938d9e4")
 	)
 	(wire
 		(pts
@@ -7628,6 +8300,26 @@
 	)
 	(wire
 		(pts
+			(xy 137.795 179.07) (xy 139.065 179.07)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea7aa91e-4223-4825-9549-959ff8509e2d")
+	)
+	(wire
+		(pts
+			(xy 137.795 179.07) (xy 137.795 189.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edd146e2-94c2-4544-991e-6fa696c4ac3b")
+	)
+	(wire
+		(pts
 			(xy 154.94 116.84) (xy 154.94 121.92)
 		)
 		(stroke
@@ -7645,6 +8337,16 @@
 			(type default)
 		)
 		(uuid "f339d13d-12a8-4f55-a483-7da659af32ac")
+	)
+	(wire
+		(pts
+			(xy 139.065 186.055) (xy 161.925 186.055)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f339e418-3c1d-4fd3-b7b0-69489e933fbc")
 	)
 	(wire
 		(pts
@@ -7718,6 +8420,16 @@
 	)
 	(wire
 		(pts
+			(xy 80.01 64.77) (xy 67.31 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9748d8b-d080-4511-9bfe-9b9b737751b6")
+	)
+	(wire
+		(pts
 			(xy 142.24 76.2) (xy 139.7 76.2)
 		)
 		(stroke
@@ -7728,7 +8440,7 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 83.82) (xy 187.96 83.82)
+			(xy 182.88 83.82) (xy 154.94 83.82)
 		)
 		(stroke
 			(width 0.254)
@@ -7768,6 +8480,16 @@
 	)
 	(wire
 		(pts
+			(xy 183.515 57.785) (xy 183.515 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc65779d-b609-42e0-835e-95e0e8fea891")
+	)
+	(wire
+		(pts
 			(xy 237.49 118.11) (xy 209.55 118.11)
 		)
 		(stroke
@@ -7798,7 +8520,7 @@
 	)
 	(text "South connector"
 		(exclude_from_sim no)
-		(at 51.562 146.558 0)
+		(at 115.316 170.942 0)
 		(effects
 			(font
 				(size 2 2)
@@ -7872,17 +8594,6 @@
 			(justify left bottom)
 		)
 		(uuid "533a092b-327c-41e1-903c-2a30c64ca4fe")
-	)
-	(text "NOTE:  V_VGA will be the highest Voltage\n       between VCCIN and +3V3."
-		(exclude_from_sim no)
-		(at 127 191.77 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "554e0a08-c1e7-45ac-8ced-f8d8ac21c868")
 	)
 	(text "LCD_D18"
 		(exclude_from_sim no)
@@ -8093,6 +8804,41 @@
 		)
 		(uuid "e15b333d-823e-4058-ab6b-05e27caeab92")
 	)
+	(text "NX3008NBKW,115 has Coss 6.5pF\nCJ3134KW as Coss 13-20pF\n"
+		(exclude_from_sim no)
+		(at 162.56 21.082 0)
+		(effects
+			(font
+				(size 2 2)
+				(thickness 0.4)
+				(bold yes)
+			)
+			(justify left)
+		)
+		(uuid "f1db92e8-d07f-4bdd-8658-a29d08f993b3")
+	)
+	(label "HSYNC_IN"
+		(at 80.01 64.77 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ae13a479-6974-4f88-b9ec-b94fcc61e776")
+	)
+	(label "VSYNC_IN"
+		(at 80.01 67.31 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "daee01c2-009b-4fc2-a628-8a286ff6d9c5")
+	)
 	(global_label "R7"
 		(shape input)
 		(at 139.7 20.32 180)
@@ -8133,6 +8879,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LCD_DE"
+		(shape input)
+		(at 171.45 48.26 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0889b12a-323b-4705-8c24-70ce12e61fe3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 161.5101 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -8687,6 +9455,28 @@
 			)
 		)
 	)
+	(global_label "V_VGA"
+		(shape input)
+		(at 111.125 176.53 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "717ecf73-b719-4528-a02a-d755429e2462")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 102.6364 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "R2"
 		(shape input)
 		(at 139.7 45.72 180)
@@ -8744,6 +9534,28 @@
 		(uuid "77f60ebc-a543-469e-bee3-cc90d0e53bdb")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 41.1019 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LCD_DE"
+		(shape input)
+		(at 168.275 139.7 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7a19eff8-fbfd-4921-9ab3-85e198ef9372")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 158.3351 139.7 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8986,6 +9798,28 @@
 		(uuid "aba66dc0-4913-4713-a0e8-d2a79cd2adaf")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 134.2353 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LCD_DE"
+		(shape input)
+		(at 170.815 93.98 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ad263ca8-aae8-4b70-b1b5-f46e0c20db0f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 160.8751 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9391,28 +10225,6 @@
 			)
 		)
 	)
-	(global_label "V_VGA"
-		(shape output)
-		(at 163.83 167.64 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "dfcdfe85-0fef-434d-965b-c1bfa746cee0")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 172.3186 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "G6"
 		(shape input)
 		(at 139.7 71.12 180)
@@ -9718,6 +10530,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 161.925 191.77 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "06012324-c7ba-4aff-9c30-d6d35b86179e")
+		(property "Reference" "#PWR024"
+			(at 161.925 198.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 158.115 193.675 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 161.925 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 161.925 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 161.925 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "80aaf77d-f77b-4803-b321-40445efa0e32")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR024")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:GND")
 		(at 107.95 153.67 0)
 		(mirror y)
@@ -9779,6 +10656,164 @@
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
 					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 161.925 173.355 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "08b3f71e-3211-49f7-9772-c3e58ed52938")
+		(property "Reference" "#PWR023"
+			(at 161.925 177.165 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 161.925 169.545 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 161.925 173.355 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 161.925 173.355 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 161.925 173.355 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9a232af3-e2ed-4af9-8565-0009099abd5b")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR023")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "easyeda2kicad:NX3008NBKW,115")
+		(at 176.53 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0c30d314-5829-4cd4-9801-15f3b5a10f57")
+		(property "Reference" "Q2"
+			(at 184.785 140.0799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "NX3008NBKW,115"
+			(at 184.785 142.6199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "easyeda2kicad:SOT-323-3_L2.0-W1.3-P1.30-LS2.1-BR"
+			(at 176.53 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/MOSFET_Nexperia_NX3008NBKW-115_Nexperia-NX3008NBKW-115_C282548.html"
+			(at 176.53 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 176.53 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Nexperia(安世)"
+			(at 176.53 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "NX3008NBKW,115"
+			(at 176.53 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "857b235a-9f61-46a2-a9c8-837a5356b63d")
+		)
+		(pin "1"
+			(uuid "18b4244e-ead5-470d-8209-485c3f83f5db")
+		)
+		(pin "2"
+			(uuid "063e95b4-0587-4f96-bdf4-4bcb6d8ffe9f")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "Q2")
 					(unit 1)
 				)
 			)
@@ -9907,7 +10942,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2212302030_TE-Connectivity-1-1734248-5_C2922285.pdf"
 			(at 237.49 82.55 0)
 			(effects
 				(font
@@ -9918,6 +10953,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 237.49 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C2922285"
 			(at 237.49 82.55 0)
 			(effects
 				(font
@@ -10026,200 +11070,6 @@
 		)
 	)
 	(symbol
-		(lib_name "DF12NB_3.0_-30DP-0.5V_51__1")
-		(lib_id "DF12NB_3.0_-30DP-0.5V_51_:DF12NB_3.0_-30DP-0.5V_51_")
-		(at 92.71 97.79 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "102a26ce-bab5-4938-a674-32cdd76658bf")
-		(property "Reference" "J1"
-			(at 86.36 50.8 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "DF12NB(3.0)-30DS-0.5V(51)"
-			(at 95.25 50.8 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "DF12NB3030DP05V51"
-			(at 85.09 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 87.63 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" "30 Position Connector Header, Outer Shroud Contacts Surface Mount Gold"
-			(at 95.25 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Height" "2.5"
-			(at 92.71 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "DF12NB(3.0)-30DP-0.5V(51)"
-			(at 97.79 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Hirose"
-			(at 100.33 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(pin "MP1"
-			(uuid "6a28202f-a0d3-427c-9aa7-f06d8de6d0c2")
-		)
-		(pin "MP2"
-			(uuid "fe6d03b9-9079-4d89-8210-a4236050958e")
-		)
-		(pin "1"
-			(uuid "03166c92-ff08-4b36-85f2-70c4d997856f")
-		)
-		(pin "10"
-			(uuid "bc8fe415-c8b4-42c1-8297-3cb021c70772")
-		)
-		(pin "11"
-			(uuid "7b43ae5b-9ddc-4c5e-9458-3e6dfd63a531")
-		)
-		(pin "12"
-			(uuid "681cfc2b-3d04-4746-80c6-23e749485bf2")
-		)
-		(pin "13"
-			(uuid "ce6dffe5-fc87-49a5-aa92-39acf048a781")
-		)
-		(pin "14"
-			(uuid "2b7f4aaf-67f1-44e5-b302-c50daf46a410")
-		)
-		(pin "15"
-			(uuid "f341c360-869d-4417-8043-d145be96a27a")
-		)
-		(pin "16"
-			(uuid "2ac09f66-c1e2-4822-ad96-f81b4c15d79b")
-		)
-		(pin "17"
-			(uuid "2c0815e1-295c-43e4-b54b-4a60e8f52e88")
-		)
-		(pin "18"
-			(uuid "f925dded-7042-4053-ba08-4ebcccc645b5")
-		)
-		(pin "19"
-			(uuid "330eb458-f9a9-4524-982a-112888d5ba7d")
-		)
-		(pin "2"
-			(uuid "1467a97e-26fd-4c3e-9ed7-be5cf178831c")
-		)
-		(pin "20"
-			(uuid "2e719222-759a-4745-8417-32d7ac901698")
-		)
-		(pin "21"
-			(uuid "96cf9054-0696-4031-80ef-700178444a4f")
-		)
-		(pin "22"
-			(uuid "7cc61434-3a32-4717-b603-1664869828d4")
-		)
-		(pin "23"
-			(uuid "604b64f4-8333-40a9-bbfc-a90b949d3906")
-		)
-		(pin "24"
-			(uuid "ff2974ee-bd02-496e-b3b5-27dc423dc749")
-		)
-		(pin "25"
-			(uuid "2df87be8-09af-419b-88c6-8bb0a477574e")
-		)
-		(pin "26"
-			(uuid "ff1273f6-1430-403f-b136-4c13359f273a")
-		)
-		(pin "27"
-			(uuid "c7fa8db1-1cac-4583-a940-2ebbba9681bb")
-		)
-		(pin "28"
-			(uuid "b9194a44-6d2a-443a-a3a9-594b6d52e348")
-		)
-		(pin "29"
-			(uuid "69f2c3db-1606-49da-9e0a-f8a1bfd55be2")
-		)
-		(pin "3"
-			(uuid "8fdf824a-7966-45f8-b702-02c8da16550b")
-		)
-		(pin "30"
-			(uuid "e33394a2-f411-4b1a-afe6-5462a246de0b")
-		)
-		(pin "4"
-			(uuid "72b7c898-6fa7-4fe3-b137-ca57584d407f")
-		)
-		(pin "5"
-			(uuid "324c831a-01d7-4727-b7c7-3d8a1ecea1b1")
-		)
-		(pin "6"
-			(uuid "f543394c-aa43-4423-9ead-c41677cebdad")
-		)
-		(pin "7"
-			(uuid "35c72c00-dbbb-4032-a459-9acf77ca7353")
-		)
-		(pin "8"
-			(uuid "fca2c520-6241-4773-ac8d-8ffb0de55a27")
-		)
-		(pin "9"
-			(uuid "24af58ba-317f-411f-ab55-344890267e33")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Periph-altium-import:GND")
 		(at 92.71 46.99 180)
 		(unit 1)
@@ -10280,170 +11130,6 @@
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
 					(reference "#PWR010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Logic_LevelTranslator:TXS0102DCU")
-		(at 241.3 48.26 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1472c7d3-2a61-4c24-ad67-d41ce0ef505e")
-		(property "Reference" "U1"
-			(at 243.4941 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TXS0102DQMR"
-			(at 243.4941 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Library:DQM8"
-			(at 241.3 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 241.3 48.768 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 241.3 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e536003f-d35d-4632-8ae6-52cf07207a3a")
-		)
-		(pin "2"
-			(uuid "69a1ff8e-28c9-4bb2-bfa5-5e19a72170d6")
-		)
-		(pin "3"
-			(uuid "a274051c-ab5b-4ed6-a6b5-2ea5b6ca3525")
-		)
-		(pin "4"
-			(uuid "be3a3fee-e4f9-4aba-ba3a-854a88caa4d6")
-		)
-		(pin "5"
-			(uuid "0ab18e83-dade-4d52-83d1-51e6610c25d9")
-		)
-		(pin "6"
-			(uuid "966bcb36-bcc6-4d6a-b187-37e3749857b3")
-		)
-		(pin "7"
-			(uuid "4950bcb8-8da9-4af2-b224-e03efd9ef8b8")
-		)
-		(pin "8"
-			(uuid "9ab2742f-d6c8-44fc-a27a-187ffe81a659")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Schottky")
-		(at 149.86 177.8 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "170c2b5f-846c-4ebe-837d-da8021863a86")
-		(property "Reference" "D2"
-			(at 149.86 173.355 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "NSR05F40NXT5G"
-			(at 149.86 175.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_0402_1005Metric"
-			(at 149.86 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/1809111718_onsemi-NSR05F40NXT5G_C146713.pdf"
-			(at 149.86 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 149.86 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part Number" "C146713"
-			(at 149.86 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "382b7ab2-28be-4560-9f04-e8973d81a84c")
-		)
-		(pin "2"
-			(uuid "d2a5939b-3fc5-461e-b63c-07d3d0b9efab")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -10755,134 +11441,205 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 158.75 163.83 0)
+		(lib_name "DF12NB_3.0_-30DP-0.5V_51__1")
+		(lib_id "DF12NB_3.0_-30DP-0.5V_51_:DF12NB_3.0_-30DP-0.5V_51_")
+		(at 77.47 166.37 270)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "20fbd599-a090-49d7-a048-dcc41fd5bbd3")
-		(property "Reference" "#FLG03"
-			(at 158.75 161.925 0)
+		(uuid "1db3cbb1-62af-418e-b881-3adfad0885f3")
+		(property "Reference" "J1"
+			(at 83.82 119.38 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
+				(justify right)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 158.75 158.75 0)
+		(property "Value" "DF12NB(3.0)-30DS-0.5V(51)"
+			(at 74.93 119.38 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 				(hide yes)
 			)
 		)
-		(property "Footprint" ""
-			(at 158.75 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 158.75 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 158.75 163.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "86cb9e8c-8342-4e3f-82a1-1f85d67857f5")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "#FLG03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 142.24 177.8 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2114db11-abe0-44db-bcbb-abb9e8bc11e0")
-		(property "Reference" "#PWR017"
-			(at 146.05 177.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 138.43 177.8 90)
+		(property "Footprint" "easyeda2kicad:CONN-SMD_30P-P0.50_HRS_DF12NB-3.0-30DP-0.5V"
+			(at 85.09 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
 			)
 		)
-		(property "Footprint" ""
-			(at 142.24 177.8 0)
+		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2111111830_HRS-Hirose-DF12NB-3-0-30DP-0-5V-51_C2904115.pdf"
+			(at 82.55 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 142.24 177.8 0)
+		(property "Description" "30 Position Connector Header, Outer Shroud Contacts Surface Mount Gold"
+			(at 74.93 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 142.24 177.8 0)
+		(property "LCSC Part Number" "C2904115"
+			(at 80.01 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 				(hide yes)
 			)
+		)
+		(property "Height" "2.5"
+			(at 77.47 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "DF12NB(3.0)-30DP-0.5V(51)"
+			(at 72.39 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Hirose"
+			(at 69.85 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "MP1"
+			(uuid "b71c0388-87b6-452e-ae70-d81ebdf96da9")
+		)
+		(pin "MP2"
+			(uuid "55b1e5f8-2af0-4683-b05a-eec551c7153e")
 		)
 		(pin "1"
-			(uuid "8ba75d6c-211e-4cdc-bbb6-27323793b90f")
+			(uuid "db74bbfa-540d-45c7-9171-737084515507")
+		)
+		(pin "10"
+			(uuid "3ad8824f-1411-4a06-9769-ba8c3a8ab22f")
+		)
+		(pin "11"
+			(uuid "b0745963-9f60-4d01-8d0d-a270039e8971")
+		)
+		(pin "12"
+			(uuid "c8bc967f-1e95-41ae-b760-29dcb639d17a")
+		)
+		(pin "13"
+			(uuid "4400b0ab-3024-4381-b178-57e81b92ca43")
+		)
+		(pin "14"
+			(uuid "d634c628-3d5b-4019-9e53-2730b5ed1d55")
+		)
+		(pin "15"
+			(uuid "aa065eff-40e3-406c-9580-6af785c6da8b")
+		)
+		(pin "16"
+			(uuid "99bbc425-469a-4ebd-ad2f-69a9641c8270")
+		)
+		(pin "17"
+			(uuid "c74ce794-4e03-4a8d-a1d5-32b4b113d17f")
+		)
+		(pin "18"
+			(uuid "b1462151-98af-46de-b22e-58b468af850b")
+		)
+		(pin "19"
+			(uuid "0b57dc0c-cdbe-41ed-970d-71c17f4044db")
+		)
+		(pin "2"
+			(uuid "70f6626a-c687-4645-a9a8-69fab243aca2")
+		)
+		(pin "20"
+			(uuid "3e4c1cc3-ee59-4bbd-8fd5-afcd8fd7e2ed")
+		)
+		(pin "21"
+			(uuid "f27f9228-9b16-450e-95a3-3b25db9cd1b1")
+		)
+		(pin "22"
+			(uuid "35532edb-0b2e-445f-9227-fe4ee06af676")
+		)
+		(pin "23"
+			(uuid "cf91ed90-9927-43f5-b9ed-9ca3ca6b9c46")
+		)
+		(pin "24"
+			(uuid "fa928691-afc8-4402-9849-091b1955f036")
+		)
+		(pin "25"
+			(uuid "bf2c2ccc-3e53-4ecd-a837-53927d0ee42a")
+		)
+		(pin "26"
+			(uuid "0dc47867-1efd-4b3e-b451-ad15acce963f")
+		)
+		(pin "27"
+			(uuid "c3cdf132-4b05-4e23-b9c9-4d88a41bdb3b")
+		)
+		(pin "28"
+			(uuid "ba016ea6-0bc0-45f9-b33c-8fb6fea1bf6a")
+		)
+		(pin "29"
+			(uuid "f852fc60-1928-43bf-9da6-1e7f51903ce8")
+		)
+		(pin "3"
+			(uuid "c13d21f4-6eb8-4fea-ab32-2c7b05370f1b")
+		)
+		(pin "30"
+			(uuid "3fe66401-6503-483a-bd8a-fb50eb63c419")
+		)
+		(pin "4"
+			(uuid "588ff006-68a5-4a21-85f0-4fd1387d5124")
+		)
+		(pin "5"
+			(uuid "f4833d12-f168-42a9-a034-6ae88afc8381")
+		)
+		(pin "6"
+			(uuid "c6e9433a-0049-4316-82b4-fe588c819ced")
+		)
+		(pin "7"
+			(uuid "7e4ab4c9-95e6-4072-b4eb-07cb7eba8b2b")
+		)
+		(pin "8"
+			(uuid "009725c0-b715-4049-b670-021352c611be")
+		)
+		(pin "9"
+			(uuid "1d2116fe-f278-4eed-9d0d-2004b7ca47ba")
 		)
 		(instances
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "#PWR017")
+					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -11026,7 +11783,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C852745"
+		(property "LCSC Part Number" "C2681606"
 			(at 152.654 111.76 0)
 			(effects
 				(font
@@ -11051,6 +11808,73 @@
 			(project "MQ_mod"
 				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
 					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 132.715 171.45 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "22dd0725-f097-491c-a6cd-7078cef621cb")
+		(property "Reference" "#FLG03"
+			(at 132.715 169.545 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 132.715 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 132.715 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 132.715 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 132.715 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f6faa469-8687-49e8-874c-1a888452e651")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#FLG03")
 					(unit 1)
 				)
 			)
@@ -11225,6 +12049,84 @@
 		)
 	)
 	(symbol
+		(lib_id "Periph-altium-import:0_CAP")
+		(at 205.74 40.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "308ae8df-28e0-4884-bfda-334977b8b3d5")
+		(property "Reference" "C2"
+			(at 206.756 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "2.2uF"
+			(at 206.375 43.815 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 205.74 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 205.74 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 205.74 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C170151"
+			(at 205.74 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fc4d4b48-b106-47b5-bf98-dea9775079fd")
+		)
+		(pin "2"
+			(uuid "5faa27ad-7666-4dae-9a50-e8520b98d161")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:GND")
 		(at 46.99 166.37 0)
 		(unit 1)
@@ -11363,32 +12265,35 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Schottky")
-		(at 149.86 167.64 180)
+		(lib_id "easyeda2kicad:NX3008NBKW,115")
+		(at 179.705 49.53 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "40bac3de-55e7-4d1c-9985-761797835c0b")
-		(property "Reference" "D1"
-			(at 149.86 163.195 0)
+		(fields_autoplaced yes)
+		(uuid "4021f257-e089-4651-8925-c8f731c15a9e")
+		(property "Reference" "Q4"
+			(at 187.96 48.6399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "NSR05F40NXT5G"
-			(at 149.86 165.1 0)
+		(property "Value" "NX3008NBKW,115"
+			(at 187.96 51.1799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_0402_1005Metric"
-			(at 149.86 167.64 0)
+		(property "Footprint" "easyeda2kicad:SOT-323-3_L2.0-W1.3-P1.30-LS2.1-BR"
+			(at 179.705 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11396,8 +12301,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/1809111718_onsemi-NSR05F40NXT5G_C146713.pdf"
-			(at 149.86 167.64 0)
+		(property "Datasheet" "https://lcsc.com/product-detail/MOSFET_Nexperia_NX3008NBKW-115_Nexperia-NX3008NBKW-115_C282548.html"
+			(at 179.705 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11406,7 +12311,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 149.86 167.64 0)
+			(at 179.705 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11414,25 +12319,37 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C146713"
-			(at 149.86 167.64 0)
+		(property "Manufacturer" "Nexperia(安世)"
+			(at 179.705 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
+		)
+		(property "MPN" "NX3008NBKW,115"
+			(at 179.705 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "5fa1b03c-3176-436d-809d-8c58b62ed568")
 		)
 		(pin "1"
-			(uuid "3b4ceab9-a258-4c01-8b86-59db24716380")
+			(uuid "e72d1fa0-8167-4e82-9897-d785295e38ab")
 		)
 		(pin "2"
-			(uuid "8b5e9f61-7671-4271-a2e4-c09c39944e8c")
+			(uuid "e8199f37-fd76-4ed1-975b-fa2cdc400a1a")
 		)
 		(instances
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "D1")
+					(reference "Q4")
 					(unit 1)
 				)
 			)
@@ -11667,6 +12584,97 @@
 		)
 	)
 	(symbol
+		(lib_id "easyeda2kicad:NX3008NBKW,115")
+		(at 179.07 95.25 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "43c900d7-ac9d-4113-913e-d499f4fb2b18")
+		(property "Reference" "Q1"
+			(at 187.325 94.3599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "NX3008NBKW,115"
+			(at 187.325 96.8999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "easyeda2kicad:SOT-323-3_L2.0-W1.3-P1.30-LS2.1-BR"
+			(at 179.07 109.22 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://lcsc.com/product-detail/MOSFET_Nexperia_NX3008NBKW-115_Nexperia-NX3008NBKW-115_C282548.html"
+			(at 179.07 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 179.07 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Nexperia(安世)"
+			(at 179.07 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "NX3008NBKW,115"
+			(at 179.07 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "3"
+			(uuid "15edbc02-6aa6-4bd8-92f2-bac9e822ec64")
+		)
+		(pin "1"
+			(uuid "ef5203d3-5d15-492c-a85b-2d9f806b780b")
+		)
+		(pin "2"
+			(uuid "66f4a0d8-dcb2-44f8-ad52-78bc3bf63557")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:GND")
 		(at 241.3 71.12 0)
 		(unit 1)
@@ -11733,90 +12741,6 @@
 			(project "MQ_mod"
 				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
 					(reference "#PWR058")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Periph-altium-import:0_CAP")
-		(at 205.74 40.64 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "4824ac23-5721-46a8-8e9f-71f607ad9751")
-		(property "Reference" "C1"
-			(at 202.184 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 199.644 43.688 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Footprint" "Library:C_0402_1005Metric"
-			(at 205.74 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 205.74 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 205.74 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part Number" "C60474"
-			(at 205.74 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "3828da94-0aa2-44f1-8e2e-9103d6316bc9")
-		)
-		(pin "2"
-			(uuid "7db90ad0-2b53-4b18-98aa-88ef13551dd6")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "C1")
-					(unit 1)
-				)
-			)
-			(project "MQ_mod"
-				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
-					(reference "C40")
 					(unit 1)
 				)
 			)
@@ -11979,6 +12903,151 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 137.795 189.23 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "51c60b87-ef8c-429d-a130-c9ba766f4b89")
+		(property "Reference" "#PWR018"
+			(at 137.795 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 141.605 191.135 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 137.795 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.795 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 137.795 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "746be031-1b12-4f69-8cf5-133b4f22d159")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR018")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Periph-altium-import:0_CAP")
+		(at 117.475 186.69 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "54281cdb-5a5a-4688-9466-59a54cb6b6be")
+		(property "Reference" "C3"
+			(at 116.459 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "2.2uF"
+			(at 116.84 189.865 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 117.475 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 117.475 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 117.475 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C170151"
+			(at 117.475 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8f21377d-4315-4f61-847e-a1e28efbf0ef")
+		)
+		(pin "2"
+			(uuid "cc5ad6ea-ba06-4fee-b49a-7a4e7876533a")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 152.654 116.84 0)
 		(unit 1)
@@ -12063,6 +13132,162 @@
 		)
 	)
 	(symbol
+		(lib_id "Periph-altium-import:0_CAP")
+		(at 271.78 40.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5ae941da-a95a-4b82-97d7-c6414d37948f")
+		(property "Reference" "C1"
+			(at 272.796 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "2.2uF"
+			(at 272.415 43.815 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 271.78 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 271.78 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 271.78 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C170151"
+			(at 271.78 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a5fdd6a4-079b-4410-8038-3744d8dfb3c0")
+		)
+		(pin "2"
+			(uuid "979b6f60-9078-4c65-812a-da123ae4d9d1")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Periph-altium-import:0_CAP")
+		(at 167.005 179.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5c81949a-c24f-4f9b-b74d-ac1de51b3412")
+		(property "Reference" "C5"
+			(at 168.021 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "2.2uF"
+			(at 167.64 182.245 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 167.005 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 167.005 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 167.005 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C170151"
+			(at 167.005 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9f8b69d7-0ca8-4556-a361-bb6fb288ad52")
+		)
+		(pin "2"
+			(uuid "bcfe29ac-7c26-41c0-aede-05995db6f596")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 67.564 64.77 0)
 		(unit 1)
@@ -12141,6 +13366,211 @@
 			(project "MQ_mod"
 				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
 					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "DF12NB_3.0_-30DP-0.5V_51__1")
+		(lib_id "DF12NB_3.0_-30DP-0.5V_51_:DF12NB_3.0_-30DP-0.5V_51_")
+		(at 92.71 97.79 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "616e4aaf-9504-4ab8-aa99-b2fc90d7ad04")
+		(property "Reference" "J4"
+			(at 99.06 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "DF12NB(3.0)-30DS-0.5V(51)"
+			(at 90.17 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "easyeda2kicad:CONN-SMD_30P-P0.50_HRS_DF12NB-3.0-30DP-0.5V"
+			(at 100.33 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2111111830_HRS-Hirose-DF12NB-3-0-30DP-0-5V-51_C2904115.pdf"
+			(at 97.79 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "30 Position Connector Header, Outer Shroud Contacts Surface Mount Gold"
+			(at 90.17 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C2904115"
+			(at 95.25 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Height" "2.5"
+			(at 92.71 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Part_Number" "DF12NB(3.0)-30DP-0.5V(51)"
+			(at 87.63 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer_Name" "Hirose"
+			(at 85.09 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(pin "MP1"
+			(uuid "83dddbf3-b5fc-496c-9629-1da3630de36c")
+		)
+		(pin "MP2"
+			(uuid "89f55be6-26f5-4256-a9e9-8c5082b177da")
+		)
+		(pin "1"
+			(uuid "a0a4fbb4-cf65-4937-a9b6-f643ab20f7a3")
+		)
+		(pin "10"
+			(uuid "78790fd2-5bea-4d53-ad4e-11b6f046db06")
+		)
+		(pin "11"
+			(uuid "529789ee-28d6-4b97-b6a2-931ec1417bc7")
+		)
+		(pin "12"
+			(uuid "e57b6e90-ac3d-49a6-9a31-3417ba9312ac")
+		)
+		(pin "13"
+			(uuid "d44a3045-da6f-4367-a654-1e980457db42")
+		)
+		(pin "14"
+			(uuid "f687cf96-36fc-4fe2-9053-387311b7f809")
+		)
+		(pin "15"
+			(uuid "3720e1a2-a1c6-4997-a511-383ed6cff112")
+		)
+		(pin "16"
+			(uuid "d62d42ee-acaf-40e6-8f0c-0a7a6fbc37e5")
+		)
+		(pin "17"
+			(uuid "caa319e0-a6ef-434f-bdbe-3975b55f3c24")
+		)
+		(pin "18"
+			(uuid "85e457c9-1338-42f0-8d8e-5371136e17cf")
+		)
+		(pin "19"
+			(uuid "ca0c87c1-0090-463f-848a-4c201cbdf04e")
+		)
+		(pin "2"
+			(uuid "5e243a22-6709-4117-93a5-5677f676892d")
+		)
+		(pin "20"
+			(uuid "038aeea7-3570-4a2e-8b4b-e0cd48b18ca8")
+		)
+		(pin "21"
+			(uuid "c4133dc2-c9ac-4a7d-aa04-5a632bbc2770")
+		)
+		(pin "22"
+			(uuid "0b8c1e16-b0fa-459e-a05d-729350a9cef8")
+		)
+		(pin "23"
+			(uuid "b2ef0bf8-f8bb-4e1c-9b31-87d7ac2a5344")
+		)
+		(pin "24"
+			(uuid "ccf48a47-a7c6-477a-a098-63e9a5de5f52")
+		)
+		(pin "25"
+			(uuid "dff37321-8a18-4ec9-a905-5dd963f93809")
+		)
+		(pin "26"
+			(uuid "a82ee106-90ae-469a-80fc-93a06ba6810f")
+		)
+		(pin "27"
+			(uuid "84b35cca-2c74-45b4-a619-a4c782f06fa1")
+		)
+		(pin "28"
+			(uuid "4e3f1d4b-a51d-4557-97d8-520774a897ba")
+		)
+		(pin "29"
+			(uuid "1fe3d40e-c899-40ec-a3fb-5845e2c00530")
+		)
+		(pin "3"
+			(uuid "4553bf61-52b1-465c-9f03-5da88020dcb8")
+		)
+		(pin "30"
+			(uuid "d6d61a98-1c15-4fa1-9f7a-d9cb80b2484c")
+		)
+		(pin "4"
+			(uuid "2ced3b36-9472-493e-b2f9-bc0719433914")
+		)
+		(pin "5"
+			(uuid "ad675595-0007-466c-8b7b-214bf94236db")
+		)
+		(pin "6"
+			(uuid "17095208-5f59-4ea0-b7a4-2325ea6ec233")
+		)
+		(pin "7"
+			(uuid "66dc17b3-a3a4-40a5-85fa-56ea3de57e4f")
+		)
+		(pin "8"
+			(uuid "de684465-a517-4dd8-a7b6-4a57d31308ef")
+		)
+		(pin "9"
+			(uuid "37a1c513-6f6f-46db-b726-c04711d246b7")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -12609,200 +14039,6 @@
 		)
 	)
 	(symbol
-		(lib_name "DF12NB_3.0_-30DP-0.5V_51__1")
-		(lib_id "DF12NB_3.0_-30DP-0.5V_51_:DF12NB_3.0_-30DP-0.5V_51_")
-		(at 77.47 166.37 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "7daa11ec-9f2d-4424-b357-e993327cf694")
-		(property "Reference" "J2"
-			(at 71.12 119.38 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "DF12NB(3.0)-30DS-0.5V(51)"
-			(at 80.01 119.38 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "DF12NB3030DP05V51"
-			(at 69.85 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 72.39 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Description" "30 Position Connector Header, Outer Shroud Contacts Surface Mount Gold"
-			(at 80.01 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Height" "2.5"
-			(at 77.47 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Part_Number" "DF12NB(3.0)-30DP-0.5V(51)"
-			(at 82.55 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Manufacturer_Name" "Hirose"
-			(at 85.09 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(pin "MP1"
-			(uuid "b87608b6-0786-49fe-ab92-705f228eae54")
-		)
-		(pin "MP2"
-			(uuid "64aa90d1-d931-480c-8828-dc185613fa3a")
-		)
-		(pin "1"
-			(uuid "856886f9-22bc-44b5-a5b7-831de5f785a6")
-		)
-		(pin "10"
-			(uuid "4092e602-6185-49b0-bb2b-464361903dbe")
-		)
-		(pin "11"
-			(uuid "3fe776e2-41ed-4140-be75-f932d1279a0f")
-		)
-		(pin "12"
-			(uuid "85aded4d-3b7d-452e-b13e-883d3e7e7789")
-		)
-		(pin "13"
-			(uuid "aa74c3af-2e8b-4c2b-8fc1-5c115ab97145")
-		)
-		(pin "14"
-			(uuid "8e634783-bbc4-4d84-a5e1-522d4c40637c")
-		)
-		(pin "15"
-			(uuid "affc3898-ddb7-4ef0-b20d-54087a0c7b79")
-		)
-		(pin "16"
-			(uuid "95e45364-7a0e-4fa6-8722-306517553bf9")
-		)
-		(pin "17"
-			(uuid "a75334e0-e569-4239-b7a2-8ae279f9df17")
-		)
-		(pin "18"
-			(uuid "d091ff54-72e4-4fb5-80ed-42230ba8dce9")
-		)
-		(pin "19"
-			(uuid "2f9dd67f-2081-4d47-a11e-0d7c047d0a88")
-		)
-		(pin "2"
-			(uuid "5516a6bb-1256-4a98-a1d1-5f16aac15fdb")
-		)
-		(pin "20"
-			(uuid "e73467ef-0fe7-4394-8351-c183e97b2045")
-		)
-		(pin "21"
-			(uuid "c8151791-7a72-4b37-948c-f8b18a1f1dba")
-		)
-		(pin "22"
-			(uuid "0d1bca3b-9179-40ba-873c-6b7062e74d2c")
-		)
-		(pin "23"
-			(uuid "a5003cda-57d3-4817-a05e-46c5950598d9")
-		)
-		(pin "24"
-			(uuid "b681ec37-90be-4af5-aeb5-08b82ca4ca1a")
-		)
-		(pin "25"
-			(uuid "a25b6712-0783-4427-b24f-dcd9ff7a2f8a")
-		)
-		(pin "26"
-			(uuid "7d8d74ca-63f6-4eed-bd58-b7eaf5290963")
-		)
-		(pin "27"
-			(uuid "b750c346-5063-4185-830e-4d1a63f49e6c")
-		)
-		(pin "28"
-			(uuid "a1758909-099b-4f24-82ea-070561e08c7d")
-		)
-		(pin "29"
-			(uuid "d558b6c6-3963-4245-92f5-987dc6a31199")
-		)
-		(pin "3"
-			(uuid "3d4079a9-a5f0-4c0d-b202-e9658c583e64")
-		)
-		(pin "30"
-			(uuid "2adc76bb-caad-47ca-b74a-43f5fcdf64f5")
-		)
-		(pin "4"
-			(uuid "0c03038b-9959-41b2-90d1-c472f1b5d0f0")
-		)
-		(pin "5"
-			(uuid "46c232cd-f344-4137-a5d9-855e82563517")
-		)
-		(pin "6"
-			(uuid "9cdfbad3-f2a9-4dce-95fc-7ba13bcd30fe")
-		)
-		(pin "7"
-			(uuid "1e2ee4d5-5212-45f2-8da4-7d777ae9ce13")
-		)
-		(pin "8"
-			(uuid "d3b9277c-3fc8-439c-9839-c8727fd4cfb3")
-		)
-		(pin "9"
-			(uuid "e8b8067f-6b24-4481-9578-518f243e57f3")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "J2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 152.654 45.72 0)
 		(unit 1)
@@ -12881,6 +14117,138 @@
 			(project "MQ_mod"
 				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
 					(reference "R32")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Periph-altium-import:GND")
+		(at 180.34 149.225 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7efcaa40-56be-4063-9160-9de413300380")
+		(property "Reference" "#PWR011"
+			(at 180.34 149.225 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 185.42 150.495 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 180.34 149.225 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 180.34 149.225 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 180.34 149.225 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin ""
+			(uuid "c7886254-3563-4d9c-ab86-e7f860af77dc")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Periph-altium-import:GND")
+		(at 182.88 103.505 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "818a27ac-5f42-4111-b1ec-62f9dff1e3f8")
+		(property "Reference" "#PWR019"
+			(at 182.88 103.505 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 187.96 104.775 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 103.505 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 103.505 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 103.505 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin ""
+			(uuid "d0a537ab-9377-426f-b474-19831429bd14")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -12971,90 +14339,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Periph-altium-import:0_CAP")
-		(at 271.78 40.64 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8b93a34e-cec9-498b-93de-91e7db5546b4")
-		(property "Reference" "C2"
-			(at 272.796 39.37 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 273.05 43.688 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Footprint" "Library:C_0402_1005Metric"
-			(at 271.78 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 271.78 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 271.78 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part Number" "C60474"
-			(at 271.78 40.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1ed79d38-7613-41d1-ac9b-5b1825a74070")
-		)
-		(pin "2"
-			(uuid "8974ec41-bc74-4413-9bf7-dbe16b38c914")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "C2")
-					(unit 1)
-				)
-			)
-			(project "MQ_mod"
-				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
-					(reference "C40")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3V3")
 		(at 77.47 91.44 90)
 		(unit 1)
@@ -13116,6 +14400,78 @@
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
 					(reference "#PWR07")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Periph-altium-import:GND")
+		(at 183.515 57.785 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a004cae3-d335-40e1-a868-cca231a98a8b")
+		(property "Reference" "#PWR020"
+			(at 183.515 57.785 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 188.595 59.055 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 183.515 57.785 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 183.515 57.785 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 183.515 57.785 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin ""
+			(uuid "0fdd0897-501a-47ab-828c-55c31ab2a4d1")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR020")
+					(unit 1)
+				)
+			)
+			(project "MQ_mod"
+				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -13428,6 +14784,178 @@
 		)
 	)
 	(symbol
+		(lib_id "easyeda2kicad:HE9009M6R")
+		(at 149.225 179.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ac340f67-ee0c-4a0c-ad07-e4f5b6b9ba53")
+		(property "Reference" "U2"
+			(at 149.225 168.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "HE9009M6R"
+			(at 149.225 171.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+			(at 149.225 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.lcsc.com/datasheet/C5123433.pdf"
+			(at 149.225 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 149.225 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "HEERMICR(赫尔半导体)"
+			(at 149.225 194.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "HE9009M6R"
+			(at 149.225 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN_ALT" "AP3602A"
+			(at 149.225 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "5"
+			(uuid "6270329a-9a41-49c8-b1ea-069fa5aa47f3")
+		)
+		(pin "6"
+			(uuid "eb32415c-9984-477b-964a-fd318ed542ba")
+		)
+		(pin "3"
+			(uuid "c3156ef5-6670-4c38-b7f4-be8eb388b5ff")
+		)
+		(pin "2"
+			(uuid "73abe9f6-1d12-4d83-ac1f-367e7d9a5a04")
+		)
+		(pin "1"
+			(uuid "d64aac4c-b4ca-4106-85ab-2f78d917fe87")
+		)
+		(pin "4"
+			(uuid "4b965c06-dad1-4002-80d2-f26431087db5")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 117.475 189.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "adf76a0a-b9aa-43d7-8129-37445281c847")
+		(property "Reference" "#PWR017"
+			(at 117.475 195.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 113.665 191.135 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 117.475 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 117.475 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 117.475 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1e39e1b1-54f5-4e32-ae91-f9afd9f6c365")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "#PWR017")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 152.654 96.52 0)
 		(unit 1)
@@ -13637,7 +15165,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C852745"
+		(property "LCSC Part Number" "C2681606"
 			(at 152.654 20.32 0)
 			(effects
 				(font
@@ -13979,6 +15507,84 @@
 		)
 	)
 	(symbol
+		(lib_id "Periph-altium-import:0_CAP")
+		(at 161.925 189.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d03a778c-deb6-49fd-abd1-f0e0a620f3bc")
+		(property "Reference" "C4"
+			(at 162.941 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "2.2uF"
+			(at 162.56 192.405 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
+			(at 161.925 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 161.925 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 161.925 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C170151"
+			(at 161.925 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b77efd46-2bef-406c-a5e0-6b9859a09e0d")
+		)
+		(pin "2"
+			(uuid "a656fc0e-f8e0-473a-8d80-4c7f4ee50b9b")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 152.654 132.08 0)
 		(unit 1)
@@ -14214,16 +15820,35 @@
 		)
 	)
 	(symbol
-		(lib_id "Periph-altium-import:VCCIN")
-		(at 142.24 167.64 270)
+		(lib_id "Logic_LevelTranslator:TXS0102DCT")
+		(at 241.3 48.26 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "d6ef9ccc-c1e3-4c17-a1ff-8ca2a335f7ad")
-		(property "Reference" "#PWR018"
-			(at 142.24 167.64 0)
+		(fields_autoplaced yes)
+		(uuid "e1818cc4-cc34-41e2-bf42-e651f0f3fa93")
+		(property "Reference" "U1"
+			(at 243.4941 60.325 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TXS0102DCT"
+			(at 243.4941 62.865 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
+			(at 241.3 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14231,16 +15856,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "VCCIN"
-			(at 136.144 167.64 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 142.24 167.64 0)
+		(property "Datasheet" "http://www.ti.com/lit/gpn/txs0102"
+			(at 241.3 48.768 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14248,8 +15865,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 142.24 167.64 0)
+		(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, SSOP-8"
+			(at 241.3 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14257,28 +15874,34 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 142.24 167.64 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
+		(pin "2"
+			(uuid "a93fa4c6-09aa-4dde-a8fb-46120dad49db")
 		)
-		(pin ""
-			(uuid "8863fd33-4131-4ee2-8712-8054570718dd")
+		(pin "1"
+			(uuid "ec9e5ee0-b6d3-42c1-bee3-5f88a257ee72")
+		)
+		(pin "3"
+			(uuid "eea59619-af1e-40bd-b9d4-266fd722da71")
+		)
+		(pin "4"
+			(uuid "42427d84-00d1-4df0-8026-11f31994e62c")
+		)
+		(pin "5"
+			(uuid "8713461d-af77-43d5-afbc-ee1834c8fed3")
+		)
+		(pin "6"
+			(uuid "2dbefc61-96f4-438a-88dc-51dda6e5b554")
+		)
+		(pin "7"
+			(uuid "836eb80b-9b4a-49f5-b73d-8d83d1c6dab6")
+		)
+		(pin "8"
+			(uuid "3810a916-f63c-43d4-a82c-40dc71356303")
 		)
 		(instances
 			(project "VGA_adapter"
 				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "#PWR018")
-					(unit 1)
-				)
-			)
-			(project "MQ_mod"
-				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
-					(reference "#PWR092")
+					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -14422,7 +16045,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C852745"
+		(property "LCSC Part Number" "C2681606"
 			(at 152.654 66.04 0)
 			(effects
 				(font
