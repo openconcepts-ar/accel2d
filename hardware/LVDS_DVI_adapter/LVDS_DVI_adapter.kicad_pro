@@ -64,10 +64,7 @@
           "width": 0.26
         }
       ],
-      "drc_exclusions": [
-        "courtyards_overlap|133550001|123027001|839a7d12-ebd3-4889-82ab-92baf02d3b4a|e82d7eac-a4dd-4b79-af19-d3ff0c05082f",
-        "starved_thermal|134550000|123727000|20c9ab90-c871-4439-a096-fb1898e755a0|5445adb1-3746-4fdf-afcb-e564416fa17a|F.Cu"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "filename": "board_design_settings.json",
         "version": 2
@@ -137,7 +134,7 @@
         "min_hole_to_hole": 0.5,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
-        "min_resolved_spokes": 2,
+        "min_resolved_spokes": 1,
         "min_silk_clearance": 0.0,
         "min_text_height": 0.7999999999999999,
         "min_text_thickness": 0.08,
@@ -675,7 +672,7 @@
       "workbook_filename": ""
     },
     "page_layout_descr_file": "",
-    "plot_directory": "plot/",
+    "plot_directory": "",
     "spice_adjust_passive_values": false,
     "spice_current_sheet_as_root": false,
     "spice_external_command": "spice \"%I\"",
