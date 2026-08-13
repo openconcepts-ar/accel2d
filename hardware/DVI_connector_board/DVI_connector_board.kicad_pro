@@ -183,7 +183,8 @@
         0.127,
         0.1397,
         0.1524,
-        0.2286
+        0.2286,
+        0.5
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
