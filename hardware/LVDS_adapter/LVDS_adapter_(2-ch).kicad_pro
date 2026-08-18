@@ -49,7 +49,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.127
+          "min_clearance": 0.0
         }
       },
       "diff_pair_dimensions": [
@@ -59,10 +59,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "copper_edge_clearance|145850000|101950000|29d04d6e-6e77-4888-869c-7b16163a80c2|92ee9ddc-b95b-4c00-973f-1beedb217c51",
-        "copper_edge_clearance|145850000|76750000|29d04d6e-6e77-4888-869c-7b16163a80c2|a25b30d7-f7c4-453f-9b29-e1f7a117df1a"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -124,9 +121,9 @@
         "max_error": 0.005,
         "min_clearance": 0.127,
         "min_connection": 0.0,
-        "min_copper_edge_clearance": 0.35,
+        "min_copper_edge_clearance": 0.3,
         "min_hole_clearance": 0.254,
-        "min_hole_to_hole": 0.5,
+        "min_hole_to_hole": 0.44999999999999996,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
         "min_resolved_spokes": 1,
