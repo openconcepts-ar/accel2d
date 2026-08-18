@@ -7250,6 +7250,16 @@
 	)
 	(wire
 		(pts
+			(xy 57.15 128.27) (xy 64.77 128.27)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "64c848e4-e2e0-4711-ae51-3ccc9d8c219e")
+	)
+	(wire
+		(pts
 			(xy 237.49 128.27) (xy 209.55 128.27)
 		)
 		(stroke
@@ -7410,16 +7420,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 128.27) (xy 64.77 128.27)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "77f697d3-99db-446a-8952-8aa76e1cdd44")
-	)
-	(wire
-		(pts
 			(xy 64.77 153.67) (xy 46.99 153.67)
 		)
 		(stroke
@@ -7447,6 +7447,16 @@
 			(type default)
 		)
 		(uuid "7a53e765-c231-47ce-846e-e199db876b0d")
+	)
+	(wire
+		(pts
+			(xy 57.15 125.73) (xy 64.77 125.73)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "7e62c890-de37-4a55-9635-79a13b8513ed")
 	)
 	(wire
 		(pts
@@ -8500,16 +8510,6 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 125.73) (xy 64.77 125.73)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "fdd155c1-2c00-4341-9c24-f2cfd798275e")
-	)
-	(wire
-		(pts
 			(xy 237.49 85.09) (xy 237.49 82.55)
 		)
 		(stroke
@@ -8517,6 +8517,17 @@
 			(type default)
 		)
 		(uuid "ff8bfa76-03df-4778-b178-58450790425b")
+	)
+	(text "LCD_D12"
+		(exclude_from_sim no)
+		(at 59.69 128.27 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "0ba5ada5-c043-40f2-8304-8e5224a6c394")
 	)
 	(text "South connector"
 		(exclude_from_sim no)
@@ -8705,6 +8716,17 @@
 		)
 		(uuid "a51d8b02-b000-45c4-93d4-28aeebe64e03")
 	)
+	(text "LCD_D13"
+		(exclude_from_sim no)
+		(at 59.69 125.73 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "a73a6f06-47c4-4e7b-8e55-e70e59cef8a7")
+	)
 	(text "LCD_D11"
 		(exclude_from_sim no)
 		(at 89.535 128.27 0)
@@ -8737,28 +8759,6 @@
 			(justify left bottom)
 		)
 		(uuid "b93bae82-fe66-400a-8d5d-a314a514d92c")
-	)
-	(text "LCD_D13"
-		(exclude_from_sim no)
-		(at 59.69 128.27 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "bc726ddf-ad33-4787-9825-98999a4f7f4b")
-	)
-	(text "LCD_D12"
-		(exclude_from_sim no)
-		(at 59.69 125.73 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "c3e2ef80-ddae-4796-a9f7-b6241b3247e1")
 	)
 	(text "LCD_D4"
 		(exclude_from_sim no)
@@ -8839,6 +8839,28 @@
 		)
 		(uuid "daee01c2-009b-4fc2-a628-8a286ff6d9c5")
 	)
+	(global_label "G5"
+		(shape output)
+		(at 57.15 125.73 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "00863271-8c63-4fe7-b949-064b9d39beed")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 51.6853 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "R7"
 		(shape input)
 		(at 139.7 20.32 180)
@@ -8852,6 +8874,28 @@
 		(uuid "029dbd51-1c03-42ef-9845-9d6ef5407f99")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 134.2353 20.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "G4"
+		(shape output)
+		(at 57.15 128.27 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "02c8dad9-6105-4e76-bc2f-f6bcee33ffc2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 51.6853 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9050,28 +9094,6 @@
 		(uuid "26765ca2-64a2-4a5e-a029-379544b8fa5e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 134.2353 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "G4"
-		(shape output)
-		(at 57.15 125.73 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "26be93fb-74ea-4822-afbf-53bfbacd20c4")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 51.6853 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9979,28 +10001,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "G5"
-		(shape output)
-		(at 57.15 128.27 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "bcbcc034-c4e2-414d-938c-05b9ee2d42cb")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 51.6853 128.27 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 				(hide yes)
 			)
 		)

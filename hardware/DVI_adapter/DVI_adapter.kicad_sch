@@ -9631,6 +9631,10 @@
 		(uuid "61457f8d-7cc4-4374-aded-634f2208ef28")
 	)
 	(no_connect
+		(at 35.56 116.84)
+		(uuid "63df5976-12c2-40e3-806a-397caa45e567")
+	)
+	(no_connect
 		(at 62.23 81.28)
 		(uuid "8048dcf6-b884-4ab4-a221-ee68e52109cc")
 	)
@@ -9653,10 +9657,6 @@
 	(no_connect
 		(at 60.96 121.92)
 		(uuid "a8c4f38a-10e7-4fa0-a055-a6dc9f5b7799")
-	)
-	(no_connect
-		(at 35.56 114.3)
-		(uuid "a9572875-b884-41fd-8e41-27b4cd94243c")
 	)
 	(no_connect
 		(at 35.56 132.08)
@@ -11286,16 +11286,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 119.38) (xy 35.56 119.38)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "77f697d3-99db-446a-8952-8aa76e1cdd44")
-	)
-	(wire
-		(pts
 			(xy 35.56 144.78) (xy 17.78 144.78)
 		)
 		(stroke
@@ -12116,6 +12106,16 @@
 	)
 	(wire
 		(pts
+			(xy 27.94 116.84) (xy 35.56 116.84)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "cdf6d20d-85c7-4f2e-9c23-cac757587987")
+	)
+	(wire
+		(pts
 			(xy 198.12 116.84) (xy 210.82 116.84)
 		)
 		(stroke
@@ -12183,6 +12183,16 @@
 			(type default)
 		)
 		(uuid "d0d621c7-7260-441e-8768-6fc3e03d580f")
+	)
+	(wire
+		(pts
+			(xy 27.94 119.38) (xy 35.56 119.38)
+		)
+		(stroke
+			(width 0.254)
+			(type default)
+		)
+		(uuid "d3eb0f41-fd66-4bb2-a3a4-e7a8d0b8ecfd")
 	)
 	(wire
 		(pts
@@ -12786,16 +12796,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 116.84) (xy 35.56 116.84)
-		)
-		(stroke
-			(width 0.254)
-			(type default)
-		)
-		(uuid "fdd155c1-2c00-4341-9c24-f2cfd798275e")
-	)
-	(wire
-		(pts
 			(xy 110.49 95.25) (xy 121.92 95.25)
 		)
 		(stroke
@@ -12941,6 +12941,17 @@
 			(justify left bottom)
 		)
 		(uuid "4db83a6d-0f7e-4023-9c34-d52445278c14")
+	)
+	(text "LCD_D13"
+		(exclude_from_sim no)
+		(at 30.48 116.84 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "4e2d2e41-e23e-4db6-aa41-1d7c549802e6")
 	)
 	(text "LCD_D9"
 		(exclude_from_sim no)
@@ -13121,28 +13132,6 @@
 		)
 		(uuid "b93bae82-fe66-400a-8d5d-a314a514d92c")
 	)
-	(text "LCD_D13"
-		(exclude_from_sim no)
-		(at 30.48 119.38 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "bc726ddf-ad33-4787-9825-98999a4f7f4b")
-	)
-	(text "LCD_D12"
-		(exclude_from_sim no)
-		(at 30.48 116.84 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "c3e2ef80-ddae-4796-a9f7-b6241b3247e1")
-	)
 	(text "LCD_D4"
 		(exclude_from_sim no)
 		(at 60.325 132.08 0)
@@ -13153,6 +13142,17 @@
 			(justify left bottom)
 		)
 		(uuid "c9a026a5-3363-4681-8206-729d74a9b0a4")
+	)
+	(text "LCD_D12"
+		(exclude_from_sim no)
+		(at 30.48 119.38 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "d29f68fe-40a9-4aae-a033-0b6c95b760a3")
 	)
 	(text "22uF Tantalum polarized\ncapacitor"
 		(exclude_from_sim no)
@@ -13694,28 +13694,6 @@
 			)
 		)
 	)
-	(global_label "G4"
-		(shape output)
-		(at 27.94 116.84 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "26be93fb-74ea-4822-afbf-53bfbacd20c4")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 22.4753 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "TVDD"
 		(shape input)
 		(at 274.955 92.075 0)
@@ -13800,6 +13778,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "G4"
+		(shape output)
+		(at 27.94 119.38 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "401f317b-3836-4562-85c9-a982b3629d6b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 22.4753 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -14662,28 +14662,6 @@
 			)
 		)
 	)
-	(global_label "G5"
-		(shape output)
-		(at 27.94 119.38 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "bcbcc034-c4e2-414d-938c-05b9ee2d42cb")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 22.4753 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "R3"
 		(shape output)
 		(at 69.85 71.12 0)
@@ -15093,6 +15071,28 @@
 		(uuid "ef37e8ef-5b62-4b1a-8f7e-586a94b35e34")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 73.9897 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "G5"
+		(shape output)
+		(at 27.94 116.84 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f0fab34b-c4d5-4243-b924-c60553f7b491")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 22.4753 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
