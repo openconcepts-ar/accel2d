@@ -5229,18 +5229,6 @@
 		)
 		(uuid "8f0b0689-2c4f-4370-8785-bd141f22b3d0")
 	)
-	(text "The IC may require a higher voltage"
-		(exclude_from_sim no)
-		(at 69.088 184.15 0)
-		(effects
-			(font
-				(size 2 2)
-				(thickness 0.4)
-				(bold yes)
-			)
-		)
-		(uuid "ea172a9e-517f-4587-b047-69717d32ffe9")
-	)
 	(global_label "XVDD_3V3"
 		(shape input)
 		(at 189.865 97.155 0)
@@ -10373,6 +10361,15 @@
 			)
 		)
 		(property "MPN" "TPNCP115ASN120T2G"
+			(at 64.135 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN_ALT" "AP2112K-1.2TRG1"
 			(at 64.135 162.56 0)
 			(effects
 				(font

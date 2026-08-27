@@ -58,7 +58,15 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "courtyards_overlap|104800001|125870001|047a4f4a-a137-4d30-bdc1-d59f463088d5|e7a18feb-78ab-4a46-9ccf-a70c16bc4748",
+        "courtyards_overlap|107342498|126437501|a470c6f6-e6ce-4a5c-92f7-2f5b0ec1ae37|e7a18feb-78ab-4a46-9ccf-a70c16bc4748",
+        "courtyards_overlap|109490001|125590001|047a4f4a-a137-4d30-bdc1-d59f463088d5|4ba364d0-2110-401f-b0de-3745e132495e",
+        "courtyards_overlap|110409999|126437501|4ba364d0-2110-401f-b0de-3745e132495e|a470c6f6-e6ce-4a5c-92f7-2f5b0ec1ae37",
+        "courtyards_overlap|111308421|125560001|047a4f4a-a137-4d30-bdc1-d59f463088d5|71bbb0c3-c053-4b40-91ad-6c6e0bc27725",
+        "courtyards_overlap|111359999|126437501|71bbb0c3-c053-4b40-91ad-6c6e0bc27725|a470c6f6-e6ce-4a5c-92f7-2f5b0ec1ae37",
+        "courtyards_overlap|111999999|126437501|047a4f4a-a137-4d30-bdc1-d59f463088d5|a470c6f6-e6ce-4a5c-92f7-2f5b0ec1ae37"
+      ],
       "meta": {
         "version": 2
       },
@@ -126,10 +134,10 @@
         "min_silk_clearance": 0.0,
         "min_text_height": 0.7999999999999999,
         "min_text_thickness": 0.08,
-        "min_through_hole_diameter": 0.3,
+        "min_through_hole_diameter": 0.19999999999999998,
         "min_track_width": 0.127,
         "min_via_annular_width": 0.125,
-        "min_via_diameter": 0.5499999999999999,
+        "min_via_diameter": 0.35,
         "solder_mask_clearance": 0.0,
         "solder_mask_min_width": 0.0,
         "solder_mask_to_copper_clearance": 0.0,
@@ -467,12 +475,12 @@
       {
         "bus_width": 12,
         "clearance": 0.127,
-        "diff_pair_gap": 0.25,
+        "diff_pair_gap": 0.127,
         "diff_pair_via_gap": 0.25,
-        "diff_pair_width": 0.2,
+        "diff_pair_width": 0.1537,
         "line_style": 0,
-        "microvia_diameter": 0.3,
-        "microvia_drill": 0.1,
+        "microvia_diameter": 0.35,
+        "microvia_drill": 0.2,
         "name": "Default",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
@@ -647,6 +655,14 @@
     [
       "971d21cc-a5c8-4932-ad62-f68d6b0e4b00",
       "Root"
+    ],
+    [
+      "5642edec-fdb1-4594-a460-4c5875e7b593",
+      "IO"
+    ],
+    [
+      "8825bcd9-1923-4aca-91a1-9f5b9a2443b2",
+      "POWER"
     ]
   ],
   "text_variables": {}
