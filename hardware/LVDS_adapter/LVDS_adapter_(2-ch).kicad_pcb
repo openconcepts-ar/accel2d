@@ -8705,7 +8705,7 @@
 		(layer "User.4")
 		(uuid "a540909b-6854-40af-ab0f-f19a1802e792")
 	)
-	(gr_text "CUPRUMFLOW"
+	(gr_text "VERSION:"
 		(at 146.35 100.74 270)
 		(layer "B.SilkS")
 		(uuid "1d6d7d66-6b79-4887-8b0e-9b664034f7ee")

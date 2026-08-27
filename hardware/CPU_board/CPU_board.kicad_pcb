@@ -30962,7 +30962,7 @@
 			(justify mirror)
 		)
 	)
-	(gr_text "CUPRUMFLOW"
+	(gr_text "VERSION:"
 		(at 98.0928 105.402 0)
 		(layer "B.SilkS")
 		(uuid "31dc46cf-1296-4020-b298-7e1ebb112d06")
