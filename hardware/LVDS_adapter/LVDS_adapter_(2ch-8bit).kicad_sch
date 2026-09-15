@@ -5384,6 +5384,12 @@
 		(uuid "93f95f19-cfcb-418c-9445-c077afba1f88")
 	)
 	(junction
+		(at 178.435 112.395)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9864ad6e-c973-48fc-83cb-997fd610a8c6")
+	)
+	(junction
 		(at 121.92 104.775)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5502,12 +5508,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d00a6de0-0554-42f2-ba4e-b0ebf05cd3ed")
-	)
-	(junction
-		(at 178.435 112.395)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d921cd5b-bb65-4d52-a2f7-08059c70da1b")
 	)
 	(junction
 		(at 121.92 125.095)
@@ -5983,16 +5983,6 @@
 	)
 	(wire
 		(pts
-			(xy 172.085 112.395) (xy 178.435 112.395)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3bd70458-b14b-4bd6-aa83-234a657cce87")
-	)
-	(wire
-		(pts
 			(xy 101.6 81.915) (xy 121.92 81.915)
 		)
 		(stroke
@@ -6373,7 +6363,7 @@
 	)
 	(wire
 		(pts
-			(xy 178.435 112.395) (xy 191.135 112.395)
+			(xy 172.085 112.395) (xy 178.435 112.395)
 		)
 		(stroke
 			(width 0)
@@ -7200,6 +7190,16 @@
 			(type default)
 		)
 		(uuid "e022b346-d4cf-4468-8832-a64d749b0ac8")
+	)
+	(wire
+		(pts
+			(xy 178.435 112.395) (xy 191.135 112.395)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0b61520-a7cd-46ef-a6d7-c374d628f080")
 	)
 	(wire
 		(pts
@@ -11375,6 +11375,7 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
 			)
 		)
 		(property "Footprint" "easyeda2kicad:FPC-SMD_FH52K-6S-0.5SH"
