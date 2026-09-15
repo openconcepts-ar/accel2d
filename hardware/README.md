@@ -1,23 +1,25 @@
 # HARDWARE (boards)
 
-Here are the design files for the current 11 boards of this project:  
+Here are the design files for the current boards of this project:  
 
 Processing boards:  
-  * [CPU board](#cpu-board-design)  
-  * [ECP5 FPGA board](#ECP5-fpga-board-design)  
-  * [Spartan-6 FPGA board](#spartan-6-fpga-board)
+  * [CPU board](#cpu-board-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FCPU_board)  
+  * [ECP5 FPGA board](#ECP5-fpga-board-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FFPGA_board)  
+  * [Spartan-6 FPGA board](#spartan-6-fpga-board) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FSpartan6_board)  
 
 Adapter boards:  
-  * [eDP adapter board](#edp-adapter-design)  
-  * [VGA adapter](#vga-adapter-board-design) & connector  
-  * [LVDS adapters](#lvds-adapter-board-design) single and dual channel  
-  * [DVI adapter](#dvi-adapter-board-design)  
-  * [DVI passive adapter](#dvi-passive-adapter-board-design)  
+  * [eDP adapter board](#edp-adapter-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FeDP_adapter)  
+  * [eDP adapter board, alternate IC version](#edp-adapter-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FeDP_adapter%2Fedp_adapterITE)  
+  * [VGA adapter](#vga-adapter-board-design) & connector [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FVGA_adapter)  
+  * [LVDS adapters](#lvds-adapter-board-design) single and dual channel [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FLVDS_adapter)  
+  * [DVI adapter](#dvi-adapter-board-design) & connector [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FDVI_adapter)  
+  * [DVI passive adapter](#dvi-passive-adapter-board-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FDVI_connector_board)  
+  * [USB to I2C bridge](#usb-to-i2c-bridge) [_viewer_ NOTE: select USBHOST project](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FTouch_splitter)   
 
 Debugging boards:  
-  * [DVI receiver](#dvi-receiver-board)  
-  * [Touch splitter](#touch-splitter-board)  
-  * [I/O board](#io-board-design)  
+  * [DVI receiver](#dvi-receiver-board) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FDVI_receiver)  
+  * [Touch splitter](#touch-splitter-board) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FTouch_splitter)  
+  * [I/O board](#io-board-design) [_viewer_](https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fopenconcepts-ar%2Faccel2d%2Ftree%2Fpcbfixes1%2Fhardware%2FIO_board)  
   
 
 ## CPU board design
@@ -90,17 +92,27 @@ PDF schematics are [here](./Spartan6_board/pcb.pdf).
 
 ## eDP adapter design
 
-This adapter is capable of converting digital RGB parallel signals to embedded display port (eDP) for diredct driving of laptop replacement displays using a standard FPC cable. The converter IC is NCS8801 from NewCoSemi.
+This adapter is capable of converting <s>digital RGB parallel signals NOTE: lack of docs prevents this, see eDP_adapter/EDP.md</s> LVDS signals to eDP protocol for direct driving of laptop replacement displays using a standard FPC cable. The converter IC is NCS8801S from [NewCoSemi](https://www.newcosemi.com/), or IT6251 from [ITE](https://www.ite.com.tw/en) as an alternative. Note they are 4-layer design for better signal integrity, as required by the high-speed differential LVDS inputs and eDP outputs.
 
-The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./eDP_adapter).  
+The design source files are [here](./eDP_adapter).  
 PDF schematics for the adapter are [here](./eDP_adapter/eDP_adapter.pdf).  
   
-This design is relased under a **CERN open-source hardware** license.
 
 <img src="../doc/eDP_adapter3D.png" height=240>  
 <img src="../doc/eDP_adapterFRONT.png" height=240>
-<img src="../doc/eDP_adapterBACK.png" height=240>
+<img src="../doc/eDP_adapterBACK.png" height=240>  
 <img src="../doc/eDP_adapter_layers.png" height=240>  
+
+**Alternate version**:  
+
+<img src="../doc/eDP_adapterITE_3D.png" height=240>  
+<img src="../doc/eDP_adapterITE_FRONT.png" height=240>
+<img src="../doc/eDP_adapterITE_BACK.png" height=240>
+<img src="../doc/eDP_adapterITE_layers.png" height=240>  
+
+The design source files are [here](./eDP_adapter).  
+
+Thiese designs are relased under a **CERN open-source hardware** license, using the the open-source EDA tool [Kicad](https://kicad.org)
 
   
 ## VGA adapter board design
@@ -131,20 +143,29 @@ Features:
 
 The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./LVDS_adapter), licensed under a **CERN open-source hardware** license.  
   
-PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf) (single channel) and [here](./LVDS_adapter/LVDS_adapter_2ch.pdf)  (dual channel).  
+PDF schematics for the adapter are [here](./LVDS_adapter/LVDS_adapter_schematics.pdf) (single channel) and [here](./LVDS_adapter/LVDS_adapter_2ch.pdf) (dual channel).  
 
-### Dual channel
+**Dual channel**
 <img src="../doc/LVDS_adapter3D-2ch.png" width=480>  
 <img src="../doc/LVDS_adapterFRONT-2ch.png" width=240>
 <img src="../doc/LVDS_adapterBACK-2ch.png" width=240>  
 <img src="../doc/LVDS_adapter_layers-2ch.png" width=240>  
 
-### Single channel
+**Single channel**
 <img src="../doc/LVDS_adapter3D.png" width=480>  
 <img src="../doc/LVDS_adapterFRONT.png" width=240>
 <img src="../doc/LVDS_adapterBACK.png" width=240>  
 <img src="../doc/LVDS_adapter_layers.png" width=240>  
   
+
+**8-bit dual channel**
+
+This boards outputs a standard 2x15 2mm pitch LVDS connector on the side, supporting 1 or 2 channel, 6- or 8-bit versions. It adds a 6-pin I2C connector on the back for touch signals.  
+<img src="../doc/LVDS_adapter3D-2ch8bit.png" width=480>  
+<img src="../doc/LVDS_adapterFRONT-2ch8bit.png" width=240>
+<img src="../doc/LVDS_adapterBACK-2ch8bit.png" width=240>  
+<img src="../doc/LVDS_adapter_layers-2ch8bit.png" width=240>  
+
 ## DVI adapter board design
 
 This board converts parallel RGB signals to digital video signals in the DVI format, as accepted by the majority of current PC monitors and TVs.
@@ -160,10 +181,15 @@ The design is done with the open-source EDA tool [Kicad](https://kicad.org), the
 PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.pdf).  
 
 <img src="../doc/DVI_adapter3D.png" width=320>
-<img src="../doc/DVI_connector_board3D.png" width=320>  
 <img src="../doc/DVI_adapterFRONT.png" height=160>
 <img src="../doc/DVI_adapterBACK.png" height=160>
 <img src="../doc/DVI_adapter_layers.png" height=160>  
+
+**Connector board**
+  
+This was fixed for better signal integrity using a G-S-S-G scheme for the differential signals, using a pinout that is common in off-the-shelf extension adapters.   
+
+<img src="../doc/DVI_connector_board3D.png" width=320>  
 
 
 ## DVI passive adapter board design
@@ -201,14 +227,24 @@ PDF schematics for the adapter are [here](./DVI_adapter/DVI_adapter_schematics.p
 The touch splitter board allows to split the signals from a 40-pin eDP display woth on-cell touch, separating the 30-pin eDP signals and the USB touch signals. It supports powering the touch model with 5V or 3.3V.
 
 The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./Touch_splitter). 
-  
-PDF schematics are [here](./Touch_splitter/eDP_touch_adapter.pdf).  
 
 <img src="../doc/Touch_splitter3D.png" height=200>  
 <img src="../doc/Touch_splitterFRONT.png" height=200>
 <img src="../doc/Touch_splitterBACK.png" height=200>
 <img src="../doc/Touch_splitter_layers.png" height=200>  
 
+
+## USB to I2C Bridge
+This board is a 40-pin extended eDP with touch to 30-pin with bridged I2C. It is similar top the Touch splitter board, but "active": instead of passively exposing the USB signals to an external connector, it routes them to a MCU.
+  
+The board uses a RP2354 as the MCU wich supports USB full-speeed host (unsing the USB signals on the connector with the additional 10 pins) and outputs I2C data over a usual 30-pin eDP connector. It uses "OEM reserved" pins to route the I2C signals and the interrupt pin. This is received by the eDP adapter which supports touch-enabled display reusing it's 30-pin output FPC connector, being still compatible with non-touch enabled 30-pin displays.
+
+The design is done with the open-source EDA tool [Kicad](https://kicad.org), the source files are [here](./Touch_splitter), see `eDP_touch_adapter_USBHOST.kicad_*` files. 
+
+<img src="../doc/Touch_adapter_USBHOST_3D.png" height=200>  
+<img src="../doc/Touch_adapter_USBHOST_FRONT.png" height=200>
+<img src="../doc/Touch_adapter_USBHOST_BACK.png" height=200>  
+<img src="../doc/Touch_adapter_USBHOST_layers.png" height=200>  
 
 
   
@@ -228,7 +264,10 @@ The design is done with the open-source EDA tool [Kicad](https://kicad.org), the
 
 See most relevant [commit](https://github.com/openconcepts-ar/accel2d/commit/21333764fecb12ceccd276d67593bb1683f1b8bd).  
 
-  * Added [eDP adapter board](#edp-adapter-design)
+  * Added [eDP adapter board](#edp-adapter-design), alternate version
+  * Added [USB to I2C bridge](#usb-to-i2c-bridge)
+  * Added [LVDS adapters, 8-bit version dual channel](#lvds-adapter-board-design)
+  * Updated [eDP adapter board](#edp-adapter-design) to 4 layers
   * Added [Spartan-6 FPGA board](#spartan-6-fpga-board)
   * Added [DVI receiver board](#dvi-receiver-board)
   * Added [Touch splitter board](#touch-splitter-board)
