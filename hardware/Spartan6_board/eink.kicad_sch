@@ -5,9 +5,9 @@
 	(uuid "f84683da-cedd-485f-a3db-e0737fd9f48e")
 	(paper "A4")
 	(title_block
-		(title "Caster EPDC")
-		(date "2022-07-03")
-		(rev "R0.4")
+		(title "Spartan 6 FPGA board")
+		(date "2026-09-17")
+		(rev "R0.1")
 		(company "Copyright 2022 Modos / Engineer: Wenting Zhang")
 	)
 	(lib_symbols

@@ -5,9 +5,9 @@
 	(uuid "2b11a276-2b0a-4653-b2ba-18cc4c92042b")
 	(paper "A4")
 	(title_block
-		(title "Caster EPDC")
-		(date "2022-07-03")
-		(rev "R0.4")
+		(title "Spartan 6 FPGA board")
+		(date "2026-09-17")
+		(rev "R0.1")
 		(company "Copyright 2022 Modos / Engineer: Wenting Zhang")
 	)
 	(lib_symbols
@@ -12934,7 +12934,7 @@
 				)
 			)
 		)
-		(property "Value" "XC6SLX16-FTG256"
+		(property "Value" "XC6SLX25-3FTG256C"
 			(at 220.98 48.26 0)
 			(effects
 				(font
@@ -12968,7 +12968,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C39313"
+		(property "LCSC Part Number" "C1521716"
 			(at 220.98 81.28 0)
 			(effects
 				(font
