@@ -5,9 +5,9 @@
 	(uuid "94defba7-511a-47c7-8481-fb18479bbf32")
 	(paper "A4")
 	(title_block
-		(title "Caster EPDC")
-		(date "2022-07-03")
-		(rev "R0.4")
+		(title "Spartan 6 FPGA board")
+		(date "2026-09-17")
+		(rev "R0.1")
 		(company "Copyright 2022 Modos / Engineer: Wenting Zhang")
 	)
 	(lib_symbols
@@ -9269,6 +9269,16 @@
 		)
 		(uuid "ff2f787c-9d9f-42e2-ae99-3ca0b27b5adf")
 	)
+	(text "Consider the slower MT46H32M16LF (8x9mm)\nas in Saturn board"
+		(exclude_from_sim no)
+		(at 258.064 18.288 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "447a2310-6c10-4da7-ad4e-aa8af14a89b0")
+	)
 	(text "ZIO"
 		(exclude_from_sim no)
 		(at 139.7 50.8 0)
@@ -15266,7 +15276,7 @@
 				)
 			)
 		)
-		(property "Value" "XC6SLX16-FTG256"
+		(property "Value" "XC6SLX25-3FTG256C"
 			(at 86.36 187.96 0)
 			(effects
 				(font
@@ -15300,7 +15310,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C39313"
+		(property "LCSC Part Number" "C1521716"
 			(at 86.36 104.14 0)
 			(effects
 				(font
