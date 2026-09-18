@@ -64,7 +64,12 @@ Where the following parameters of the DRC are checked:
 <img src="../doc/DFM_annular-ring.png">  
 
 Note that track width, clearance and pad spacing of less than 0.1mm are marked in the "danger" zone by the DFM tool, in discrepancy with the capability specifications which allow 0.09mm.
-A similar situation happens with the annular rings, marked as dangerous if smaller than 0.1mm, where the capabilities allow 0.075mm as the preferred size.
+A similar situation happens with the annular rings, marked as dangerous if smaller than 0.1mm, where the capabilities allow 0.075mm as the preferred size.  
+  
+Note that below 0.075mm there's risks regarding drill tolerance of 0.05mm (in accordance with capabilities):  
+<img src="../doc/FPGA board (6 layer) xray detail.png">  
+  
+Average Hole Plating Thickness is .018mm.  
 
 ## Conclusion
 This analysis was useful in practice, to make the decision of updating the 6-layer board where all vias of 0.25mm outer diameter were changed to 0.3mm, with a correspondingly larger annular ring, thereby reducing manufacturing risks.
