@@ -3869,8 +3869,11 @@
 				)
 			)
 		)
+		(property ki_fp_filters "Connector*:*_2x??_*")
 		(path "/5d624170-6a42-44f8-ab6c-98ab8da35292")
-		(attr through_hole)
+		(sheetname "Root")
+		(sheetfile "LVDS_adapter_(2ch-8bit).kicad_sch")
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start -4.7 28.738001)
 			(end -4.7 29.5)

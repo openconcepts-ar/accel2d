@@ -10247,9 +10247,9 @@
 		(at 186.055 94.615 180)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
-		(dnp yes)
+		(dnp no)
 		(uuid "5d624170-6a42-44f8-ab6c-98ab8da35292")
 		(property "Reference" "J2"
 			(at 184.785 118.745 0)
