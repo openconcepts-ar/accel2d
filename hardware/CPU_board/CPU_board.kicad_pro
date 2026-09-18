@@ -81,11 +81,11 @@
           ""
         ],
         [
-          "clearance|88147607|103919530|04172517-9c55-42a2-acb8-7505e9544b60|26bc52c2-2281-4534-a1aa-7aef0398af67",
+          "clearance|88147607|103749530|26bc52c2-2281-4534-a1aa-7aef0398af67|04172517-9c55-42a2-acb8-7505e9544b60",
           ""
         ],
         [
-          "clearance|88147607|104719530|67d54831-1151-4930-8847-4ff6806868fa|3e927e5b-bb25-4c06-8dad-dfc4feae7042",
+          "clearance|88147607|104549530|3e927e5b-bb25-4c06-8dad-dfc4feae7042|67d54831-1151-4930-8847-4ff6806868fa",
           ""
         ],
         [
@@ -93,7 +93,7 @@
           ""
         ],
         [
-          "clearance|88147607|105519530|260bf8df-09d6-4eff-aa1f-77efdb072c4f|ef847cbe-80f8-41b1-8304-bc47c1858d9b",
+          "clearance|88147607|105349530|ef847cbe-80f8-41b1-8304-bc47c1858d9b|260bf8df-09d6-4eff-aa1f-77efdb072c4f",
           ""
         ],
         [
@@ -234,7 +234,7 @@
         "allow_microvias": false,
         "max_error": 0.005,
         "min_clearance": 0.1,
-        "min_connection": 0.0889,
+        "min_connection": 0.1,
         "min_copper_edge_clearance": 0.3,
         "min_groove_width": 0.0,
         "min_hole_clearance": 0.3,
@@ -339,6 +339,10 @@
         {
           "diameter": 0.45,
           "drill": 0.2
+        },
+        {
+          "diameter": 0.6,
+          "drill": 0.35
         }
       ],
       "zones_allow_external_fillets": false,
