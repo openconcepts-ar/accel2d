@@ -3310,6 +3310,19 @@
 				)
 			)
 		)
+		(property "LCSC Part Number" "C347220"
+			(at 0 0 90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "0de5769a-171a-4ebb-8b02-21fa30b78654")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "SOT?223*TabPin2*")
 		(path "/8825bcd9-1923-4aca-91a1-9f5b9a2443b2/018ea46f-5138-4fd6-b989-2f37a093e55a")
 		(sheetname "POWER")
@@ -10565,7 +10578,7 @@
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C2"
-			(at -0.1 1.749999 270)
+			(at -0.1 1.749999 -90)
 			(layer "F.SilkS")
 			(uuid "f10bc98e-fe2a-48f7-9ab8-5b3b70635c77")
 			(effects
@@ -10576,7 +10589,7 @@
 			)
 		)
 		(property "Value" "10uF 25V"
-			(at 0 1.679999 270)
+			(at 0 1.679999 -90)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ebe71c49-b1eb-4bd1-a58c-bb5885688902")
@@ -10742,7 +10755,7 @@
 			(uuid "628345be-8c4c-49db-8071-fc10b2902d8a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 270)
+			(at 0 0 -90)
 			(layer "F.Fab")
 			(uuid "90e738ab-e46b-411f-84e3-f6292798f067")
 			(effects
@@ -13616,7 +13629,7 @@
 		(attr smd)
 		(fp_arc
 			(start -1.03124 1.073829)
-			(mid -1.126298 1)
+			(mid -1.126298 0.999999)
 			(end -1.03124 0.926171)
 			(stroke
 				(width 0.1524)
@@ -14940,7 +14953,7 @@
 		(attr smd)
 		(fp_arc
 			(start -1.03124 1.073829)
-			(mid -1.126298 1)
+			(mid -1.126298 0.999999)
 			(end -1.03124 0.926171)
 			(stroke
 				(width 0.1524)
@@ -16053,25 +16066,26 @@
 				(justify mirror)
 			)
 		)
-		(property "LCSC Part" "C9900011361"
-			(at 0 0 -135)
-			(layer "B.Fab")
-			(hide yes)
-			(uuid "fd1fe2e9-9ecd-4535-ae2f-56b00987d081")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-				(justify mirror)
-			)
-		)
 		(property "MPN" "IT6251"
 			(at 0 0 45)
 			(unlocked yes)
 			(layer "B.Fab")
 			(hide yes)
 			(uuid "feb17a09-aae8-4d78-bdde-c74ce668b18f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "LCSC Part Number" "C9900011361"
+			(at 0 0 -135)
+			(unlocked yes)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "21b353dc-ca75-4a58-ab82-ab51bc24d986")
 			(effects
 				(font
 					(size 1 1)
