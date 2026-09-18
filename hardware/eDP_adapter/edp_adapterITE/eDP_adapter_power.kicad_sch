@@ -5036,6 +5036,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part Number" "C347220"
+			(at 139.7 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "377b2ff5-8a94-4707-aced-03e28959451c")
 		)

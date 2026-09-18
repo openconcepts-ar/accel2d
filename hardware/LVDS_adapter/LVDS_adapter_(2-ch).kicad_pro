@@ -59,7 +59,11 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "annular_width|136175000|78162500|c18e7e62-e44d-4387-93db-11e53bbb91a5|00000000-0000-0000-0000-000000000000",
+        "annular_width|136175000|82162500|87d457c1-b77f-4e1d-8f02-6c4e8a2c5e9e|00000000-0000-0000-0000-000000000000",
+        "courtyards_overlap|140180001|79310001|7f4b12ae-1368-4673-ac12-771108abca01|e16657e5-c5ad-4bb6-be71-d274297e1eb5"
+      ],
       "meta": {
         "version": 2
       },
@@ -119,10 +123,10 @@
         "allow_blind_buried_vias": false,
         "allow_microvias": false,
         "max_error": 0.005,
-        "min_clearance": 0.127,
-        "min_connection": 0.0,
+        "min_clearance": 0.09999999999999999,
+        "min_connection": 0.127,
         "min_copper_edge_clearance": 0.3,
-        "min_hole_clearance": 0.254,
+        "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.44999999999999996,
         "min_microvia_diameter": 0.19999999999999998,
         "min_microvia_drill": 0.09999999999999999,
@@ -132,8 +136,8 @@
         "min_text_thickness": 0.08,
         "min_through_hole_diameter": 0.3,
         "min_track_width": 0.127,
-        "min_via_annular_width": 0.09999999999999999,
-        "min_via_diameter": 0.5,
+        "min_via_annular_width": 0.15,
+        "min_via_diameter": 0.6,
         "solder_mask_to_copper_clearance": 0.0,
         "use_height_for_length_calcs": true
       },
@@ -219,7 +223,7 @@
           "drill": 0.0
         },
         {
-          "diameter": 0.5,
+          "diameter": 0.6,
           "drill": 0.3
         }
       ],
@@ -464,7 +468,7 @@
     "classes": [
       {
         "bus_width": 12,
-        "clearance": 0.127,
+        "clearance": 0.1,
         "diff_pair_gap": 0.2032,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.296926,
@@ -481,7 +485,7 @@
       },
       {
         "bus_width": 12,
-        "clearance": 0.127,
+        "clearance": 0.1,
         "diff_pair_gap": 0.127,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2642,

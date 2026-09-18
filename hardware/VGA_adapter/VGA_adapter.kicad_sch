@@ -4230,7 +4230,7 @@
 				)
 			)
 		)
-		(symbol "Logic_LevelTranslator:TXS0102DCT"
+		(symbol "Logic_LevelTranslator:TXS0102DCU"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -4242,7 +4242,7 @@
 					)
 				)
 			)
-			(property "Value" "TXS0102DCT"
+			(property "Value" "TXS0102DCU"
 				(at 3.81 11.43 0)
 				(effects
 					(font
@@ -4251,7 +4251,7 @@
 					(justify left)
 				)
 			)
-			(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
+			(property "Footprint" "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"
 				(at 0 -13.97 0)
 				(effects
 					(font
@@ -4269,7 +4269,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, SSOP-8"
+			(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, VSSOP-8"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4287,7 +4287,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SSOP*2.95x2.8mm*P0.65mm*"
+			(property "ki_fp_filters" "VSSOP*2.3x2mm*P0.5mm*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -4296,7 +4296,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TXS0102DCT_0_1"
+			(symbol "TXS0102DCU_0_1"
 				(rectangle
 					(start -7.62 10.16)
 					(end 7.62 -10.16)
@@ -4393,7 +4393,7 @@
 					)
 				)
 			)
-			(symbol "TXS0102DCT_1_1"
+			(symbol "TXS0102DCU_1_1"
 				(polyline
 					(pts
 						(xy -4.318 2.54) (xy -1.27 2.54)
@@ -15736,6 +15736,103 @@
 		)
 	)
 	(symbol
+		(lib_id "Logic_LevelTranslator:TXS0102DCU")
+		(at 241.3 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d54402a8-8dea-4c03-8eb4-ef3a7a50a6ee")
+		(property "Reference" "U1"
+			(at 243.4941 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TXS0102DCU"
+			(at 243.4941 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_SO:VSSOP-8_2.3x2mm_P0.5mm"
+			(at 241.3 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/gpn/txs0102"
+			(at 241.3 48.768 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, VSSOP-8"
+			(at 241.3 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C53434"
+			(at 241.3 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "7"
+			(uuid "8d285b60-46d8-4501-8fd5-b94f34c5ca5c")
+		)
+		(pin "6"
+			(uuid "915cb6fc-8b8d-430b-a1df-dfb2fa5cf9da")
+		)
+		(pin "5"
+			(uuid "ac4d6166-ad79-48d3-9272-7a0d89d6aaf9")
+		)
+		(pin "4"
+			(uuid "ab0d9400-baa0-4b86-ae08-2b296ab3d8bc")
+		)
+		(pin "3"
+			(uuid "212f812f-4751-44d4-bbee-27835b38c17b")
+		)
+		(pin "2"
+			(uuid "ae995b21-0e53-4cf9-9d79-ca67bcc9e1ef")
+		)
+		(pin "1"
+			(uuid "e0205234-137a-4419-a845-e42b0805c29c")
+		)
+		(pin "8"
+			(uuid "33badbee-71e2-4933-986f-91e2ef9c55e1")
+		)
+		(instances
+			(project "VGA_adapter"
+				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Periph-altium-import:2_RES")
 		(at 152.654 35.56 0)
 		(unit 1)
@@ -15814,94 +15911,6 @@
 			(project "MQ_mod"
 				(path "/eaef1172-3351-417c-bfc4-74a598f141cb/f39f6db5-081b-4385-b382-9aa5f01f5ca5"
 					(reference "R32")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Logic_LevelTranslator:TXS0102DCT")
-		(at 241.3 48.26 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "e1818cc4-cc34-41e2-bf42-e651f0f3fa93")
-		(property "Reference" "U1"
-			(at 243.4941 60.325 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TXS0102DCT"
-			(at 243.4941 62.865 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_SO:SSOP-8_2.95x2.8mm_P0.65mm"
-			(at 241.3 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/gpn/txs0102"
-			(at 241.3 48.768 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "2-Bit Bidirectional Voltage-Level Shifter for Open-Drain and Push-Pull Application, SSOP-8"
-			(at 241.3 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "a93fa4c6-09aa-4dde-a8fb-46120dad49db")
-		)
-		(pin "1"
-			(uuid "ec9e5ee0-b6d3-42c1-bee3-5f88a257ee72")
-		)
-		(pin "3"
-			(uuid "eea59619-af1e-40bd-b9d4-266fd722da71")
-		)
-		(pin "4"
-			(uuid "42427d84-00d1-4df0-8026-11f31994e62c")
-		)
-		(pin "5"
-			(uuid "8713461d-af77-43d5-afbc-ee1834c8fed3")
-		)
-		(pin "6"
-			(uuid "2dbefc61-96f4-438a-88dc-51dda6e5b554")
-		)
-		(pin "7"
-			(uuid "836eb80b-9b4a-49f5-b73d-8d83d1c6dab6")
-		)
-		(pin "8"
-			(uuid "3810a916-f63c-43d4-a82c-40dc71356303")
-		)
-		(instances
-			(project "VGA_adapter"
-				(path "/971d21cc-a5c8-4932-ad62-f68d6b0e4b00"
-					(reference "U1")
 					(unit 1)
 				)
 			)

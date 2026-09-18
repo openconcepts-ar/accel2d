@@ -6,13 +6,9 @@
 	(paper "A4")
 	(title_block
 		(title "DVI Adapter board")
-		(date "2024-05-13")
-		(rev "V0.09")
-		(company "Copyright (C) 2023-2024 Victor Suarez Rovere")
-		(comment 1 "License:  CERN OHL-S")
-		(comment 2 "PCB design:  Mitch Altman &  Victor Suarez Rovere")
-		(comment 3 "Schematics capture:  Mitch Altman & Victor Suarez Rovere")
-		(comment 4 "Circuit design & parts selection:  Victor Suarez Rovere")
+		(date "2026-09-18")
+		(rev "V0.1")
+		(company "Copyright (C) 2023-2025 Victor Suarez Rovere")
 	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
@@ -13198,7 +13194,7 @@
 		)
 		(uuid "e15b333d-823e-4058-ab6b-05e27caeab92")
 	)
-	(text "THIS FOOTPRINT IS IN ERROR!"
+	(text "Note other packages has different footprint"
 		(exclude_from_sim no)
 		(at 243.84 18.034 0)
 		(effects
@@ -15443,6 +15439,15 @@
 				(hide yes)
 			)
 		)
+		(property "MPN" "TXS0102DQER"
+			(at 241.3 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "7"
 			(uuid "23e6118a-471b-43af-b27c-d80a5fb2418b")
 		)
@@ -16372,6 +16377,24 @@
 			)
 		)
 		(property "Description" ""
+			(at 130.81 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "TFP410PAPR"
+			(at 130.81 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C7498519"
 			(at 130.81 60.96 0)
 			(effects
 				(font
@@ -18909,7 +18932,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Library:XFCN_F0501-B-20-20T-R"
+		(property "Footprint" "easyeda2kicad:FPC-SMD_XUNPU_FPC-0.5FX-20PWBH15"
 			(at 100.33 185.42 0)
 			(effects
 				(font
@@ -18919,7 +18942,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://datasheet.lcsc.com/lcsc/2304140030_XFCN-F0501-B-20-20T-R_C481232.pdf"
+		(property "Datasheet" ""
 			(at 100.33 185.42 0)
 			(effects
 				(font
@@ -18938,7 +18961,16 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part Number" "C5291557"
+		(property "MPN" "FPC-0.5FX-20PWBH15"
+			(at 100.33 185.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part Number" "C3446031"
 			(at 100.33 185.42 0)
 			(effects
 				(font

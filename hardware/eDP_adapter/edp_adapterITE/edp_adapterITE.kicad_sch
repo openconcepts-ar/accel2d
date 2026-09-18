@@ -8076,7 +8076,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part" "C9900011361"
+		(property "LCSC Part Number" "C9900011361"
 			(at 73.025 97.79 0)
 			(effects
 				(font

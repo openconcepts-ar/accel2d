@@ -6,9 +6,10 @@
 	(paper "A4")
 	(title_block
 		(title "Spartan 6 FPGA board")
-		(date "2026-09-17")
+		(date "2026-09-18")
 		(rev "R0.1")
-		(company "Copyright 2022 Modos / Engineer: Wenting Zhang")
+		(company "(C) 2025-2026 Victor Suarez Rovere <suarezvictor@gmail.com>")
+		(comment 1 "Copyright 2023 Modos / Engineer: Wenting Zhang")
 	)
 	(lib_symbols
 		(symbol "Device:C"
