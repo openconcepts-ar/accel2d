@@ -59,7 +59,16 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "courtyards_overlap|117985154|84819999|a66b33e7-4d51-4ea5-82c4-62d2f5ec407d|a7c195db-54b5-45b2-835d-94539e3f6edc",
+        "courtyards_overlap|125385153|96232473|6f9242d4-ebe3-43f2-9b0f-b3ee13017e10|eca06037-5495-438e-a20e-1d681047cff9",
+        "courtyards_overlap|125847452|90950327|ac90f39e-d0ef-4af2-80ed-c36da49ca7eb|ba9596fb-38f2-45b1-b573-ef8893e6e41c",
+        "courtyards_overlap|128710154|84519996|f6ed2d48-370d-44ec-8a97-874176b3ea5c|9dac52b8-51c0-4aac-aead-54b38d9a0cbd",
+        "courtyards_overlap|134736833|84175092|9dac52b8-51c0-4aac-aead-54b38d9a0cbd|fdbaae9c-7373-4c59-a9f8-0026776c0910",
+        "courtyards_overlap|145410156|93547998|7aac95c9-a7d1-4384-8961-69797cb3217d|efa6fcf3-6845-4441-a7f0-23e83604703d",
+        "courtyards_overlap|145410156|94219998|3bb392b7-d35c-4728-909a-660384d07316|efa6fcf3-6845-4441-a7f0-23e83604703d",
+        "courtyards_overlap|152610154|94219998|3bb392b7-d35c-4728-909a-660384d07316|7aac95c9-a7d1-4384-8961-69797cb3217d"
+      ],
       "meta": {
         "version": 2
       },
@@ -69,12 +78,12 @@
         "connection_width": "warning",
         "copper_edge_clearance": "error",
         "copper_sliver": "warning",
-        "courtyards_overlap": "warning",
+        "courtyards_overlap": "error",
         "diff_pair_gap_out_of_range": "error",
         "diff_pair_uncoupled_length_too_long": "error",
         "drill_out_of_range": "error",
-        "duplicate_footprints": "warning",
-        "extra_footprint": "warning",
+        "duplicate_footprints": "error",
+        "extra_footprint": "error",
         "footprint": "error",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "error",
@@ -90,7 +99,7 @@
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "missing_courtyard": "ignore",
-        "missing_footprint": "warning",
+        "missing_footprint": "error",
         "net_conflict": "warning",
         "npth_inside_courtyard": "ignore",
         "padstack": "error",

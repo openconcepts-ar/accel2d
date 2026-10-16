@@ -29,27 +29,21 @@
       "zones": true
     },
     "visible_items": [
-      "vias",
-      "footprint_text",
-      "footprint_anchors",
-      "ratsnest",
-      "grid",
-      "footprints_front",
-      "footprints_back",
-      "footprint_values",
-      "footprint_references",
-      "tracks",
-      "drc_errors",
-      "drawing_sheet",
-      "bitmaps",
-      "pads",
-      "zones",
-      "drc_warnings",
-      "drc_exclusions",
-      "conflict_shadows",
-      "shapes"
+      0,
+      5,
+      11,
+      12,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      30,
+      32,
+      33
     ],
-    "visible_layers": "00000000_00000000_07fdffff_80000001",
+    "visible_layers": "7fdffff_80000001",
     "zone_display_mode": 0
   },
   "git": {
@@ -60,7 +54,7 @@
   },
   "meta": {
     "filename": "VGA_adapter.kicad_prl",
-    "version": 5
+    "version": 3
   },
   "net_inspector_panel": {
     "col_hidden": [],

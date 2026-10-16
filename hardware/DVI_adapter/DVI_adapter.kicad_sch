@@ -12971,7 +12971,7 @@
 		)
 		(uuid "5cb53d47-cf3f-4288-b944-924720cbb8b2")
 	)
-	(text "FIXES:\nAdd test points\nAdd auto reset\nAdd HPD connection to HTPLG (pin 9) - use solder jumper and 1k series resistor\nCTL1/2/3 has pulldowns so jumpers should connect to DVDD\nPRG18BB330MB1RB drops 2V with a powered HDMI to VGA adapter (77mA consumption)\n\n***D1/D2 does not seems properly soldered***\n\n\n\nNOTE:\nLCD_DE & PCLK were inverted in a previous version\n"
+	(text "FIXES:\nAdd test points\nAdd auto reset\nAdd HPD connection to HTPLG (pin 9) - use solder jumper and 1k series resistor\nCTL1/2/3 has pulldowns so jumpers should connect to DVDD\nPRG18BB330MB1RB drops 2V with a powered HDMI to VGA adapter (77mA consumption)\n\n***D1/D2 does not seems properly soldered***\n\nNEW NOTES:\n-pin 1 of FPC conector is bad in silkscreen\n\n\n\nNOTE:\nLCD_DE & PCLK were inverted in a previous version\n"
 		(exclude_from_sim no)
 		(at 19.304 13.97 0)
 		(effects
