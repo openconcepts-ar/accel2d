@@ -4,17 +4,18 @@ from umachine import Pin, SoftI2C
 import utime as time
 
 # Create Pins.
-#scl = Pin(0, Pin.OUT) #FPGA SCL north
-#sda = Pin(1, Pin.OUT) #FPGA SDA north
-scl = Pin(2, Pin.OUT) #FPGA SCL2 south
-sda = Pin(3, Pin.OUT) #FPGA SDA2 south
+scl = Pin(0, Pin.OUT) #FPGA SCL north
+sda = Pin(1, Pin.OUT) #FPGA SDA north
+#scl = Pin(2, Pin.OUT) #FPGA SCL2 south
+#sda = Pin(3, Pin.OUT) #FPGA SDA2 south
 
 # Create I2C.
 i2c = SoftI2C(scl, sda, freq=100000)
 
 # Scan I2C.
 scan = i2c.scan()
-I2C_ADDR = 0x5c #IT6251 default address: 0x5D in custom board, 0x5C in vendor one
+I2C_ADDR = scan[0] #IT6251 default address: 0x5D in custom board, 0x5C in vendor one
+assert(I2C_ADDR in [0x5C, 0x5D])
 LVDS_ADDR = 0x5e #LVDS address (to be configured)
 
 assert(I2C_ADDR in scan)
@@ -118,6 +119,7 @@ def dptx_auxwait():
     if (c & 0x20) != 0x20: return
     time.sleep_ms(1)
 
+  #FIXME: with the cable disconnected, no error is reported
   print("ERROR: AUX Channel Hang => ")
   c = i2c.readfrom_mem(I2C_ADDR, 0x9f, 1)[0]
   c = c & 0x03
@@ -173,7 +175,7 @@ def dptx_show_vid_info():
     if not (sysstat & 0x04):
         return
 
-    # Sync polarity / interlace
+    # This works ok, even with the eDP cable disconnected
     reg = i2c.readfrom_mem(I2C_ADDR, 0xa0, 1)[0]
     hsync_pol = reg & 0x01
     vsync_pol = (reg & 0x04) >> 2
@@ -203,16 +205,16 @@ def dptx_show_vid_info():
 
     assert(counter)
     crystal_freq = 27e6
-    frequency_khz = (crystal_freq/2e3 * 2048) // counter
+    frequency = 1024 * crystal_freq / counter
 
-    print("frequency = %d, xCnt = %d" % (frequency_khz*1000, counter))
+    print("frequency = %d, xCnt = %d" % (frequency, counter))
     print("Data Enable start: (%d, %d)" % (hde, vde))
 
     # Calculate back porch
     hback_porch = htotal - hactive - hfront_porch - hsync_len
     vback_porch = vtotal - vactive - vfront_porch - vsync_len
 
-    refresh_hz = frequency_khz * 1000.0 / (htotal * vtotal)
+    refresh_hz = frequency / (htotal * vtotal)
     print("The following is the current Modeline, not from EDID:")
     print(
         'Modeline "%dx%d@%s" %.3f %d %d %d %d %d %d %d %d %cHSync %cVSync%s'
@@ -220,7 +222,7 @@ def dptx_show_vid_info():
             hactive,
             vactive,
             ("%.1f" % refresh_hz).replace('.', '_'),
-            frequency_khz / 1000.0,
+            frequency / 1e6,
 
             hactive,
             hactive + hback_porch,
