@@ -1,4 +1,4 @@
-# Micropyhom demos
+# Micropyhon demos
 
 ## Interactive demo
 
