@@ -12850,28 +12850,6 @@
 		)
 		(uuid "ffecc213-13f2-4ebf-849e-94a68f2c5454")
 	)
-	(text "LCD_D16"
-		(exclude_from_sim no)
-		(at 60.325 149.86 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "10ab54aa-bfc5-443d-8da2-f0d3999e5782")
-	)
-	(text "LCD_D17"
-		(exclude_from_sim no)
-		(at 60.325 147.32 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "193e9c05-11af-4152-870b-938d2d271e95")
-	)
 	(text "South connector"
 		(exclude_from_sim no)
 		(at 43.942 106.68 0)
@@ -12982,7 +12960,18 @@
 		)
 		(uuid "56fac13f-7996-43ef-a831-ae197518758a")
 	)
-	(text "FIXES:\nAdd test points\nAdd auto reset\nAdd HPD connection to HTPLG (pin 9) - use solder jumper and 1k series resistor\nCTL1/2/3 has pulldowns so jumpers should connect to DVDD\nPRG18BB330MB1RB drops 2V with a powered HDMI to VGA adapter (77mA consumption)\n\n***D1/D2 does not seems properly soldered***\n\n\n\nNOTE:\nLCD_DE & PCLK were inverted in a previous version\n"
+	(text "LCD_D16"
+		(exclude_from_sim no)
+		(at 61.214 147.066 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "5cb53d47-cf3f-4288-b944-924720cbb8b2")
+	)
+	(text "FIXES:\nAdd test points\nAdd auto reset\nAdd HPD connection to HTPLG (pin 9) - use solder jumper and 1k series resistor\nCTL1/2/3 has pulldowns so jumpers should connect to DVDD\nPRG18BB330MB1RB drops 2V with a powered HDMI to VGA adapter (77mA consumption)\n\n***D1/D2 does not seems properly soldered***\n\nNEW NOTES:\n-pin 1 of FPC conector is bad in silkscreen\n\n\n\nNOTE:\nLCD_DE & PCLK were inverted in a previous version\n"
 		(exclude_from_sim no)
 		(at 19.304 13.97 0)
 		(effects
@@ -13082,6 +13071,17 @@
 			(justify left bottom)
 		)
 		(uuid "a51d8b02-b000-45c4-93d4-28aeebe64e03")
+	)
+	(text "LCD_D17"
+		(exclude_from_sim no)
+		(at 61.214 149.86 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "a5c53a38-e411-4b36-be9b-9d4fd9cb23de")
 	)
 	(text "NOTE:\nPIN 1 is at \nTOP on PCB"
 		(exclude_from_sim no)
@@ -13549,6 +13549,28 @@
 		(uuid "18638ac1-ac8f-463d-9087-bfb23643e8c5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 189.6147 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "R0"
+		(shape output)
+		(at 68.58 147.32 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "191b17ae-96ff-490d-b0d3-6617daf854c8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 74.0447 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14372,28 +14394,6 @@
 			)
 		)
 	)
-	(global_label "R0"
-		(shape output)
-		(at 68.58 149.86 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "a2ce6469-c14d-4c0f-9f28-0afea3d5fdf1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 74.0447 149.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "LCD_DE"
 		(shape input)
 		(at 121.92 63.5 180)
@@ -14702,6 +14702,28 @@
 			)
 		)
 	)
+	(global_label "R1"
+		(shape output)
+		(at 68.58 149.86 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "c86c641a-91c2-4572-acc5-108605d4d730")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 74.0447 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "SDA"
 		(shape bidirectional)
 		(at 228.6 50.8 180)
@@ -14720,28 +14742,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "R1"
-		(shape output)
-		(at 68.58 147.32 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d26748fb-ee38-4eae-bcd4-0875a904df71")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 74.0447 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 				(hide yes)
 			)
 		)

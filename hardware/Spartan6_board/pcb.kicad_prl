@@ -21,7 +21,7 @@
       "footprints": true,
       "graphics": true,
       "keepouts": true,
-      "lockedItems": false,
+      "lockedItems": true,
       "otherItems": true,
       "pads": true,
       "text": true,
@@ -46,9 +46,12 @@
       "pads",
       "zones",
       "drc_warnings",
+      "drc_exclusions",
+      "locked_item_shadows",
+      "conflict_shadows",
       "shapes"
     ],
-    "visible_layers": "00000000_00000000_000092f0_80000007",
+    "visible_layers": "00000000_00000000_000092f0_a20000f7",
     "zone_display_mode": 0
   },
   "git": {

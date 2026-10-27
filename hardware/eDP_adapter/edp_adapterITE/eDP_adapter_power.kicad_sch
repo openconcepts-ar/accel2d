@@ -8833,15 +8833,6 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM033R61C103KA12D"
-			(at 63.5 101.6 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
 		(pin "1"
 			(uuid "d3da60a7-ac6f-465c-9e0b-8ba9ff048289")
 		)

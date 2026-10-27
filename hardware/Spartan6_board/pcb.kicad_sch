@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "4654897e-3e2f-4522-96c3-20b19803c088")
 	(paper "A4")
 	(title_block
@@ -81,6 +81,10 @@
 	(sheet
 		(at 33.02 27.94)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -119,6 +123,10 @@
 	(sheet
 		(at 33.02 39.37)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -157,6 +165,10 @@
 	(sheet
 		(at 33.02 73.66)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -195,6 +207,10 @@
 	(sheet
 		(at 33.02 62.23)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -233,6 +249,10 @@
 	(sheet
 		(at 33.02 50.8)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -271,6 +291,10 @@
 	(sheet
 		(at 33.02 85.09)
 		(size 53.34 6.35)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -311,4 +335,5 @@
 			(page "0")
 		)
 	)
+	(embedded_fonts no)
 )

@@ -5927,6 +5927,17 @@
 		)
 		(uuid "1975f6c6-85fa-40e0-9984-c94d3148052e")
 	)
+	(text "TODO:\n-Add pullups for I2C\n-Add 3.3V and GND test points\n-Add \"buffer full\" signal and an optional LED"
+		(exclude_from_sim no)
+		(at 172.72 40.894 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+			(justify left)
+		)
+		(uuid "47e4d412-2a29-4253-af91-a9f3e11b39c4")
+	)
 	(text "FPC Connectors"
 		(exclude_from_sim no)
 		(at 342.9 64.262 0)
@@ -5951,6 +5962,17 @@
 		)
 		(uuid "6f667d45-6d33-4abe-8897-4d69dca233cc")
 	)
+	(text "This oscillator\nwith 27 ohm works ok"
+		(exclude_from_sim no)
+		(at 99.314 139.446 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "82dedd56-8fe2-4dc0-a8ef-a882a18845b7")
+	)
 	(text "DECOUPLING"
 		(exclude_from_sim no)
 		(at 159.512 228.473 0)
@@ -5962,6 +5984,17 @@
 			)
 		)
 		(uuid "a0b67724-7a20-4667-a61c-2a86215697e8")
+	)
+	(text "VTSP can work at 3.3V\non some panels specified for 5V"
+		(exclude_from_sim no)
+		(at 312.674 80.518 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fe175f35-9b2d-45f5-a7a4-27167895c72e")
 	)
 	(junction
 		(at 181.61 242.57)
