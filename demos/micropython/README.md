@@ -11,3 +11,10 @@ It needs the eDP adapter be previously configured by I2C using the [i2c_it6251_t
 
 This is a full integration demo project. As seen, many boards are involved: the FPGA main board with the required adapter, plus an extra board to access the touch data, controlled by the software: scripts running in the [micropython port](../../micropython) to the FPGA platform.
 
+## RGB565 modes
+
+The framebuffer can be set in 16-bit color mode (RGB565 format) to halve memory bandwidth or duplicate framerate. It was tested on a 10.1" LVDS 1366x768 display using this [test script](framebuf_rgb565.py).  
+  
+<img src="../../doc/test_101_LVDS_rgb565.jpeg" width="640"></img>
+
+
