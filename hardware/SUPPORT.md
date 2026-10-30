@@ -1,6 +1,6 @@
 # Tested displays
 
-The system was tested with the following displays:  
+The system was tested with the following displays (HD and FHD except a 1600x900 one). Largest display is 23.8" (FHD), smallest 10.1".
 
 - 10.1" 1366x768 LVDS FPC interface, 6 bit color.
 - 12.5" 1366x768 LVDS FPC interface, IPS, 6 bit color.
@@ -8,6 +8,7 @@ The system was tested with the following displays:
 - 14.0" 1600x900 LVDS (dual channel) FPC interface, 6 bit color.
 - 15.6" 1920x1080, IPS, eDP interface (50Hz refresh).
 - 15.6" 1366x768 LVDS FPC interface, 6 bit color.
+- 15.6" 1366x768 LVDS eDP interface, 6 bit color, with touch.
 - 22.5" monitor using digital and analog signals (1920x1080 native resolution).
 - 23.8" 1920x1080, IPS, LVDS (dual channel) FPC interface, 8 bit color.
 
@@ -16,7 +17,7 @@ The above list interaced with the FPGA board (ECP5 version).
 See corresponding pictures below.  
   
 
-# Laptop displays
+## Laptop displays
 Those are direct connected using a 0.5mm pitch flat cable carrying eDP or LVDS signals (30 and 40 pin, respectively)  
 
 
@@ -31,9 +32,13 @@ Those are direct connected using a 0.5mm pitch flat cable carrying eDP or LVDS s
 |<img src="../doc/test_156_LVDS_hd.jpeg" width="320"></img>|<img src="../doc/test_238_LVDS_dual_50Hz.jpeg" width="320"></img>|
 |:--:|:--:|
 | *15.6" 1366x768 LVDS (single channel)* | *23.8" 1920x1080 LVDS (dual channel, same pixel)* |
+  
+|<img src="../doc/test_156_edp_hd_touch.jpeg" width="320"></img>|
+|:--:|
+| *15.6" 1366x768 eDP with touch* |
 
 
-# PC monitors 
+## PC compatible monitors 
 Standard analog or digital inputs (VGA or HDMI input).  
   
 
