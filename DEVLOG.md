@@ -435,4 +435,22 @@ The `make` command will build the micropython port and upload the firmware to th
 
 Note that this needs an updated version of the [micropython port](https://github.com/suarezvictor/micropython/tree/gpu2d/ports/f133) for accessing the alternative I2C port.  
 
+# Board specific documentation
+
+Updated boards includes a README which documents fixes and solutions:  
+
+- [LVDS adapter](hardware/LVDS_adapter/README.md)
+- [Touch Splitter](hardware/Touch_splitter/README.md) (HID bridge)
+- [eDP adapter](hardware/eDP_adapter/README.md)
+
+Sotware used for testing:
+Mainly micropython demos, see [README](demos/micropython/README.md).  
+Included demos are:
+
+- [hid_bridge_test.py](demos/micropython/hid_bridge_test.py) tests the new RP2350-based USB to serial bridge board.
+- [i2c_it6251_test.py](demos/micropython/i2c_it6251_test.py) tests the new LVDS to eDP adapter board.
+- [i2c_tfp410_test.py](demos/micropython/i2c_tfp410_test.py) tests the fixes to the DVI adapter board, and now correcly access EDID.
+
+The many pictures of the fixed boards now working shows that fixes are ok. See [here](hardware/SUPPORT.md).  
+The new boards came with fixes to do (to be documented when the fixed boards are manufactured).
 

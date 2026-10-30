@@ -18,3 +18,9 @@ The framebuffer can be set in 16-bit color mode (RGB565 format) to halve memory 
 <img src="../../doc/test_101_LVDS_rgb565.jpeg" width="640"></img>
 
 
+## Double buffer test
+
+This [demo](framebuf_doublebuffer_test.py) implements the double buffer technique to avoid tearing, which is produced when you update the frame being sent to the display: it may show partial updates. The technique consists in drawing in a non-visible buffer, and when is ready, swith to it. Then you draw in the other buffer in a ping-pong fashion.
+
+This demo draws a clock hand mimicking the second hand, advacing once per frame so it completes a complete turn at 60hz frame rate and half at 30Hz rate. This way you can se the tearing avoidance and also the actual frame rate.
+
