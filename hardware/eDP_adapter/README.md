@@ -51,3 +51,8 @@ LDO 1.8V works.
 **AUX has polarity inverted** but it was fixed manually on a 40-to-30 eDP adapter.   
 As shown above, the I2C communication works (tested with the FPGA board)  
 
+## Board based on NCS chip
+
+Smoke test: do same fixes as in the ITE board
+Step up for backlight outputs about 12V (no load). LDO for 1.2V is also ok. 
+The I2C communication works (tested with the FPGA board)  
