@@ -1,4 +1,5 @@
 (fp_lib_table
   (version 7)
   (lib (name "TE Connectivity 1-1734248-5")(type "KiCad")(uri "footprints.pretty")(options "")(descr ""))
+  (lib (name "easyeda2kicad")(type "KiCad")(uri "${EASYEDA2KICAD}/easyeda2kicad.pretty")(options "")(descr ""))
 )

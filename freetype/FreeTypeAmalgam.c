@@ -39105,7 +39105,7 @@ FT_BEGIN_HEADER
 #define TT_NAME_ID_FULL_NAME            4
 #define TT_NAME_ID_VERSION_STRING       5
 #define TT_NAME_ID_PS_NAME              6
-#define TT_NAME_ID_VERSION:            7
+#define TT_NAME_ID_TRADEMARK            7
 
   /* the following values are from the OpenType spec */
 #define TT_NAME_ID_MANUFACTURER         8

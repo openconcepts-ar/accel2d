@@ -9,6 +9,24 @@ scan = i2c.scan()
 I2C_ADDR = 0x38
 assert(I2C_ADDR in scan)
 
+if 0x50 in scan:
+  data = i2c.readfrom_mem(0x50, 0, 128) #read from position 0
+  assert(len(data) == 128 and sum(data) % 256 == 0)
+  print("Model:", data[0x4d:0x4d+13].decode("utf-8")) #not always ok
+  print('Screen size: %d x %dcm' % (data[21], data[22]))
+
+  #resolutions
+  for n in range(1, 5):
+    if n == 1: print("\nNative resolutions:")
+    i = n * 18 + 36
+    if data[i] != 0 or data[i+1] != 0:
+      b = data[i:i+18]
+      h = b[2] | ((b[4]&0xF0) << 4)
+      v = b[5] | ((b[7]&0xF0) << 4)
+      clk = (b[0] | (b[1]<<8)) / 100.0
+      print('\t%4d x %4d\t%3.1f MHz pixel clock' % (h, v, clk))
+else:
+	print("No EDID device found in the I2C bus")
 
 #see https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/i915/display/dvo_tfp410.c
 TFP410_VID=		0x014C
@@ -169,7 +187,7 @@ CTL_1_MODE = (
   1*TFP410_CTL_1_HEN	| #1: HSYNC input is transmitted in its original state
   0*TFP410_CTL_1_DSEL	| #0: In the high-swing mode it is a don’t care (IDCK is single-ended)
   1*TFP410_CTL_1_BSEL	| #1: 24-bit operation with single-edge clock
-  1*TFP410_CTL_1_EDGE	| #1: Input data latches to the rising edge of IDCK+
+  0*TFP410_CTL_1_EDGE	| #1: Input data latches to the rising edge of IDCK+
   1*TFP410_CTL_1_PD		  #1: Normal operation (power up)
 )
 
@@ -240,4 +258,5 @@ time.sleep_ms(100) #wait V_RES to settle
 print("new register values")
 regs = readregs()
 dumpregs(regs)
+
 
