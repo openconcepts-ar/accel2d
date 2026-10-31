@@ -1,14 +1,16 @@
 # (C) 2026 Victor Suarez Rovere <suarezvictor@gmail.com>
 # Apache License 2.0
 
-#ILITEK ILI2511 Touch panel test
+#ILITEK ILI2511/ILI2510 Touch panel test
 #see https://github.com/Infineon/touch-ctp-ili2511
 import utime as time
 
 I2C_ADDR = 0x41
 
 from umachine import SoftI2C
-i2c = SoftI2C(scl=12, sda=13, freq=100000) #F133 board
+#i2c = SoftI2C(scl=12, sda=13, freq=100000) #F133 board
+i2c = SoftI2C(scl=3, sda=2, freq=100000) #FPGA board south connector
+
 scan = i2c.scan() #ILITEK IC reports 0x41, VGA DDC returns 0x37, 0x49, 0x50, 0x59
 assert(I2C_ADDR in scan)
 
@@ -26,13 +28,13 @@ MTB_CTP_ILI2511_FIRMWARE_NUM_BYTES                (8U)
 """
 
 assert(i2c.writeto(I2C_ADDR, b'\x40') == 1)
-data = i2c.readfrom(I2C_ADDR, 8) # returns 0600000000000001
+data = i2c.readfrom(I2C_ADDR, 8) # returns 0600000000000001, or b'06\x00\x00\x00$\x88!\x01' for ILI2510
 print("0x40:", data)
 assert(len(data) == 8 and data[0]==0x06) 
 
 
 assert(i2c.writeto(I2C_ADDR, b'\x20') == 1)
-data = i2c.readfrom(I2C_ADDR, 9) # returns 0040004017290a0000
+data = i2c.readfrom(I2C_ADDR, 9) # returns 0040004017290a0000, or b'\x00@\x80%<$\n\x00\x00' for 2510
 assert(len(data) == 9)
 print("0x20:", data)
 
