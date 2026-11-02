@@ -4,6 +4,7 @@
 #    Simple Python OpenSCAD Code Generator
 #    Copyright (C) 2009    Philipp Tiefenbacher <wizards23@gmail.com>
 #    Amendments & additions, (C) 2011 Evan Jones <evan_t_jones@mac.com>
+#    Migration to python3 (C) 2026 Evan Jones <suarezvictor@gmail.com>
 #
 #   License: LGPL 2.1 or later
 #
@@ -121,7 +122,7 @@ def use( scad_file_path, use_not_include=True):
         module = open( scad_file_path)
         contents = module.read()
         module.close()
-    except Exception, e:
+    except Exception as e:
         raise Exception( "Failed to import SCAD module '%(scad_file_path)s' with error: %(e)s "%vars())
     
     # Once we have a list of all callables and arguments, dynamically
@@ -131,7 +132,7 @@ def use( scad_file_path, use_not_include=True):
     
     for sd in symbols_dicts:
         class_str = new_openscad_class_str( sd['name'], sd['args'], sd['kwargs'], scad_file_path, use_not_include)
-        exec class_str in calling_module().__dict__
+        exec(class_str, calling_module().__dict__)
     
     return True
 
@@ -198,7 +199,7 @@ def scad_render_to_file( scad_object, filepath=None, file_header='', include_ori
     
     f = open( filepath,"w")
     f.write( rendered_string)
-    f.close
+    f.close()
 
 
 # =========================
@@ -225,6 +226,10 @@ class openscad_object( object):
         
         self.modifier = string_vals.get(m.lower(), '')
         return self
+
+    def comment(self, comment):
+        self.modifier = "//" + comment + "\n" + self.modifier
+        return self
     
     def _render(self):
         '''
@@ -237,14 +242,14 @@ class openscad_object( object):
         s = "\n" + self.modifier + self.name + "("
         first = True
         
-        valid_keys = self.params.keys()
+        valid_keys = list(self.params.keys())
         
         # intkeys are the positional parameters
-        intkeys = filter(lambda x: type(x)==int, valid_keys)
+        intkeys = [x for x in valid_keys if type(x) == int]
         intkeys.sort()
         
         # named parameters
-        nonintkeys = filter(lambda x: not type(x)==int, valid_keys)
+        nonintkeys = [x for x in valid_keys if not type(x) == int]
         
         for k in intkeys+nonintkeys:
             v = self.params[k]
@@ -488,6 +493,6 @@ for sym_dict in openscad_builtins:
     else:
         class_str = new_openscad_class_str( sym_dict['name'], sym_dict['args'], sym_dict['kwargs'])
     
-    exec class_str 
+    exec(class_str)
     
 

@@ -40,22 +40,22 @@ backlight_color = color([1.0, 1.0, 1.0])
 
 def make_front():
     outline = cube(size=[outline_w, outline_h, thickness], center=True)
-    outline = outline_color.add(outline)
+    outline = outline_color.add(outline).comment("Outline")
 
     # Polarizer layer
     polarizer = cube(size=[polarizer_w, polarizer_h, 0.3], center=True)
     polarizer = translate(v=[0, 0, thickness / 2.0 + 0.15]).add(polarizer)
-    polarizer = polarizer_color.add(polarizer)
+    polarizer = polarizer_color.add(polarizer).comment("Polarizer")
 
     # Active Area
     active_area = cube(size=[active_w, active_h, 0.2], center=True)
     active_area = translate(v=[0, 0, thickness / 2.0 + 0.4]).add(active_area)
-    active_area = active_color.add(active_area)
+    active_area = active_color.add(active_area).comment("Active_area")
 
     # Pull tape on the right
     tape = cube(size=[8.0, 10.0, 0.2], center=False)
     tape = translate(v=[active_w / 2.0, (active_h) / 2.0 - 10.0, thickness / 2.0 + 0.25]).add(tape)
-    tape = tape_color.add(tape)
+    tape = tape_color.add(tape).comment("Protective tape")
 
     # Bottom PCBA extension
     pcba = cube(size=[pcba_w, pcba_h + pcba_offset, pcba_t], center=True)
@@ -64,7 +64,7 @@ def make_front():
     edge_cyl =rotate(a=90, v=[0, 1, 0]).add(edge_cyl)
     edge_cyl = translate(v=[0, -outline_h / 2.0-pcba_h, 0]).add(edge_cyl)
     pcba = union().add(pcba).add(edge_cyl)
-    pcba = pcba_color.add(pcba)
+    pcba = pcba_color.add(pcba).comment("PCB Assembly")
 
     return [outline, polarizer, active_area, pcba, tape]
 
@@ -93,19 +93,19 @@ def make_back():
     conn = translate(v=[-outline_w/2 + connector_offset_h,
                         -outline_h / 2.0 - pcba_h + connector_offset_v,
                         -thickness / 2.0 - 0.5]).add(conn)
-    conn = connector_color.add(conn)
+    conn = connector_color.add(conn).comment("Connector")
     
     #FPC connector inside connector
     fpc_conn = cube(size=[fpc_conn_w, fpc_conn_h, 0.5], center=True)
     fpc_conn = translate(v=[-outline_w/2 + connector_offset_h + connector_w/2,
                         -outline_h / 2.0 - pcba_h/2 + connector_offset_v,
                         -thickness / 2.0 - 0.5]).add(fpc_conn)
-    fpc_conn = color([.9,.8,0.35]).add(fpc_conn)
+    fpc_conn = color([.9,.8,0.35]).add(fpc_conn).comment("FPC Connector")
 
     # Backlight zone
     backlight = rounded_rect(outline_w - 30.0*2, outline_h - 30.0*2, 16.3)
     backlight = translate(v=[0, 0, -thickness / 2.0 - 0.15]).add(backlight)
-    backlight = backlight_color.add(backlight)
+    backlight = backlight_color.add(backlight).comment("Backlight")
 
     return [backlight, conn, fpc_conn]
 
@@ -114,7 +114,7 @@ def make_panel():
     panel = union()
     for part in make_front() + make_back():
         panel.add(part)
-    return panel
+    return panel.comment("Panel")
 
 if __name__ == "__main__":
     model = make_panel()
