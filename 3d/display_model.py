@@ -68,25 +68,6 @@ def make_front():
 
     return [outline, polarizer, active_area, pcba, tape]
 
-def rounded_rect(w, h, r, thickness=0.2, segments=32):
-    u = union()
-
-    # Main body
-    u.add(cube(size=[w - 2 * r, h, thickness], center=True))
-    u.add(cube(size=[w, h - 2 * r, thickness], center=True))
-
-    # Corner cylinders
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            c = cylinder(r=r, h=thickness, center=True, segments=segments)
-            c = translate(v=[sx * (w / 2.0 - r),
-                             sy * (h / 2.0 - r),
-                             0]).add(c)
-            u.add(c)
-
-    return u
-
-
 def make_back():
     # Bottom connector hole area
     conn = cube(size=[connector_w, connector_h, 0.5], center=False)

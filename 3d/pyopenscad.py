@@ -4,7 +4,7 @@
 #    Simple Python OpenSCAD Code Generator
 #    Copyright (C) 2009    Philipp Tiefenbacher <wizards23@gmail.com>
 #    Amendments & additions, (C) 2011 Evan Jones <evan_t_jones@mac.com>
-#    Migration to python3 (C) 2026 Evan Jones <suarezvictor@gmail.com>
+#    Migration to python3 (C) 2026 Victor Suarez Rovere <suarezvictor@gmail.com>
 #
 #   License: LGPL 2.1 or later
 #
@@ -495,4 +495,22 @@ for sym_dict in openscad_builtins:
     
     exec(class_str)
     
+# helpers
+
+def rounded_rect(w, h, r, thickness=0.2, segments=32):
+    u = union()
+    u.add(cube(size=[w - 2 * r, h, thickness], center=True))
+    u.add(cube(size=[w, h - 2 * r, thickness], center=True))
+
+    # Corner cylinders
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            c = cylinder(r=r, h=thickness, center=True, segments=segments)
+            c = translate(v=[sx * (w / 2.0 - r),
+                             sy * (h / 2.0 - r),
+                             0]).add(c)
+            u.add(c)
+
+    return u
+
 
