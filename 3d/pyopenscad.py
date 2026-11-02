@@ -497,7 +497,7 @@ for sym_dict in openscad_builtins:
     
 # helpers
 
-def rounded_rect(w, h, r, thickness=0.2, segments=32):
+def rounded_rect(w, h, r, thickness, segments=32):
     u = union()
     u.add(cube(size=[w - 2 * r, h, thickness], center=True))
     u.add(cube(size=[w, h - 2 * r, thickness], center=True))
