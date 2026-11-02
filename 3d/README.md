@@ -13,13 +13,12 @@ After reviewing the chinese market in detail, by contacting many suitable provid
 
 see for example the not viable model tat they offer but cannot reproduce since custom designed for clients:
 
-<img src="OEM_display_enclosure_example.png" width="640"></img>
+<img src="../doc/OEM_display_enclosure_example.jpg" width="320"></img>
 
 
 ## Display bezel
 
 See the custom design:  
-
 <img src="../doc/bezel_156.png" width="320"></img>
 <img src="../doc/bezel_back_156.png" width="320"></img>
   
