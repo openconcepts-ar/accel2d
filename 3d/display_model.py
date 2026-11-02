@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Victor Suarez Rovere <suarezvictor@gmail.com>
+# Copyright (c) 2026 Victor Suarez Rovere <suarezvictor@gmail.com>
 # SPDX-License-Identifier: BSD-2-Clause
 
 # Model of a 15.6" IPS FHD display
