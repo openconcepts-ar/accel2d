@@ -30,6 +30,7 @@ def make_bezel():
     display_aperture = cube(size=[display_w, display_h, bezel_thickness], center=True)
     display_aperture = translate(v=[0, -pcba_h/2, -bezel_thickness/2+-front_thichness]).add(display_aperture)
     display_aperture += cube(size=[active_w, active_h, front_thichness*2.1], center=True)
+    display_aperture += translate(v=[-display_w/2+120, -(display_h+pcba_h)/2, -bezel_thickness]).add(cube(size=[50, pcba_h, bezel_thickness], center=True))
     display_aperture = aperture_color.add(display_aperture)
     
     outline -= display_aperture

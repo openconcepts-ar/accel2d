@@ -10,7 +10,7 @@ The criteria for the selection of a tool for the 3D design was motivated by the 
 4. The tool should be open source.
 
 To satisfy constraints 2 and 3, the best route would be to do the modelling using _source code_ which generates the models in standard formats. Python is a powerful language for any source-based design.  
-To satisfy constraints 1 and 4, a simple OpenSCAD generator python library was selected since it requires **no installation** and [LGPL](https://spdx.org/licenses/LGPL-2.1-or-later.html) licensed. The only need is to put the [pyopenscad.py](pyopenscad.py) file in same directory, and have python installed. The library was migrated to python3 (originally was for python2).  
+To satisfy constraints 1, a simple OpenSCAD generator python library was selected (which is a [precursor](https://github.com/SolidCode/SolidPython/blob/ea9411ff6f5d95fcb1fb00476b07fa9996d5ba33/solid/solidpython.py) of SolidPython and SolidPython2). Since a single file, it requires **no installation** and is [LGPL](https://spdx.org/licenses/LGPL-2.1-or-later.html) licensed to satisfy constraint 4. The only need is to put the [pyopenscad.py](pyopenscad.py) file in same directory, and have python installed. The library was migrated to python3 (originally was for python2).  
 The approach results similar approach to the way of designing the FPGA gateware for the project, where python scripts generates Verilog files allowing a high degree of flexibility.   
 
 ## Workflow
