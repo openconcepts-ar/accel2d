@@ -6,12 +6,21 @@
 #include "ioregs.h"
 #include "sys.h"
 
+//FIXME this should be parameters
+uintptr_t framebuffer_address;
+unsigned framebuffer_pitch;
+
+//https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/sun4i/sun4i_tcon.h#L114
+uint32_t framebuffer_io_polarity = 0b0011; //invert IO3:0 (DE/CLK/HS/VS)
+
+static void init_de(int W, int H);
+
 void dump_reg(uintptr_t addr)
 {
 	//printf("REGISTER at 0x%x: 0x%x\r\n", addr, io_read32(addr));
 }
 
-void fb_probe(void)
+void fb_probe(int W, int H)
 {
 /*
 #define CCU_pll_video0_ctrl (CCU + 0x40) // PLL_VIDEO0 Control Register ()
@@ -355,9 +364,11 @@ void fb_probe(void)
         | (13 << 0) //324MHz/13 = ~25MHz
     )});
 */
+	uint64_t pixel_freq = 60ULL*W*H*800*525/(640*480); //FIXME this is approximate
+	uint8_t clock_divider = 324*1000*1000/pixel_freq;
 	io_write32(TCON_LCD0_lcd_dclk, 0
 		| (0b0001 << TCON_LCD0_lcd_dclk_lcd_dclk_en_SHIFT)
-		| (13 << TCON_LCD0_lcd_dclk_lcd_dclk_div_SHIFT)
+		| (clock_divider << TCON_LCD0_lcd_dclk_lcd_dclk_div_SHIFT)
 	);
 	dump_reg(TCON_LCD0_lcd_dclk);
 /*
@@ -375,8 +386,8 @@ void fb_probe(void)
     )});
 */
 	io_write32(TCON_LCD0_lcd_basic0, 0
-		| ((640-1) << TCON_LCD0_lcd_basic0_width_x_SHIFT)
-		| ((480-1) << TCON_LCD0_lcd_basic0_height_y_SHIFT)
+		| ((W-1) << TCON_LCD0_lcd_basic0_width_x_SHIFT)
+		| ((H-1) << TCON_LCD0_lcd_basic0_height_y_SHIFT)
 	);
 	dump_reg(TCON_LCD0_lcd_basic0);
 /*
@@ -394,8 +405,9 @@ void fb_probe(void)
         | ((96+48-1) << 0)
     )});
 */
+	//FIXME: blanking calculation needs to be more accurate
 	io_write32(TCON_LCD0_lcd_basic1, 0
-		| ((800-1) << TCON_LCD0_lcd_basic1_ht_SHIFT)
+		| ((W*800/640-1) << TCON_LCD0_lcd_basic1_ht_SHIFT)
 		| ((96+48-1) << TCON_LCD0_lcd_basic1_hbp_SHIFT
 	));
 	dump_reg(TCON_LCD0_lcd_basic1);
@@ -414,8 +426,9 @@ void fb_probe(void)
         | ((2+33-1) << 0)
     )});
 */
+	//FIXME: blanking calculation needs to be more accurate
 	io_write32(TCON_LCD0_lcd_basic2, 0
-		| ((525*2) << TCON_LCD0_lcd_basic2_vt_SHIFT)
+		| ((H*525*2/480) << TCON_LCD0_lcd_basic2_vt_SHIFT)
         | ((2+33-1) << TCON_LCD0_lcd_basic2_vbp_SHIFT)
 	);
 	dump_reg(TCON_LCD0_lcd_basic2);
@@ -472,7 +485,8 @@ void fb_probe(void)
         0b0011 << 24 //DE, CLK, H, V polarity
     )});
 */
-	io_write32(TCON_LCD0_lcd_io_pol, 0b0011 << TCON_LCD0_lcd_io_pol_io0_inv_SHIFT);
+	//set IO3:0 polarity (DE/CLK/HS/VS), default is 0b0011
+	io_write32(TCON_LCD0_lcd_io_pol, framebuffer_io_polarity << TCON_LCD0_lcd_io_pol_io0_inv_SHIFT);
 	dump_reg(TCON_LCD0_lcd_io_pol);
 /*
     // LCD_EN
@@ -484,8 +498,7 @@ void fb_probe(void)
 /*
     unsafe { de::init(&FB.0) };
 */
-	void init_de(void);
-	init_de();
+	init_de(W, H);
 }
 
 /*
@@ -586,14 +599,11 @@ REGISTER at 0x5461040: 0x80000167
 #define DE_M0_BLD_OUT_COLOR	 (DE_M0_BLD + 0x0FC)
 
 
-#warning this should be parameters
-uintptr_t framebuffer_address;
-unsigned framebuffer_pitch;
-
 //see https://linux-sunxi.org/images/7/7b/Allwinner_DE2.0_Spec_V1.0.pdf section 5.10
-void init_de(void)
+static void init_de(int W, int H)
 {
-    framebuffer_pitch = 640*sizeof(uint32_t);
+    //framebuffer_address should be already set by the caller
+    framebuffer_pitch = W*sizeof(uint32_t);
 	
     // Enable ROT_SCLK_GATE, RT_WB_SCLK_GATE, CORE1_SCLK_GATE, CORE0_SCLK_GATE
     // (at least, as they exist in the H8).
@@ -638,7 +648,7 @@ void init_de(void)
 
     // Set height=272 and width=480
     // write_volatile(DE_M0_GLB_SIZE as *mut u32, ((480-1) << 16) | ((640-1) << 0));
-    io_write32(DE_M0_GLB_SIZE, ((480-1) << 16) | ((640-1) << 0));
+    io_write32(DE_M0_GLB_SIZE, ((H-1) << 16) | ((W-1) << 0));
     dump_reg(DE_M0_GLB_SIZE);
 
     // Set OVL_UI1_L0 to alpha=FF, top-addr-only, no-premult, BGR888, no fill, global alpha, enable
@@ -682,7 +692,7 @@ void init_de(void)
 
     // Set OVL_UI1_L0 to height=272 width=480
     // write_volatile(DE_M0_UI1_MBSIZE_L0 as *mut u32, ((480-1) << 16) | ((640-1) << 0));
-    io_write32(DE_M0_UI1_MBSIZE_L0, ((480-1) << 16) | ((640-1) << 0));
+    io_write32(DE_M0_UI1_MBSIZE_L0, ((H-1) << 16) | ((W-1) << 0));
     dump_reg(DE_M0_UI1_MBSIZE_L0);
 
     // Set OVL_UI1_L0 coordinate to 0, 0
@@ -705,7 +715,7 @@ void init_de(void)
 
     // Set overlay to 272x480
     // write_volatile(DE_M0_UI1_SIZE as *mut u32, ((480-1) << 16) | ((640-1) << 0));
-    io_write32(DE_M0_UI1_SIZE, ((480-1) << 16) | ((640-1) << 0));
+    io_write32(DE_M0_UI1_SIZE, ((H-1) << 16) | ((W-1) << 0));
     dump_reg(DE_M0_UI1_SIZE);
 
     // Enable Pipe0, no fill
@@ -715,12 +725,12 @@ void init_de(void)
 
     // Pipe0 Input size 272x480
     // write_volatile(DE_M0_BLD_CH_ISIZE_P0 as *mut u32, ((480-1)<<16) | ((640-1) << 0));
-    io_write32(DE_M0_BLD_CH_ISIZE_P0, ((480-1)<<16) | ((640-1) << 0));
+    io_write32(DE_M0_BLD_CH_ISIZE_P0, ((H-1)<<16) | ((W-1) << 0));
     dump_reg(DE_M0_BLD_CH_ISIZE_P0);
 
     // Pipe 0 offset apparently needs to be 271,479? Not sure why.
     // write_volatile(DE_M0_BLD_CH_OFFSET_P0 as *mut u32, ((480-1) << 16) | ((640-1) << 0));
-    io_write32(DE_M0_BLD_CH_OFFSET_P0, ((480-1) << 16) | ((640-1) << 0));
+    io_write32(DE_M0_BLD_CH_OFFSET_P0, ((H-1) << 16) | ((W-1) << 0));
     dump_reg(DE_M0_BLD_CH_OFFSET_P0);
 
     // Pipe 0 select from channel 1, pipe 1 from 0, pipe 2 from 2, pipe 3 from 3
@@ -730,28 +740,7 @@ void init_de(void)
 
     // Output size 272x480
     // write_volatile(DE_M0_BLD_SIZE as *mut u32, ((480-1) << 16) | ((640-1) << 0));
-    io_write32(DE_M0_BLD_SIZE, ((480-1) << 16) | ((640-1) << 0));
+    io_write32(DE_M0_BLD_SIZE, ((H-1) << 16) | ((W-1) << 0));
     dump_reg(DE_M0_BLD_SIZE);
 }
 
-/*
-DE values for 640x480, 32-bpp:
-EGISTER at 0x5000000: 0xf
-REGISTER at 0x5000004: 0xf
-REGISTER at 0x5000008: 0xf
-REGISTER at 0x500000c: 0x0
-REGISTER at 0x5100000: 0x1
-REGISTER at 0x510000c: 0x1df027f
-REGISTER at 0x5103000: 0xff000503
-REGISTER at 0x5103004: 0x1df027f
-REGISTER at 0x5103008: 0x0
-REGISTER at 0x510300c: 0xa00
-REGISTER at 0x5103010: 0x40000b50
-REGISTER at 0x5103080: 0x0
-REGISTER at 0x5103088: 0x1df027f
-REGISTER at 0x5101000: 0x100
-REGISTER at 0x5101008: 0x1df027f
-REGISTER at 0x5101008: 0x1df027f
-REGISTER at 0x5101080: 0x3201
-REGISTER at 0x510108c: 0x1df027f
-*/
