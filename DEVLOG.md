@@ -442,15 +442,20 @@ Updated boards includes a README which documents fixes and solutions:
 - [LVDS adapter](hardware/LVDS_adapter/README.md)
 - [Touch Splitter](hardware/Touch_splitter/README.md) (HID bridge)
 - [eDP adapter](hardware/eDP_adapter/README.md)
+- [VGA adapter](hardware/VGA_adapter/README.md)
 
-Sotware used for testing:
-Mainly micropython demos, see [README](demos/micropython/README.md).  
+
+
+Sotware used for testing are mainly micropython demos, see [here](demos/micropython/README.md).  
 Included demos are:
 
 - [hid_bridge_test.py](demos/micropython/hid_bridge_test.py) tests the new RP2350-based USB to serial bridge board.
 - [i2c_it6251_test.py](demos/micropython/i2c_it6251_test.py) tests the new LVDS to eDP adapter board.
 - [i2c_tfp410_test.py](demos/micropython/i2c_tfp410_test.py) tests the fixes to the DVI adapter board, and now correcly access EDID.
 
-The many pictures of the fixed boards now working shows that fixes are ok. See [here](hardware/SUPPORT.md).  
-The new boards came with fixes to do (to be documented when the fixed boards are manufactured).
+See [VGA adapter board](hardware/VGA_adapter/README.md) for related software fixes.
+
+The [many pictures](hardware/SUPPORT.md) of the newer boards actually controlling the displays shows that the fixes work.
+The new boards came with new issues, with fiexes that would be be documented after sent to manufacturing an tested.
+
 
