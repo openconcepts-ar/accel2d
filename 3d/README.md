@@ -2,10 +2,10 @@
 
 ## Display model
 
-A model of a 15.6" display (accurate to the datasheet) is provided [here](display_model.py).
+A model of a 15.6" display (accurate to the datasheet) and a bezel are provided [here](models.py).
   
-<img src="../doc/display_model_156_front.png" width="480"></img>
-<img src="../doc/display_model_156_back.png" width="480"></img>
+<img src="../doc/display_model_156.png" width="480"></img>
+<img src="../doc/display_model_back_156.png" width="480"></img>
 
 The corresponding STL file is [here](display_model.stl).  
 
@@ -20,12 +20,17 @@ see for example the not viable model tat they offer but cannot reproduce since c
 
 ## Display bezel
 
-See the custom design for the bezel [here](display_bezel.py):  
-<img src="../doc/bezel_156.png" width="320"></img>
-<img src="../doc/bezel_back_156.png" width="320"></img>
+See the custom design for the bezel in on the [same file](models.py):  
+<img src="../doc/display_bezel_156.png" width="320"></img>
+<img src="../doc/display_bezel_back_156.png" width="320"></img>
   
-With the display:  
-<img src="../doc/bezel_display_156.png" width="320"></img>
-<img src="../doc/bezel_display_back_156.png" width="320"></img>
+Or shown with the display:  
+<img src="../doc/display_bezel_display_156.png" width="320"></img>
+<img src="../doc/display_bezel_display_back_156.png" width="320"></img>
 
-The corresponding STL file is [here](display_bezel.stl).  
+The corresponding STL files are [here](display_bezel.stl) and [here](display_bezel_display.stl).  
+
+## Experimental blender rendering
+
+WIP  
+<img src="../doc/display_model_back_156.jpg" width="320"></img>
