@@ -17,13 +17,13 @@ The approach results similar approach to the way of designing the FPGA gateware 
 
 To generate the model in OpenSCAD format (.scad files) just run
 ```
-python display_model.py
+python display_model.py display_model.scad
 ```
 This creates the file `display_model.scad` which can be opened in [OpenSCAD](https://openscad.org/).
 OpenSCAD automatically renders the file whenever it's changed, so after changes to the python script, you need to run it. This can be automatized with a tool that executes the .py file on each change:  
 
 ```
-python -m watchdog.watchmedo shell-command -p display_model.py -c "python display_model.py"
+python -m watchdog.watchmedo shell-command -p display_model.py -c "python display_model.py display_model.scad"
 ```
 
 <img src="../doc/pyopenscad_workflow.png" width="1024"></img>
@@ -55,3 +55,10 @@ You can now edit the model with Freecad, installed or [running it online](https:
 
 <img src="../doc/display_model_freecad.png" width="1024"></img>
 
+# Automatic generation of files and rendering
+
+See [Makefile](Makefile) about how the .scad, .stl and rendered.png files are automatically generated:  
+
+<img src="../doc/display_model_156.png" width="1024"></img>  
+
+See [README](README.md) for more results.  
