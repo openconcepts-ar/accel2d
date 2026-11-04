@@ -42,8 +42,12 @@ Tested with the CPU board.
 
 |<img src="../doc/test_133_VGA_480p.jpeg" width="320"></img>|<img src="../doc/test_133_DVI_480p.jpeg" width="320"></img>|
 |:--:|:--:|
-| *13.3" industrial monitor using 480p VGA (analog) signals* | *21.5" monitor using DVI (digital) signals* |
+| *13.3" industrial monitor using 480p VGA (analog) signals* | *21.5" monitor using 480p DVI (digital) signals* |
   
 |<img src="../doc/test_monitor_VGA_480p.jpeg" width="320"></img>|<img src="../doc/test_215_VGA_HD.jpeg" width="320"></img>|
 |:--:|:--:|
 | *21.5" monitor using 480p VGA (analog) signals* | *21.5" monitor using VGA (analog) signals, HD resolution* |
+
+|<img src="../doc/test_215_DVI_HD.jpeg" width="320"></
+|:--:|
+| *21.5" monitor using DVI (digital) signals, HD resolution* |
