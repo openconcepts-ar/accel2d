@@ -17,6 +17,7 @@ The framebuffer can be set in 16-bit color mode (RGB565 format) to halve memory 
   
 <img src="../../doc/test_101_LVDS_rgb565.jpeg" width="640"></img>
 
+See the [changes](https://github.com/openconcepts-ar/accel2d/commit/c02795d3175d810f2537590d0ec2b514abff1690) required to support HD resolution in the SOC (16-bit or 32-bit color mode), and the [new PHY](https://github.com/openconcepts-ar/accel2d/blob/pcbfixes1/openldi.py) to control OpenLDI-based (a.k.a. LVDS) displays, which implements a 7-to-1 serializer.
 
 ## Double buffer test
 
