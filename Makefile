@@ -11,7 +11,7 @@ LATTICETOOLCHAIN=--toolchain trellis --nextpnr-seed 0 --nextpnr-timingstrict
 SDRAM_BUS_BITS?=32
 #SERIAL_PORT?=/dev/ttyUSB1 #for arty
 SERIAL_PORT?=/dev/ttyUSB2 #for ecpix5/orangecrab
-SERIAL_BAURDATE?=960000
+SERIAL_BAURDATE?=921600
 
 #AMDTOOLCHAIN?=--toolchain=yosys+nextpnr #FIXME: some glitches
 CPU_TYPE?=--cpu-type=vexriscv #only supports vexriscv
@@ -29,7 +29,7 @@ CCDEFS=-DSDRAM_BUS_BITS=$(SDRAM_BUS_BITS)
 CFLAGS+=$(CCDEFS) $(INC) -Wno-missing-prototypes -O2
 CXXFLAGS+=$(CCDEFS) $(INC) -fno-threadsafe-statics -O2
 
-SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE) --uart-baudrate $(SERIAL_BAURDATE)
+SOCARGS=--pixel-bus-width=$(SDRAM_BUS_BITS) --timer-uptime $(CPU_TYPE) --uart-baudrate $(SERIAL_BAURDATE) --with-gpio
 
 #FIXME: try crt0 provided by LiteX
 %.o: %.S

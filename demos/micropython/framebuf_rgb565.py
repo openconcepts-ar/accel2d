@@ -15,9 +15,16 @@ H = video.height()
 assert video.bpp() == 16
 fbuf = FrameBuffer(video, W, H, RGB565, video.stride())
 
-fbuf.fill_rect(W//4, H//4, 2*W//4, 2*H//4, BLUE)
-fbuf.fill_rect(W//4, H//4, 2*2*W//12, 2*H//4, GREEN)
-fbuf.fill_rect(W//4, H//4, 2*W//12, 2*H//4, RED)
-fbuf.line(0, 0, W, H, WHITE)
-video.flush()
+band_h = H // 4
 
+for x in range(W):
+    r = (x//2 & 0x1F) << 11
+    g = (x & 0x3F) << 5
+    b = x//2 & 0x1F
+    fbuf.vline(x, 0 * band_h, band_h, r)  # red gradient
+    fbuf.vline(x, 1 * band_h, band_h, g)  # green gradient
+    fbuf.vline(x, 2 * band_h, band_h, b)  # blue gradient
+    fbuf.vline(x, 3 * band_h, band_h, r | g | b) # white gradient
+
+fbuf.line(0, 0, H, H, WHITE)  # optional: keep the diagonal reference line
+video.flush()
