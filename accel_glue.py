@@ -293,7 +293,7 @@ def gen_accel_cores(soc, active_cores, pixel_bus_width=32):
 
         vram_origin = soc.bus.regions["main_ram"].origin # usually 0x40000000
         soc.add_constant("VRAM_ORIGIN_"+corename, vram_origin + fb_offset)
-        soc.platform.add_source(f"{core}.v")
+        soc.platform.add_source(f"{core}.sv")
         
         region_name = corename+"_region" #CSR base
         region = soc.bus.alloc_region(region_name, 0x1000, cached=False)

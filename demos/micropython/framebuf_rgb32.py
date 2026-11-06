@@ -12,11 +12,8 @@ H = video.height()
 assert video.bpp() == 32
 fbuf = FrameBuffer(video, W, H, RGB32, video.stride())
 
-fbuf.fill(0x000000)
-
 band_h = H // 4
 
-# one vertical line per column, intensity grows from 0 to 255 left to right
 for x in range(W):
     v = x & 255
     fbuf.vline(x, 0 * band_h, band_h, v << 16)  # red gradient

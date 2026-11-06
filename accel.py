@@ -267,7 +267,7 @@ class AccelImporterSoC(Module): #TODO: separate in base and derived class
         region = soc.bus.alloc_region(region_name, 0x1000, cached=False)
         soc.bus.add_slave(name=self.name+"_slave", slave=self.mmap_s, region=region)
         soc.add_constant(region_name, region.origin)
-        soc.platform.add_source(self.name + ".v")
+        soc.platform.add_source(self.name + ".sv")
         self.instance_core(region)
     
 
